@@ -19,11 +19,10 @@
 </head>
 <body>
   <header class="top" id="top">
-    <a href="#reel" class="logo" aria-label="Charlie Painter_DP — home">Charlie Painter_DP</a>
+    <a href="#reel" class="logo" id="logo" aria-label="Back to top">Charlie Painter_DP</a>
     <p class="top-status mono"><span class="rec" aria-hidden="true"></span><span id="top-reel">Reel 01 · Narrative</span></p>
     <nav class="top-nav mono" aria-label="Primary">
-      <a href="#narrative">Narrative</a>
-      <a href="#commercial">Commercial</a>
+      <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -58,38 +57,27 @@
       </p>
     </section>
 
-    <!-- NARRATIVE -->
-    <section class="archive" id="narrative">
-      <div class="archive-head">
-        <h2>Narrative</h2>
-        <p class="mono">{{NARRATIVE_COUNT}} credits · select a film to see its frames</p>
+    <!-- WORK -->
+    <section class="work" id="work">
+      <div class="work-bar">
+        <div class="tabs" role="tablist" aria-label="Work">
+          <button class="tab is-on" role="tab" aria-selected="true" aria-controls="panel-narrative" data-tab="narrative">Narrative <sup class="mono">{{NARRATIVE_COUNT}}</sup></button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-commercial" data-tab="commercial">Commercial <sup class="mono">{{COMMERCIAL_COUNT}}</sup></button>
+        </div>
+        <div class="views mono" role="group" aria-label="Layout">
+          <span>View</span>
+          <button class="view is-on" data-view="index" aria-pressed="true">A · Index</button>
+          <button class="view" data-view="sheet" aria-pressed="false">B · Contact sheet</button>
+          <button class="view" data-view="screen" aria-pressed="false">C · Screening</button>
+        </div>
       </div>
-      <ol class="jobs">
-{{NARRATIVE}}
-      </ol>
-      <ul class="more mono" aria-label="More narrative credits">
-{{NARRATIVE_MORE}}
-      </ul>
-    </section>
-
-    <!-- COMMERCIAL -->
-    <section class="archive" id="commercial">
-      <div class="archive-head">
-        <h2>Commercial</h2>
-        <p class="mono">{{COMMERCIAL_COUNT}} credits · also: {{COMMERCIAL_MORE}}</p>
-      </div>
-      <ol class="jobs">
-{{COMMERCIAL}}
-      </ol>
-      <a class="studio-link mono" href="https://painterstudio.vercel.app" target="_blank" rel="noopener">
-        <span>Commissioning content for a brand?</span>
-        <b>Painter.Studio — Charlie’s content studio ↗</b>
-      </a>
+{{NARRATIVE_PANEL}}
+{{COMMERCIAL_PANEL}}
     </section>
 
     <!-- ABOUT -->
     <section class="about" id="about">
-      <p class="about-line">Charlie Painter is a narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
+      <p class="about-line">A narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
       <div class="about-grid mono">
         <div>
           <h3>Awards</h3>
@@ -114,8 +102,8 @@
     <!-- CONTACT -->
     <footer class="contact" id="contact">
       <div class="contact-grid mono">
-        <div><h3>Name</h3><p>Charlie Painter<br />Director of Photography<br />London, UK</p></div>
-        <div><h3>Direct</h3><p><a href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a><br />CV on request</p></div>
+        <div><h3>Based</h3><p>London, UK</p></div>
+        <div><h3>Enquiries</h3><p>Features, shorts &amp; commercials<br /><a href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a></p></div>
         <div><h3>Elsewhere</h3><p><a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram</a><br /><a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo</a><br /><a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb</a></p></div>
       </div>
       <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
