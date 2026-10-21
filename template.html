@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Charlie Painter — Director of Photography, London</title>
+  <meta name="description" content="Charlie Painter is a London-based cinematographer working across narrative features, shorts and commercials. Winner of Best Cinematography at SSIFF 2025 and a British Society of Cinematographers mentee." />
+  <meta name="theme-color" content="#080807" />
+  <meta property="og:title" content="Charlie Painter — Director of Photography" />
+  <meta property="og:description" content="Narrative features, shorts and commercials. London." />
+  <meta property="og:image" content="/media/reel-narrative-poster.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top" id="top">
+    <a href="#reel" class="logo" aria-label="Charlie Painter_DP — home">Charlie Painter_DP</a>
+    <p class="top-status mono"><span class="rec" aria-hidden="true"></span><span id="top-reel">Reel 01 · Narrative</span></p>
+    <nav class="top-nav mono" aria-label="Primary">
+      <a href="#narrative">Narrative</a>
+      <a href="#commercial">Commercial</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- REEL -->
+    <section class="reel" id="reel" aria-label="Showreel">
+      <div class="screen">
+        <video id="reel-video" class="screen-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-poster.jpg">
+          <source src="/media/reel-narrative.mp4" type="video/mp4" />
+        </video>
+        <div class="screen-ui mono">
+          <span id="reel-caption">Narrative showreel</span>
+          <span class="tc" id="tc" aria-hidden="true">01:00:00:00</span>
+        </div>
+      </div>
+      <div class="reel-foot">
+        <h1 class="name">Charlie Painter<span>Director of Photography</span></h1>
+        <div class="controls mono" role="group" aria-label="Reel">
+          <button class="ctl is-on" data-reel="narrative" aria-pressed="true">Narrative</button>
+          <button class="ctl" data-reel="commercial" aria-pressed="false">Commercial</button>
+          <button class="ctl" id="reel-pause" aria-pressed="false">Pause</button>
+          <button class="ctl ctl-solid" id="reel-sound">Watch with sound ↗</button>
+          <span class="ratio" aria-hidden="true">2.00 : 1</span>
+        </div>
+      </div>
+      <p class="laurels mono">
+        <span>Winner — Best Cinematography, SSIFF 2025</span>
+        <span>British Society of Cinematographers Mentee</span>
+        <span>London</span>
+      </p>
+    </section>
+
+    <!-- NARRATIVE -->
+    <section class="archive" id="narrative">
+      <div class="archive-head">
+        <h2>Narrative</h2>
+        <p class="mono">{{NARRATIVE_COUNT}} credits · select a film to see its frames</p>
+      </div>
+      <ol class="jobs">
+{{NARRATIVE}}
+      </ol>
+      <ul class="more mono" aria-label="More narrative credits">
+{{NARRATIVE_MORE}}
+      </ul>
+    </section>
+
+    <!-- COMMERCIAL -->
+    <section class="archive" id="commercial">
+      <div class="archive-head">
+        <h2>Commercial</h2>
+        <p class="mono">{{COMMERCIAL_COUNT}} credits · also: {{COMMERCIAL_MORE}}</p>
+      </div>
+      <ol class="jobs">
+{{COMMERCIAL}}
+      </ol>
+      <a class="studio-link mono" href="https://painterstudio.vercel.app" target="_blank" rel="noopener">
+        <span>Commissioning content for a brand?</span>
+        <b>Painter.Studio — Charlie’s content studio ↗</b>
+      </a>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <p class="about-line">Charlie Painter is a narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
+      <div class="about-grid mono">
+        <div>
+          <h3>Awards</h3>
+          <ul>
+            <li>Winner — Best Cinematography, SSIFF 2025</li>
+            <li>Nominee — Best Cinematography, YETI Film Fest</li>
+            <li>Winner — Best Film, LakeCity</li>
+            <li>Winner — Best Film, Cambridge Short Film Festival</li>
+            <li>Winner — Best Drama, Arena 51 Film Festival</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Press</h3>
+          <a class="press" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
+            <span>British Cinematographer</span>
+            “Eighty-six years ago today, my great-great-uncle, Jack, was fighting for his life in Dunkirk.” — on <i>Operation Dynamo</i> ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <footer class="contact" id="contact">
+      <div class="contact-grid mono">
+        <div><h3>Name</h3><p>Charlie Painter<br />Director of Photography<br />London, UK</p></div>
+        <div><h3>Direct</h3><p><a href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a><br />CV on request</p></div>
+        <div><h3>Elsewhere</h3><p><a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram</a><br /><a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo</a><br /><a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb</a></p></div>
+      </div>
+      <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+      <p class="fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><a href="#reel">Back to top ↑</a></p>
+    </footer>
+  </main>
+
+  <!-- LIGHTBOX: plays a film, or steps through a film's frames -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Viewer" hidden>
+    <div class="lb-bar mono">
+      <span id="lb-title"></span>
+      <span id="lb-count"></span>
+      <button id="lb-close">Close ✕</button>
+    </div>
+    <div class="lb-stage" id="lb-stage"></div>
+    <div class="lb-nav mono" id="lb-nav">
+      <button id="lb-prev">← Prev</button>
+      <button id="lb-film" hidden>Play film ↗</button>
+      <button id="lb-next">Next →</button>
+    </div>
+  </div>
+
+  <script src="/main.js" defer></script>
+</body>
+</html>

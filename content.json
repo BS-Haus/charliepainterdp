@@ -1,0 +1,131 @@
+{
+  "narrative": [
+    {
+      "title": "If",
+      "credit": "Dir. Cyrus Mirzashafa",
+      "detail": "Starring Clive Russell · Thulsa Films",
+      "kind": "Short",
+      "video": { "provider": "vimeo", "id": "1088718265" },
+      "stills": ["iffilm-1", "iffilm-2", "iffilm-3", "iffilm-4", "iffilm-5"]
+    },
+    {
+      "title": "Operation Dynamo",
+      "credit": "Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd",
+      "detail": "Thulsa Films",
+      "kind": "Short",
+      "video": { "provider": "vimeo", "id": "1126894625", "hash": "97279ba9a1" },
+      "stills": ["operationdynamo-1", "operationdynamo-2", "operationdynamo-3", "operationdynamo-4", "operationdynamo-5"]
+    },
+    {
+      "title": "Flush!",
+      "credit": "Dir. Nico Bourgeais",
+      "detail": "Fusion Alpha",
+      "kind": "Short",
+      "video": { "provider": "vimeo", "id": "1133511001", "hash": "98df98088f" },
+      "stills": ["flush-1", "flush-2", "flush-3", "flush-4", "flush-5"]
+    },
+    {
+      "title": "Vetala",
+      "credit": "Dir. Ajit Mann",
+      "detail": "M & K",
+      "kind": "Short",
+      "stills": ["vetala-1", "vetala-2", "vetala-3", "vetala-4", "vetala-5", "vetala-6", "vetala-7", "vetala-8", "vetala-9"]
+    },
+    {
+      "title": "Accomplice",
+      "credit": "Dir. Dominic Fraser",
+      "detail": "CPC",
+      "kind": "Short",
+      "stills": ["accomplice-1", "accomplice-2", "accomplice-3", "accomplice-4", "accomplice-5", "accomplice-6"]
+    },
+    {
+      "title": "Confess",
+      "credit": "Dir. Ajit Mann",
+      "detail": "M & K",
+      "kind": "Short",
+      "stills": ["confess-1", "confess-2", "confess-3", "confess-4", "confess-5"]
+    },
+    {
+      "title": "Memories of a Life",
+      "credit": "Dir. Ellie Hague",
+      "detail": "Thulsa Films",
+      "kind": "Short",
+      "stills": ["moal-1", "moal-2", "moal-3", "moal-4", "moal-5"]
+    },
+    {
+      "title": "In Vitro Felicitas",
+      "credit": "Dir. Cyrus Mirzashafa",
+      "detail": "Thulsa Films",
+      "kind": "Short",
+      "stills": ["invitrofelicitas-1"]
+    },
+    {
+      "title": "Brownies or Ice Cream?",
+      "credit": "Dir. Stefan Poelman",
+      "detail": "Pink Momentum",
+      "kind": "Short",
+      "stills": ["brownies-or-ice-cream-1", "brownies-or-ice-cream-2", "brownies-or-ice-cream-3"]
+    }
+  ],
+  "narrative_more": [
+    ["Carry With Both Hands", "Feature", "Tim Rogg / St Maur Pictures"],
+    ["Cynthia", "Short", "James Hood / Banshee"],
+    ["What Could’ve Been?", "Short", "Niamh Ennis / CPC"],
+    ["Would Smith?", "Short", "Matty Mahoney / Mohawk"],
+    ["Nice To See You Anyway", "Short", "Cyrus Mirzashafa / Thulsa Films"],
+    ["Mired", "Short", "James Hood / Banshee"],
+    ["Dukh", "Short", "Ajit Mann / M & K"]
+  ],
+  "commercial": [
+    {
+      "title": "66°North",
+      "subtitle": "Calming the Storm",
+      "credit": "Dir. Dann Emmons",
+      "detail": "One Thousand Eyes · Talent Oli Cook",
+      "kind": "Commercial",
+      "video": { "provider": "vimeo", "id": "1213570673", "hash": "ef3a99b161" },
+      "stills": ["66north-2", "66north-1", "66north-r1", "66north-r2", "66north-r3"]
+    },
+    {
+      "title": "John Smith’s",
+      "subtitle": "Traditions",
+      "credit": "Dir. Dann Emmons",
+      "detail": "One Thousand Eyes",
+      "kind": "Commercial",
+      "video": { "provider": "vimeo", "id": "1189764769" },
+      "stills": ["johnsmiths-1", "johnsmiths-r1", "johnsmiths-r2", "johnsmiths-r3"]
+    },
+    {
+      "title": "Aberfeldy",
+      "credit": "Dir. Jess Leuty",
+      "detail": "CPC",
+      "kind": "Brand film",
+      "video": { "provider": "vimeo", "id": "1176200194" },
+      "stills": ["aberfeldy-2", "aberfeldy-r1", "aberfeldy-r2", "aberfeldy-r3", "aberfeldy-r4"]
+    },
+    {
+      "title": "Vision Pro",
+      "credit": "Dir. Nico Bourgeais",
+      "detail": "CPC",
+      "kind": "Commercial",
+      "video": { "provider": "vimeo", "id": "926185147" },
+      "stills": ["vision-pro-1", "vision-pro-2", "vision-pro-3", "vision-pro-4", "vision-pro-5"]
+    },
+    {
+      "title": "London Jazz Festival",
+      "credit": "Dir. Lauren Smith",
+      "detail": "Serious Music",
+      "kind": "Brand film",
+      "video": { "provider": "youtube", "id": "ugaZUGlBulc" },
+      "stills": ["london-jazz-festival-1", "london-jazz-festival-2", "london-jazz-festival-3", "london-jazz-festival-r1", "london-jazz-festival-r2", "london-jazz-festival-r3"]
+    },
+    {
+      "title": "Phox Water",
+      "credit": "",
+      "detail": "",
+      "kind": "Commercial",
+      "stills": ["phox-r1", "phox-r2", "phox-r3"]
+    }
+  ],
+  "commercial_more": ["Mars", "Peroni", "LJF 25", "Elizabeth Day", "NAQ Music"]
+}
