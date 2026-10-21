@@ -16,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
+  <script>try { if (localStorage.getItem("cp-theme") === "light") document.documentElement.dataset.theme = "light"; } catch (e) {}</script>
 </head>
 <body>
   <header class="top" id="top">
@@ -25,6 +26,7 @@
       <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
+      <button class="theme" id="theme" aria-label="Switch to light background"><i aria-hidden="true"></i><span>Light</span></button>
     </nav>
   </header>
 
@@ -66,163 +68,172 @@
       <ol class="rl-list">
         <li class="rl" data-title="If" data-stills="iffilm-1,iffilm-2,iffilm-3,iffilm-4,iffilm-5" data-tint="#36200c" data-provider="vimeo" data-id="1088718265">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/iffilm-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/iffilm-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/iffilm-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/iffilm-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/iffilm-5.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">01</span>
             <span class="rl-title">If</span>
             <span class="rl-credit mono">Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from If"><img src="/media/stills/iffilm-1.jpg" alt="Frame 1 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-2.jpg" alt="Frame 2 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-3.jpg" alt="Frame 3 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-4.jpg" alt="Frame 4 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-5.jpg" alt="Frame 5 from If" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from If — move across to flick through, click to enlarge"><img src="/media/stills/iffilm-1.jpg" alt="Frame 1 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-2.jpg" alt="Frame 2 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-3.jpg" alt="Frame 3 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-4.jpg" alt="Frame 4 from If" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-5.jpg" alt="Frame 5 from If" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/iffilm-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/iffilm-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/iffilm-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/iffilm-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/iffilm-5.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Operation Dynamo" data-stills="operationdynamo-1,operationdynamo-2,operationdynamo-3,operationdynamo-4,operationdynamo-5" data-tint="#2e2013" data-provider="vimeo" data-id="1126894625" data-hash="97279ba9a1">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/operationdynamo-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/operationdynamo-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/operationdynamo-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/operationdynamo-5.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">02</span>
             <span class="rl-title">Operation Dynamo</span>
             <span class="rl-credit mono">Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Operation Dynamo"><img src="/media/stills/operationdynamo-1.jpg" alt="Frame 1 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-2.jpg" alt="Frame 2 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-3.jpg" alt="Frame 3 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-4.jpg" alt="Frame 4 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-5.jpg" alt="Frame 5 from Operation Dynamo" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Operation Dynamo — move across to flick through, click to enlarge"><img src="/media/stills/operationdynamo-1.jpg" alt="Frame 1 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-2.jpg" alt="Frame 2 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-3.jpg" alt="Frame 3 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-4.jpg" alt="Frame 4 from Operation Dynamo" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-5.jpg" alt="Frame 5 from Operation Dynamo" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/operationdynamo-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/operationdynamo-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/operationdynamo-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/operationdynamo-5.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Flush!" data-stills="flush-1,flush-2,flush-3,flush-4,flush-5" data-tint="#370b1a" data-provider="vimeo" data-id="1133511001" data-hash="98df98088f">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/flush-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/flush-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/flush-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/flush-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/flush-5.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">03</span>
             <span class="rl-title">Flush!</span>
             <span class="rl-credit mono">Dir. Nico Bourgeais · Fusion Alpha</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Flush!"><img src="/media/stills/flush-1.jpg" alt="Frame 1 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-2.jpg" alt="Frame 2 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-3.jpg" alt="Frame 3 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-4.jpg" alt="Frame 4 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-5.jpg" alt="Frame 5 from Flush!" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Nico Bourgeais · Fusion Alpha</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Flush! — move across to flick through, click to enlarge"><img src="/media/stills/flush-1.jpg" alt="Frame 1 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-2.jpg" alt="Frame 2 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-3.jpg" alt="Frame 3 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-4.jpg" alt="Frame 4 from Flush!" loading="lazy" decoding="async" /><img src="/media/stills/flush-5.jpg" alt="Frame 5 from Flush!" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/flush-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/flush-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/flush-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/flush-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/flush-5.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Nico Bourgeais · Fusion Alpha</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Vetala" data-stills="vetala-1,vetala-2,vetala-3,vetala-4,vetala-5,vetala-6,vetala-7,vetala-8,vetala-9" data-tint="#292b16">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/vetala-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-5.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-6.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-7.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-8.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vetala-9.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">04</span>
             <span class="rl-title">Vetala</span>
             <span class="rl-credit mono">Dir. Ajit Mann · M &amp; K</span>
+            <span class="rl-frames-n mono">09 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Vetala"><img src="/media/stills/vetala-1.jpg" alt="Frame 1 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-2.jpg" alt="Frame 2 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-3.jpg" alt="Frame 3 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-4.jpg" alt="Frame 4 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-5.jpg" alt="Frame 5 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-6.jpg" alt="Frame 6 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-7.jpg" alt="Frame 7 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-8.jpg" alt="Frame 8 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-9.jpg" alt="Frame 9 from Vetala" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 09</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Ajit Mann · M &amp; K</p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Vetala — move across to flick through, click to enlarge"><img src="/media/stills/vetala-1.jpg" alt="Frame 1 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-2.jpg" alt="Frame 2 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-3.jpg" alt="Frame 3 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-4.jpg" alt="Frame 4 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-5.jpg" alt="Frame 5 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-6.jpg" alt="Frame 6 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-7.jpg" alt="Frame 7 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-8.jpg" alt="Frame 8 from Vetala" loading="lazy" decoding="async" /><img src="/media/stills/vetala-9.jpg" alt="Frame 9 from Vetala" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:3"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/vetala-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/vetala-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/vetala-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/vetala-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/vetala-5.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="5" aria-label="Frame 6"><img src="/media/thumbs/vetala-6.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="6" aria-label="Frame 7"><img src="/media/thumbs/vetala-7.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="7" aria-label="Frame 8"><img src="/media/thumbs/vetala-8.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="8" aria-label="Frame 9"><img src="/media/thumbs/vetala-9.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 09</span><br />Dir. Ajit Mann · M &amp; K</p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Accomplice" data-stills="accomplice-1,accomplice-2,accomplice-3,accomplice-4,accomplice-5,accomplice-6" data-tint="#112c30">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/accomplice-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/accomplice-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/accomplice-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/accomplice-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/accomplice-5.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/accomplice-6.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">05</span>
             <span class="rl-title">Accomplice</span>
             <span class="rl-credit mono">Dir. Dominic Fraser · CPC</span>
+            <span class="rl-frames-n mono">06 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Accomplice"><img src="/media/stills/accomplice-1.jpg" alt="Frame 1 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-2.jpg" alt="Frame 2 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-3.jpg" alt="Frame 3 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-4.jpg" alt="Frame 4 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-5.jpg" alt="Frame 5 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-6.jpg" alt="Frame 6 from Accomplice" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 06</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Dominic Fraser · CPC</p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Accomplice — move across to flick through, click to enlarge"><img src="/media/stills/accomplice-1.jpg" alt="Frame 1 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-2.jpg" alt="Frame 2 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-3.jpg" alt="Frame 3 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-4.jpg" alt="Frame 4 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-5.jpg" alt="Frame 5 from Accomplice" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-6.jpg" alt="Frame 6 from Accomplice" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/accomplice-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/accomplice-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/accomplice-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/accomplice-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/accomplice-5.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="5" aria-label="Frame 6"><img src="/media/thumbs/accomplice-6.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 06</span><br />Dir. Dominic Fraser · CPC</p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Confess" data-stills="confess-1,confess-2,confess-3,confess-4,confess-5" data-tint="#391808">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/confess-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/confess-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/confess-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/confess-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/confess-5.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">06</span>
             <span class="rl-title">Confess</span>
             <span class="rl-credit mono">Dir. Ajit Mann · M &amp; K</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Confess"><img src="/media/stills/confess-1.jpg" alt="Frame 1 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-2.jpg" alt="Frame 2 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-3.jpg" alt="Frame 3 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-4.jpg" alt="Frame 4 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-5.jpg" alt="Frame 5 from Confess" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Ajit Mann · M &amp; K</p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Confess — move across to flick through, click to enlarge"><img src="/media/stills/confess-1.jpg" alt="Frame 1 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-2.jpg" alt="Frame 2 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-3.jpg" alt="Frame 3 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-4.jpg" alt="Frame 4 from Confess" loading="lazy" decoding="async" /><img src="/media/stills/confess-5.jpg" alt="Frame 5 from Confess" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/confess-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/confess-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/confess-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/confess-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/confess-5.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Ajit Mann · M &amp; K</p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Memories of a Life" data-stills="moal-1,moal-2,moal-3,moal-4,moal-5" data-tint="#3a0811">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/moal-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/moal-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/moal-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/moal-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/moal-5.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">07</span>
             <span class="rl-title">Memories of a Life</span>
             <span class="rl-credit mono">Dir. Ellie Hague · Thulsa Films</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Memories of a Life"><img src="/media/stills/moal-1.jpg" alt="Frame 1 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-2.jpg" alt="Frame 2 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-3.jpg" alt="Frame 3 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-4.jpg" alt="Frame 4 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-5.jpg" alt="Frame 5 from Memories of a Life" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Ellie Hague · Thulsa Films</p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Memories of a Life — move across to flick through, click to enlarge"><img src="/media/stills/moal-1.jpg" alt="Frame 1 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-2.jpg" alt="Frame 2 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-3.jpg" alt="Frame 3 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-4.jpg" alt="Frame 4 from Memories of a Life" loading="lazy" decoding="async" /><img src="/media/stills/moal-5.jpg" alt="Frame 5 from Memories of a Life" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/moal-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/moal-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/moal-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/moal-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/moal-5.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Ellie Hague · Thulsa Films</p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="In Vitro Felicitas" data-stills="invitrofelicitas-1" data-tint="#311f11">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">08</span>
             <span class="rl-title">In Vitro Felicitas</span>
             <span class="rl-credit mono">Dir. Cyrus Mirzashafa · Thulsa Films</span>
+            <span class="rl-frames-n mono">01 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from In Vitro Felicitas"><img src="/media/stills/invitrofelicitas-1.jpg" alt="Frame 1 from In Vitro Felicitas" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 01</p>
-              <p class="rl-ticks"><i></i></p>
-              <p class="rl-credit-full">Dir. Cyrus Mirzashafa · Thulsa Films</p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from In Vitro Felicitas — move across to flick through, click to enlarge"><img src="/media/stills/invitrofelicitas-1.jpg" alt="Frame 1 from In Vitro Felicitas" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:1"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 01</span><br />Dir. Cyrus Mirzashafa · Thulsa Films</p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Brownies or Ice Cream?" data-stills="brownies-or-ice-cream-1,brownies-or-ice-cream-2,brownies-or-ice-cream-3" data-tint="#261c1c">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">09</span>
             <span class="rl-title">Brownies or Ice Cream?</span>
             <span class="rl-credit mono">Dir. Stefan Poelman · Pink Momentum</span>
+            <span class="rl-frames-n mono">03 frames</span>
             <span class="rl-kind mono">Short</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Brownies or Ice Cream?"><img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="Frame 1 from Brownies or Ice Cream?" loading="lazy" decoding="async" /><img src="/media/stills/brownies-or-ice-cream-2.jpg" alt="Frame 2 from Brownies or Ice Cream?" loading="lazy" decoding="async" /><img src="/media/stills/brownies-or-ice-cream-3.jpg" alt="Frame 3 from Brownies or Ice Cream?" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 03</p>
-              <p class="rl-ticks"><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Stefan Poelman · Pink Momentum</p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Brownies or Ice Cream? — move across to flick through, click to enlarge"><img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="Frame 1 from Brownies or Ice Cream?" loading="lazy" decoding="async" /><img src="/media/stills/brownies-or-ice-cream-2.jpg" alt="Frame 2 from Brownies or Ice Cream?" loading="lazy" decoding="async" /><img src="/media/stills/brownies-or-ice-cream-3.jpg" alt="Frame 3 from Brownies or Ice Cream?" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 03</span><br />Dir. Stefan Poelman · Pink Momentum</p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
@@ -234,109 +245,115 @@
       <ol class="rl-list">
         <li class="rl" data-title="66°North" data-stills="66north-2,66north-1,66north-r1,66north-r2,66north-r3" data-tint="#07183a" data-provider="vimeo" data-id="1213570673" data-hash="ef3a99b161">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/66north-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/66north-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/66north-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/66north-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/66north-r3.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">01</span>
             <span class="rl-title">66°North <em>‘Calming the Storm’</em></span>
             <span class="rl-credit mono">Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Commercial</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from 66°North"><img src="/media/stills/66north-2.jpg" alt="Frame 1 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-1.jpg" alt="Frame 2 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-r1.jpg" alt="Frame 3 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-r2.jpg" alt="Frame 4 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-r3.jpg" alt="Frame 5 from 66°North" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from 66°North — move across to flick through, click to enlarge"><img src="/media/stills/66north-2.jpg" alt="Frame 1 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-1.jpg" alt="Frame 2 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-r1.jpg" alt="Frame 3 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-r2.jpg" alt="Frame 4 from 66°North" loading="lazy" decoding="async" /><img src="/media/stills/66north-r3.jpg" alt="Frame 5 from 66°North" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/66north-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/66north-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/66north-r1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/66north-r2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/66north-r3.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="John Smith’s" data-stills="johnsmiths-1,johnsmiths-r1,johnsmiths-r2,johnsmiths-r3" data-tint="#341f0d" data-provider="vimeo" data-id="1189764769">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">02</span>
             <span class="rl-title">John Smith’s <em>‘Traditions’</em></span>
             <span class="rl-credit mono">Dir. Dann Emmons · One Thousand Eyes</span>
+            <span class="rl-frames-n mono">04 frames</span>
             <span class="rl-kind mono">Commercial</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from John Smith’s"><img src="/media/stills/johnsmiths-1.jpg" alt="Frame 1 from John Smith’s" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r1.jpg" alt="Frame 2 from John Smith’s" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r2.jpg" alt="Frame 3 from John Smith’s" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r3.jpg" alt="Frame 4 from John Smith’s" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 04</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Dann Emmons · One Thousand Eyes</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from John Smith’s — move across to flick through, click to enlarge"><img src="/media/stills/johnsmiths-1.jpg" alt="Frame 1 from John Smith’s" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r1.jpg" alt="Frame 2 from John Smith’s" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r2.jpg" alt="Frame 3 from John Smith’s" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r3.jpg" alt="Frame 4 from John Smith’s" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 04</span><br />Dir. Dann Emmons · One Thousand Eyes</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Aberfeldy" data-stills="aberfeldy-2,aberfeldy-r1,aberfeldy-r2,aberfeldy-r3,aberfeldy-r4" data-tint="#35220c" data-provider="vimeo" data-id="1176200194">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">03</span>
             <span class="rl-title">Aberfeldy</span>
             <span class="rl-credit mono">Dir. Jess Leuty · CPC</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Brand film</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Aberfeldy"><img src="/media/stills/aberfeldy-2.jpg" alt="Frame 1 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r1.jpg" alt="Frame 2 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r2.jpg" alt="Frame 3 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r3.jpg" alt="Frame 4 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r4.jpg" alt="Frame 5 from Aberfeldy" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Jess Leuty · CPC</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Aberfeldy — move across to flick through, click to enlarge"><img src="/media/stills/aberfeldy-2.jpg" alt="Frame 1 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r1.jpg" alt="Frame 2 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r2.jpg" alt="Frame 3 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r3.jpg" alt="Frame 4 from Aberfeldy" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r4.jpg" alt="Frame 5 from Aberfeldy" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Jess Leuty · CPC</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Vision Pro" data-stills="vision-pro-1,vision-pro-2,vision-pro-3,vision-pro-4,vision-pro-5" data-tint="#36220b" data-provider="vimeo" data-id="926185147">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">04</span>
             <span class="rl-title">Vision Pro</span>
             <span class="rl-credit mono">Dir. Nico Bourgeais · CPC</span>
+            <span class="rl-frames-n mono">05 frames</span>
             <span class="rl-kind mono">Commercial</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Vision Pro"><img src="/media/stills/vision-pro-1.jpg" alt="Frame 1 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-2.jpg" alt="Frame 2 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-3.jpg" alt="Frame 3 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-4.jpg" alt="Frame 4 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-5.jpg" alt="Frame 5 from Vision Pro" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 05</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Nico Bourgeais · CPC</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Vision Pro — move across to flick through, click to enlarge"><img src="/media/stills/vision-pro-1.jpg" alt="Frame 1 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-2.jpg" alt="Frame 2 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-3.jpg" alt="Frame 3 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-4.jpg" alt="Frame 4 from Vision Pro" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-5.jpg" alt="Frame 5 from Vision Pro" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 05</span><br />Dir. Nico Bourgeais · CPC</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="London Jazz Festival" data-stills="london-jazz-festival-1,london-jazz-festival-2,london-jazz-festival-3,london-jazz-festival-r1,london-jazz-festival-r2,london-jazz-festival-r3" data-tint="#3b1207" data-provider="youtube" data-id="ugaZUGlBulc">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">05</span>
             <span class="rl-title">London Jazz Festival</span>
             <span class="rl-credit mono">Dir. Lauren Smith · Serious Music</span>
+            <span class="rl-frames-n mono">06 frames</span>
             <span class="rl-kind mono">Brand film</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from London Jazz Festival"><img src="/media/stills/london-jazz-festival-1.jpg" alt="Frame 1 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-2.jpg" alt="Frame 2 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-3.jpg" alt="Frame 3 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r1.jpg" alt="Frame 4 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r2.jpg" alt="Frame 5 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r3.jpg" alt="Frame 6 from London Jazz Festival" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 06</p>
-              <p class="rl-ticks"><i></i><i></i><i></i><i></i><i></i><i></i></p>
-              <p class="rl-credit-full">Dir. Lauren Smith · Serious Music</p>
-              <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from London Jazz Festival — move across to flick through, click to enlarge"><img src="/media/stills/london-jazz-festival-1.jpg" alt="Frame 1 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-2.jpg" alt="Frame 2 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-3.jpg" alt="Frame 3 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r1.jpg" alt="Frame 4 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r2.jpg" alt="Frame 5 from London Jazz Festival" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r3.jpg" alt="Frame 6 from London Jazz Festival" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="3" aria-label="Frame 4"><img src="/media/thumbs/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="4" aria-label="Frame 5"><img src="/media/thumbs/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="5" aria-label="Frame 6"><img src="/media/thumbs/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 06</span><br />Dir. Lauren Smith · Serious Music</p>
+                <div class="rl-acts"><button class="rl-play">Play film ↗</button><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>
         <li class="rl" data-title="Phox Water" data-stills="phox-r1,phox-r2,phox-r3" data-tint="#37210a">
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true"><img src="/media/thumbs/phox-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/phox-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/thumbs/phox-r3.jpg" alt="" loading="lazy" decoding="async" /></span>
             <span class="rl-n mono">06</span>
             <span class="rl-title">Phox Water</span>
             <span class="rl-credit mono"></span>
+            <span class="rl-frames-n mono">03 frames</span>
             <span class="rl-kind mono">Commercial</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from Phox Water"><img src="/media/stills/phox-r1.jpg" alt="Frame 1 from Phox Water" loading="lazy" decoding="async" /><img src="/media/stills/phox-r2.jpg" alt="Frame 2 from Phox Water" loading="lazy" decoding="async" /><img src="/media/stills/phox-r3.jpg" alt="Frame 3 from Phox Water" loading="lazy" decoding="async" /></div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / 03</p>
-              <p class="rl-ticks"><i></i><i></i><i></i></p>
-              <p class="rl-credit-full"></p>
-              <div class="rl-acts"><button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from Phox Water — move across to flick through, click to enlarge"><img src="/media/stills/phox-r1.jpg" alt="Frame 1 from Phox Water" loading="lazy" decoding="async" /><img src="/media/stills/phox-r2.jpg" alt="Frame 2 from Phox Water" loading="lazy" decoding="async" /><img src="/media/stills/phox-r3.jpg" alt="Frame 3 from Phox Water" loading="lazy" decoding="async" /><span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:2"><button class="rl-thumb" data-i="0" aria-label="Frame 1"><img src="/media/thumbs/phox-r1.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="1" aria-label="Frame 2"><img src="/media/thumbs/phox-r2.jpg" alt="" loading="lazy" decoding="async" /></button><button class="rl-thumb" data-i="2" aria-label="Frame 3"><img src="/media/thumbs/phox-r3.jpg" alt="" loading="lazy" decoding="async" /></button></div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / 03</span><br /></p>
+                <div class="rl-acts"><button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>

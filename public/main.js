@@ -139,18 +139,19 @@
     show();
   });
 
-  /* ---------- Work: one film open at a time, flicking through its frames ---------- */
+  /* ---------- Work: one film open at a time, every frame on show ---------- */
   const workEl = $("#work");
   const rows = $$(".rl", workEl);
   const canHover = window.matchMedia("(hover: hover)").matches;
-  let openRow = null, flick = 0, hoverTimer = 0;
+  let openRow = null, hoverTimer = 0;
 
   const flickTo = (row, i) => {
-    const imgs = $$(".rl-stage img", row), ticks = $$(".rl-ticks i", row);
-    row._i = (i + imgs.length) % imgs.length;
+    const imgs = $$(".rl-stage img", row), thumbs = $$(".rl-thumb", row);
+    row._i = Math.max(0, Math.min(imgs.length - 1, i));
     imgs.forEach((im, k) => im.classList.toggle("on", k === row._i));
-    ticks.forEach((t, k) => t.classList.toggle("on", k === row._i));
+    thumbs.forEach((t, k) => t.classList.toggle("on", k === row._i));
     $(".rl-i", row).textContent = pad(row._i + 1);
+    $(".rl-scrub span", row).style.transform = `scaleX(${(row._i + 1) / imgs.length})`;
   };
 
   const expand = (row) => {
@@ -159,29 +160,49 @@
     openRow = row;
     row.classList.add("is-open");
     $(".rl-head", row).setAttribute("aria-expanded", "true");
-    workEl.style.setProperty("--tint", row.dataset.tint);
     flickTo(row, 0);
-    clearInterval(flick);
-    if (!reduceMotion) flick = setInterval(() => flickTo(row, row._i + 1), 700);
   };
 
   rows.forEach((row) => {
     const head = $(".rl-head", row);
+    const stage = $(".rl-stage", row);
+    const count = $$(".rl-stage img", row).length;
     if (canHover) {
       // a short dwell so sweeping the mouse down the list doesn't open every film on the way
-      head.addEventListener("mouseenter", () => { clearTimeout(hoverTimer); hoverTimer = setTimeout(() => expand(row), 140); });
+      head.addEventListener("mouseenter", () => { clearTimeout(hoverTimer); hoverTimer = setTimeout(() => expand(row), 160); });
       head.addEventListener("mouseleave", () => clearTimeout(hoverTimer));
     }
-    head.addEventListener("click", () => (row === openRow && row.dataset.id ? window.cpOpen(row, null) : expand(row)));
+    head.addEventListener("click", () => (row === openRow && row.dataset.id ? open(row, null) : expand(row)));
     head.addEventListener("focus", () => expand(row));
-    $(".rl-stage", row).addEventListener("click", () => window.cpOpen(row, row._i || 0));
-    $(".rl-frames", row).addEventListener("click", () => window.cpOpen(row, row._i || 0));
-    $(".rl-play", row)?.addEventListener("click", () => window.cpOpen(row, null));
-    // pause flicking while someone studies a frame
-    $(".rl-stage", row).addEventListener("mouseenter", () => clearInterval(flick));
-    $(".rl-stage", row).addEventListener("mouseleave", () => { if (row === openRow && !reduceMotion) { clearInterval(flick); flick = setInterval(() => flickTo(row, row._i + 1), 700); } });
+    // Sweep across the main frame to flick through the film
+    stage.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const r = stage.getBoundingClientRect();
+      flickTo(row, Math.floor(((e.clientX - r.left) / r.width) * count));
+    });
+    stage.addEventListener("click", () => open(row, row._i || 0));
+    $$(".rl-thumb", row).forEach((t) => {
+      const i = Number(t.dataset.i);
+      t.addEventListener("mouseenter", () => flickTo(row, i));
+      t.addEventListener("focus", () => flickTo(row, i));
+      t.addEventListener("click", () => (canHover ? open(row, i) : flickTo(row, i)));
+    });
+    $(".rl-frames", row).addEventListener("click", () => open(row, row._i || 0));
+    $(".rl-play", row)?.addEventListener("click", () => open(row, null));
   });
   expand(rows[0]);
+
+  /* ---------- Black or white canvas ---------- */
+  const themeBtn = $("#theme");
+  const applyTheme = (t) => {
+    if (t === "light") document.documentElement.dataset.theme = "light";
+    else delete document.documentElement.dataset.theme;
+    $("span", themeBtn).textContent = t === "light" ? "Dark" : "Light";
+    themeBtn.setAttribute("aria-label", `Switch to ${t === "light" ? "dark" : "light"} background`);
+    try { localStorage.setItem("cp-theme", t); } catch (e) {}
+  };
+  applyTheme(document.documentElement.dataset.theme === "light" ? "light" : "dark");
+  themeBtn.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light"));
 
   /* ---------- Logo only once the big name has left the screen ---------- */
   const logo = $("#logo");

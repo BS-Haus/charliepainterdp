@@ -32,32 +32,37 @@ def title_html(p):
 
 
 def reel_list(items):
-    """An accordion of films: slim title bars; the open one becomes a big screen that flicks through its frames."""
+    """An accordion of films: clean title bars; the open one shows a main frame beside every frame."""
     rows = []
     for i, p in enumerate(items):
         sub = f' <em>‘{esc(p["subtitle"])}’</em>' if p.get("subtitle") else ""
-        band = "".join(f'<img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" />' for st in p["stills"])
+        n = len(p["stills"])
+        cols = 3 if n > 6 else 2 if n > 1 else 1
         stage = "".join(
             f'<img src="/media/stills/{st}.jpg" alt="Frame {k + 1} from {esc(p["title"])}" loading="lazy" decoding="async" />'
             for k, st in enumerate(p["stills"])
         )
-        ticks = "".join("<i></i>" for _ in p["stills"])
+        thumbs = "".join(
+            f'<button class="rl-thumb" data-i="{k}" aria-label="Frame {k + 1}"><img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" /></button>'
+            for k, st in enumerate(p["stills"])
+        )
         play = '<button class="rl-play">Play film ↗</button>' if p.get("video") else ""
         rows.append(f'''        <li class="rl"{film_attrs(p)}>
           <button class="rl-head" aria-expanded="false">
-            <span class="rl-band" aria-hidden="true">{band}</span>
             <span class="rl-n mono">{i + 1:02d}</span>
             <span class="rl-title">{esc(p['title'])}{sub}</span>
             <span class="rl-credit mono">{esc(credit(p))}</span>
+            <span class="rl-frames-n mono">{n:02d} frames</span>
             <span class="rl-kind mono">{esc(p['kind'])}</span>
           </button>
           <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from {esc(p['title'])}">{stage}</div>
-            <div class="rl-info mono">
-              <p class="rl-count"><span class="rl-i">01</span> / {len(p["stills"]):02d}</p>
-              <p class="rl-ticks">{ticks}</p>
-              <p class="rl-credit-full">{esc(credit(p))}</p>
-              <div class="rl-acts">{play}<button class="rl-frames">All frames</button></div>
+            <div class="rl-stage" aria-label="Frames from {esc(p['title'])} — move across to flick through, click to enlarge">{stage}<span class="rl-scrub"><span></span></span></div>
+            <div class="rl-side">
+              <div class="rl-thumbs" style="--cols:{cols}">{thumbs}</div>
+              <div class="rl-info mono">
+                <p><span class="rl-count"><span class="rl-i">01</span> / {n:02d}</span><br />{esc(credit(p))}</p>
+                <div class="rl-acts">{play}<button class="rl-frames">Enlarge</button></div>
+              </div>
             </div>
           </div></div>
         </li>''')
