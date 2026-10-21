@@ -31,23 +31,37 @@ def title_html(p):
     return f"{esc(p['title'])}{sub}"
 
 
-def wall(sections):
-    """Every film on one screen: each is a small contact-sheet block of up to four frames."""
-    out, n = [], 0
-    for label, items in sections:
-        out.append(f'          <div class="w-cell w-chapter"><span class="mono">{len(items):02d} films</span><b>{label}</b></div>')
-        for p in items:
-            n += 1
-            frames = p["stills"][:4]
-            count = len(frames)
-            imgs = "".join(f'<img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" />' for st in frames)
-            sub = f' — ‘{esc(p["subtitle"])}’' if p.get("subtitle") else ""
-            out.append(f'''          <button class="w-cell w-film"{film_attrs(p)} data-n="{n:02d}" data-credit="{esc(credit(p))}" data-kind="{esc(p['kind'])}" aria-label="{"Play" if p.get("video") else "View frames from"} {esc(p['title'])}">
-            <span class="w-sheet w-sheet-{count}">{imgs}</span>
-            <span class="w-cap mono"><span>{n:02d}</span><b>{esc(p['title'])}{esc(sub)}</b><span>{esc(p['kind'])}</span></span>
-          </button>''')
-    out.append('''          <a class="w-cell w-studio" href="https://painterstudio.vercel.app" target="_blank" rel="noopener"><span class="mono">For brands</span><b>Painter.Studio ↗</b><span class="mono">Charlie’s content studio</span></a>''')
-    return "\n".join(out)
+def reel_list(items):
+    """An accordion of films: slim title bars; the open one becomes a big screen that flicks through its frames."""
+    rows = []
+    for i, p in enumerate(items):
+        sub = f' <em>‘{esc(p["subtitle"])}’</em>' if p.get("subtitle") else ""
+        band = "".join(f'<img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" />' for st in p["stills"])
+        stage = "".join(
+            f'<img src="/media/stills/{st}.jpg" alt="Frame {k + 1} from {esc(p["title"])}" loading="lazy" decoding="async" />'
+            for k, st in enumerate(p["stills"])
+        )
+        ticks = "".join("<i></i>" for _ in p["stills"])
+        play = '<button class="rl-play">Play film ↗</button>' if p.get("video") else ""
+        rows.append(f'''        <li class="rl"{film_attrs(p)}>
+          <button class="rl-head" aria-expanded="false">
+            <span class="rl-band" aria-hidden="true">{band}</span>
+            <span class="rl-n mono">{i + 1:02d}</span>
+            <span class="rl-title">{esc(p['title'])}{sub}</span>
+            <span class="rl-credit mono">{esc(credit(p))}</span>
+            <span class="rl-kind mono">{esc(p['kind'])}</span>
+          </button>
+          <div class="rl-body"><div class="rl-inner">
+            <div class="rl-stage" role="button" tabindex="-1" aria-label="View frames from {esc(p['title'])}">{stage}</div>
+            <div class="rl-info mono">
+              <p class="rl-count"><span class="rl-i">01</span> / {len(p["stills"]):02d}</p>
+              <p class="rl-ticks">{ticks}</p>
+              <p class="rl-credit-full">{esc(credit(p))}</p>
+              <div class="rl-acts">{play}<button class="rl-frames">All frames</button></div>
+            </div>
+          </div></div>
+        </li>''')
+    return "\n".join(rows)
 
 
 narr_more = "\n".join(
@@ -65,10 +79,11 @@ comm_extra = f"""        <div class="also-col">
           <p class="also-line">{" · ".join(esc(x) for x in content["commercial_more"])}</p>
         </div>"""
 
-total = len(content["narrative"]) + len(content["commercial"])
 out = (ROOT / "template.html").read_text()
-out = out.replace("{{WALL}}", wall([("Narrative", content["narrative"]), ("Commercial", content["commercial"])]))
-out = out.replace("{{FILM_COUNT}}", f"{total:02d}")
+out = out.replace("{{NARRATIVE}}", reel_list(content["narrative"]))
+out = out.replace("{{COMMERCIAL}}", reel_list(content["commercial"]))
+out = out.replace("{{NARRATIVE_COUNT}}", f'{len(content["narrative"]):02d}')
+out = out.replace("{{COMMERCIAL_COUNT}}", f'{len(content["commercial"]):02d}')
 out = out.replace("{{ALSO}}", narr_extra + "\n" + comm_extra)
 (ROOT / "public" / "index.html").write_text(out)
 print("Built public/index.html")

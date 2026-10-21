@@ -109,6 +109,8 @@
     show();
   };
 
+  window.cpOpen = (el, i) => open(el, i);
+
   const close = () => {
     lb.classList.remove("is-open");
     lb.hidden = true;
@@ -137,20 +139,49 @@
     show();
   });
 
-  /* ---------- Work: the wall ---------- */
-  const wallEl = $("#work");
-  const hudN = $("#hud-n"), hudTitle = $("#hud-title"), hudCredit = $("#hud-credit");
-  $$(".w-film", wallEl).forEach((cell) => {
-    const show = () => {
-      wallEl.style.setProperty("--tint", cell.dataset.tint);
-      hudN.textContent = cell.dataset.n;
-      hudTitle.textContent = cell.dataset.title;
-      hudCredit.textContent = [cell.dataset.kind, cell.dataset.credit].filter(Boolean).join(" · ");
-    };
-    cell.addEventListener("mouseenter", show);
-    cell.addEventListener("focus", show);
-    cell.addEventListener("click", () => open(cell, null));
+  /* ---------- Work: one film open at a time, flicking through its frames ---------- */
+  const workEl = $("#work");
+  const rows = $$(".rl", workEl);
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  let openRow = null, flick = 0, hoverTimer = 0;
+
+  const flickTo = (row, i) => {
+    const imgs = $$(".rl-stage img", row), ticks = $$(".rl-ticks i", row);
+    row._i = (i + imgs.length) % imgs.length;
+    imgs.forEach((im, k) => im.classList.toggle("on", k === row._i));
+    ticks.forEach((t, k) => t.classList.toggle("on", k === row._i));
+    $(".rl-i", row).textContent = pad(row._i + 1);
+  };
+
+  const expand = (row) => {
+    if (row === openRow) return;
+    if (openRow) { openRow.classList.remove("is-open"); $(".rl-head", openRow).setAttribute("aria-expanded", "false"); }
+    openRow = row;
+    row.classList.add("is-open");
+    $(".rl-head", row).setAttribute("aria-expanded", "true");
+    workEl.style.setProperty("--tint", row.dataset.tint);
+    flickTo(row, 0);
+    clearInterval(flick);
+    if (!reduceMotion) flick = setInterval(() => flickTo(row, row._i + 1), 700);
+  };
+
+  rows.forEach((row) => {
+    const head = $(".rl-head", row);
+    if (canHover) {
+      // a short dwell so sweeping the mouse down the list doesn't open every film on the way
+      head.addEventListener("mouseenter", () => { clearTimeout(hoverTimer); hoverTimer = setTimeout(() => expand(row), 140); });
+      head.addEventListener("mouseleave", () => clearTimeout(hoverTimer));
+    }
+    head.addEventListener("click", () => (row === openRow && row.dataset.id ? window.cpOpen(row, null) : expand(row)));
+    head.addEventListener("focus", () => expand(row));
+    $(".rl-stage", row).addEventListener("click", () => window.cpOpen(row, row._i || 0));
+    $(".rl-frames", row).addEventListener("click", () => window.cpOpen(row, row._i || 0));
+    $(".rl-play", row)?.addEventListener("click", () => window.cpOpen(row, null));
+    // pause flicking while someone studies a frame
+    $(".rl-stage", row).addEventListener("mouseenter", () => clearInterval(flick));
+    $(".rl-stage", row).addEventListener("mouseleave", () => { if (row === openRow && !reduceMotion) { clearInterval(flick); flick = setInterval(() => flickTo(row, row._i + 1), 700); } });
   });
+  expand(rows[0]);
 
   /* ---------- Logo only once the big name has left the screen ---------- */
   const logo = $("#logo");
