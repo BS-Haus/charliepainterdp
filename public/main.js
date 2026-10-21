@@ -192,18 +192,6 @@
   });
   expand(rows[0]);
 
-  /* ---------- Black or white canvas ---------- */
-  const themeBtn = $("#theme");
-  const applyTheme = (t) => {
-    if (t === "light") document.documentElement.dataset.theme = "light";
-    else delete document.documentElement.dataset.theme;
-    $("span", themeBtn).textContent = t === "light" ? "Dark" : "Light";
-    themeBtn.setAttribute("aria-label", `Switch to ${t === "light" ? "dark" : "light"} background`);
-    try { localStorage.setItem("cp-theme", t); } catch (e) {}
-  };
-  applyTheme(document.documentElement.dataset.theme === "light" ? "light" : "dark");
-  themeBtn.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light"));
-
   /* ---------- Logo only once the big name has left the screen ---------- */
   const logo = $("#logo");
   new IntersectionObserver(([e]) => logo.classList.toggle("is-hidden", e.isIntersecting)).observe($(".name"));
