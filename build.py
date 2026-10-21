@@ -52,7 +52,7 @@ def reel_list(items):
             <span class="rl-n mono">{i + 1:02d}</span>
             <span class="rl-title">{esc(p['title'])}{sub}</span>
             <span class="rl-credit mono">{esc(credit(p))}</span>
-            <span class="rl-frames-n mono">{n:02d} frames</span>
+            <span class="rl-mini" aria-hidden="true">{"".join(f'<img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" />' for st in p["stills"][:5])}</span>
             <span class="rl-kind mono">{esc(p['kind'])}</span>
           </button>
           <div class="rl-body"><div class="rl-inner">

@@ -95,14 +95,19 @@ h2, h3 { font-weight: 500; margin: 0; }
 
 /* Closed: a clean title bar */
 .rl-head {
-  width: 100%; display: grid; grid-template-columns: 40px minmax(0, 1.3fr) minmax(0, 1fr) 90px 110px; align-items: center; gap: 16px;
+  width: 100%; display: grid; grid-template-columns: 40px minmax(0, 1.2fr) minmax(0, 1fr) 332px 90px; align-items: center; gap: 16px;
   padding: 16px 0; transition: padding .5s var(--ease-out);
 }
 .rl-n { color: var(--muted); }
 .rl-title { font-size: clamp(20px, 2.1vw, 32px); font-weight: 500; letter-spacing: -0.04em; line-height: 1.05; color: var(--muted); transition: color .3s; }
 .rl-title em { font-style: normal; font-size: .6em; margin-left: .3em; }
 .rl-head:hover .rl-title, .rl.is-open .rl-title { color: var(--fg); }
-.rl-credit, .rl-frames-n { color: var(--muted); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.rl-credit { color: var(--muted); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+/* Closed: a small version of the film's frames; they make way when it opens */
+.rl-mini { display: flex; gap: 3px; justify-content: flex-end; transition: opacity .4s; }
+.rl-mini img { width: 64px; height: 36px; object-fit: cover; opacity: .65; transition: opacity .3s; }
+.rl-head:hover .rl-mini img { opacity: 1; }
+.rl.is-open .rl-mini { opacity: 0; }
 .rl-kind { color: var(--muted); text-align: right; }
 .rl.is-open .rl-n { color: var(--rec); }
 
@@ -196,7 +201,12 @@ h2, h3 { font-weight: 500; margin: 0; }
   .logo { white-space: nowrap; font-size: 16px; }
   .top-nav a:first-child { display: none; }
   .rl-head { grid-template-columns: 30px 1fr auto; }
-  .rl-credit, .rl-frames-n { display: none; }
+  .rl-credit { display: none; }
+  .rl-head { grid-template-columns: 30px 1fr auto; row-gap: 10px; }
+  .rl-kind { grid-row: 1; grid-column: 3; }
+  .rl-mini { grid-row: 2; grid-column: 2 / -1; justify-content: flex-start; }
+  .rl-mini img { width: 52px; height: 30px; }
+  .rl.is-open .rl-mini { display: none; }
   .rl-inner { grid-template-columns: 1fr; }
   .rl-stage { aspect-ratio: 16 / 10; }
   .rl-thumbs { --cols: 5 !important; grid-auto-rows: auto; }
