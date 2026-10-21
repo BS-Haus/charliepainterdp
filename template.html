@@ -57,22 +57,20 @@
       </p>
     </section>
 
-    <!-- WORK -->
-    <section class="work" id="work">
-      <div class="work-bar">
-        <div class="tabs" role="tablist" aria-label="Work">
-          <button class="tab is-on" role="tab" aria-selected="true" aria-controls="panel-narrative" data-tab="narrative">Narrative <sup class="mono">{{NARRATIVE_COUNT}}</sup></button>
-          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-commercial" data-tab="commercial">Commercial <sup class="mono">{{COMMERCIAL_COUNT}}</sup></button>
-        </div>
-        <div class="views mono" role="group" aria-label="Layout">
-          <span>View</span>
-          <button class="view is-on" data-view="index" aria-pressed="true">A · Index</button>
-          <button class="view" data-view="sheet" aria-pressed="false">B · Contact sheet</button>
-          <button class="view" data-view="screen" aria-pressed="false">C · Screening</button>
-        </div>
+    <!-- WORK: the wall — every film on one screen -->
+    <section class="wall" id="work" aria-label="Work">
+      <div class="wall-head">
+        <h2>Work</h2>
+        <p class="mono">{{FILM_COUNT}} films · select one to play</p>
       </div>
-{{NARRATIVE_PANEL}}
-{{COMMERCIAL_PANEL}}
+      <div class="wall-grid">
+{{WALL}}
+      </div>
+      <p class="wall-hud mono" aria-live="polite"><span id="hud-n">—</span><span id="hud-title">Hover a film</span><span id="hud-credit"></span></p>
+    </section>
+
+    <section class="also" aria-label="More credits">
+{{ALSO}}
     </section>
 
     <!-- ABOUT -->
