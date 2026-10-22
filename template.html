@@ -19,13 +19,14 @@
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="is-intro">
-  <!-- INTRO: the wordmark builds, then the suite draws itself in -->
+  <!-- INTRO: the wordmark builds, then the grid draws itself in -->
   <div class="intro" id="intro" aria-hidden="true">
     <p class="intro-mark"><span class="intro-word">Charlie Painter</span><span class="intro-dp">_DP</span></p>
     <p class="intro-meta mono"><span>Director of Photography</span><span id="intro-count">00</span></p>
     <span class="intro-line"><span id="intro-bar"></span></span>
   </div>
 
+  <!-- One technical grid: every panel shares its hairlines with its neighbours -->
   <div class="suite" id="top">
 
     <!-- MENU BAR -->
@@ -33,33 +34,38 @@
       <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
       <nav class="nav mono" aria-label="Sections">
         <a href="#work">Work</a>
-        <a href="#timeline">Timeline</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
 
-    <!-- PROGRAM MONITOR -->
+    <!-- PROGRAM MONITOR: the reel plays big here, then docks into the work section as you scroll -->
     <section class="panel monitor" id="reel" aria-label="Showreel" style="--d:1">
       <div class="panel-head mono">
-        <span class="ph-label"><span class="rec" aria-hidden="true"></span><span id="vf-label">Reel 01 — Narrative</span></span>
+        <span class="ph-label"><span class="rec" aria-hidden="true"></span><span id="top-label">Reel 01 — Narrative</span></span>
         <span class="tc" id="tc" aria-hidden="true">01:00:00:00</span>
       </div>
-      <div class="vf" id="vf" role="button" tabindex="0" aria-label="Open with sound">
-        <video id="reel-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg">
-          <source src="/media/reel-narrative-v2.mp4" type="video/mp4" />
-        </video>
-        <div class="vf-frames" id="vf-frames" aria-hidden="true"></div>
-        <span class="vf-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      </div>
+      <div class="slot slot-top" id="slot-top"><span class="slot-idle mono">Playing below ↓</span></div>
       <div class="panel-foot">
         <div class="scale" aria-hidden="true"><span class="scale-ticks"></span><span class="scale-index" id="scale-index"></span></div>
-        <button class="key mono" id="vf-play">Watch with sound ↗</button>
+        <button class="key mono" id="reel-play">Watch with sound ↗</button>
       </div>
     </section>
 
-    <!-- WORK: the films, and the one you're on -->
-    <section class="panel bin" id="work" aria-label="Work" style="--d:2">
+    <!-- WORK: the docked player on the left, the films on the right -->
+    <section class="panel dock" id="work" aria-label="Player" style="--d:2">
+      <div class="dock-in">
+        <div class="panel-head mono"><span class="ph-label" id="dock-label">Reel 01 — Narrative</span><span id="dock-count">2.39 : 1</span></div>
+        <div class="slot slot-dock" id="slot-dock"></div>
+        <div class="dock-meta">
+          <p class="dock-title" id="dock-title">Narrative showreel</p>
+          <p class="dock-credit" id="dock-credit">Scroll the list to step through the films.</p>
+        </div>
+        <div class="panel-foot"><button class="key mono" id="dock-play">Watch with sound ↗</button><button class="key mono" id="dock-frames" hidden>All frames</button></div>
+      </div>
+    </section>
+
+    <section class="panel bin" aria-label="Films" style="--d:3">
       <div class="panel-head mono tabs" role="tablist">
         <button class="tab is-on" role="tab" aria-selected="true" data-tab="narrative">Narrative <b>{{NARRATIVE_COUNT}}</b></button>
         <button class="tab" role="tab" aria-selected="false" data-tab="commercial">Commercial <b>{{COMMERCIAL_COUNT}}</b></button>
@@ -70,33 +76,6 @@
       <ol class="rows" data-set="commercial" hidden>
 {{COMMERCIAL}}
       </ol>
-    </section>
-
-    <section class="panel source" aria-label="Selected film" style="--d:3">
-      <div class="source-in">
-        <div class="panel-head mono"><span id="src-n"></span><span id="src-count"></span></div>
-        <div class="src-view" id="src-view" role="button" tabindex="0" aria-label="Enlarge frame"></div>
-        <div class="src-meta">
-          <p class="src-title" id="src-title"></p>
-          <p class="src-credit" id="src-credit"></p>
-        </div>
-        <div class="src-grid" id="src-grid"></div>
-        <div class="panel-foot"><button class="key mono" id="src-play">Play film ↗</button></div>
-      </div>
-    </section>
-
-    <!-- TIMELINE -->
-    <section class="panel timeline" id="timeline" aria-label="Timeline">
-      <div class="panel-head mono"><span>Timeline</span><span>{{FILM_COUNT}} films</span></div>
-      <div class="tl" id="tl">
-        <div class="track" data-set="narrative"><span class="track-label mono">Narrative</span><div class="clips">
-{{TL_NARRATIVE}}
-        </div></div>
-        <div class="track" data-set="commercial"><span class="track-label mono">Commercial</span><div class="clips">
-{{TL_COMMERCIAL}}
-        </div></div>
-        <span class="playhead" id="playhead" aria-hidden="true"></span>
-      </div>
     </section>
 
     <!-- ABOUT: one statement, then the detail -->
@@ -135,7 +114,16 @@
       </nav>
     </section>
 
-    <footer class="fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+    <footer class="panel fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+  </div>
+
+  <!-- THE PLAYER: one screen that travels from the monitor to the dock -->
+  <div class="player" id="player" role="button" tabindex="0" aria-label="Open with sound">
+    <video id="reel-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg">
+      <source src="/media/reel-narrative-v2.mp4" type="video/mp4" />
+    </video>
+    <div class="player-frames" id="player-frames" aria-hidden="true"></div>
+    <span class="vf-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   </div>
 
   <!-- VIEWER -->
