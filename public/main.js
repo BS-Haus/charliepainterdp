@@ -5,55 +5,93 @@
 
   $("#year").textContent = new Date().getFullYear();
 
-  /* ---------- Reel: narrative / commercial, with a running timecode ---------- */
+  /* ---------- Screen: big up top, docks bottom-left as you scroll ---------- */
   const REELS = {
-    narrative: { n: "01", label: "Narrative", caption: "Narrative showreel", src: "/media/reel-narrative.mp4", poster: "/media/reel-narrative-poster.jpg", vimeo: "1149629056" },
-    commercial: { n: "02", label: "Commercial", caption: "Commercial showreel", src: "/media/reel-commercial.mp4", poster: "/media/reel-commercial-poster.jpg", vimeo: "1188991301" },
+    narrative: { n: "01", label: "Narrative", src: "/media/reel-narrative.mp4", poster: "/media/reel-narrative-poster.jpg", vimeo: "1149629056" },
+    commercial: { n: "02", label: "Commercial", src: "/media/reel-commercial.mp4", poster: "/media/reel-commercial-poster.jpg", vimeo: "1188991301" },
   };
   let current = "narrative";
   const video = $("#reel-video");
   const tc = $("#tc");
-  const pauseBtn = $("#reel-pause");
-
-  const setReel = (key) => {
-    if (key === current) return;
-    current = key;
-    const r = REELS[key];
-    video.poster = r.poster;
-    video.src = r.src;
-    if (!reduceMotion) video.play().catch(() => {});
-    $("#reel-caption").textContent = r.caption;
-    $("#top-reel").textContent = `Reel ${r.n} · ${r.label}`;
-    $$("[data-reel]").forEach((b) => {
-      const on = b.dataset.reel === key;
-      b.classList.toggle("is-on", on);
-      b.setAttribute("aria-pressed", String(on));
-    });
-    setPaused(false);
-  };
-  $$("[data-reel]").forEach((b) => b.addEventListener("click", () => setReel(b.dataset.reel)));
-
-  const setPaused = (paused) => {
-    paused ? video.pause() : video.play().catch(() => {});
-    pauseBtn.textContent = paused ? "Play" : "Pause";
-    pauseBtn.setAttribute("aria-pressed", String(paused));
-  };
-  pauseBtn.addEventListener("click", () => setPaused(!video.paused));
-
+  const screen = $("#screen");
+  const slot = $("#screen-slot");
+  const label = $("#screen-label");
+  const framesEl = $("#screen-frames");
   const pad = (n) => String(n).padStart(2, "0");
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
   const tick = () => {
     const t = video.currentTime || 0;
     tc.textContent = `01:${pad(Math.floor(t / 60))}:${pad(Math.floor(t % 60))}:${pad(Math.floor((t % 1) * 25))}`;
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
-  if (reduceMotion) { video.removeAttribute("autoplay"); setPaused(true); }
+  if (reduceMotion) { video.removeAttribute("autoplay"); video.pause(); }
 
-  // Pause the reel while it's off screen
+  // Docked size mirrors the CSS: --dock-w is clamp(260px, 23vw, 380px), --gutter is clamp(16px, 2.4vw, 36px)
+  const canDock = window.matchMedia("(min-width: 861px)");
+  const place = () => {
+    const r = slot.getBoundingClientRect();
+    let x = r.left, y = r.top, w = r.width, h = r.height, p = 0;
+    if (canDock.matches) {
+      const vw = window.innerWidth, gutter = clamp(vw * 0.024, 16, 36), dw = clamp(vw * 0.23, 260, 380), dh = dw / 2;
+      p = clamp((64 - r.top) / (r.height * 0.7), 0, 1);
+      const e = reduceMotion ? (p > 0.5 ? 1 : 0) : easeInOut(p);
+      x = lerp(r.left, gutter, e);
+      // hold just under the header while it shrinks, rather than sliding off the top
+      y = lerp(Math.max(r.top, 64), window.innerHeight - gutter - dh, e);
+      w = lerp(r.width, dw, e);
+      h = lerp(r.height, dh, e);
+    }
+    screen.style.width = `${w}px`;
+    screen.style.height = `${h}px`;
+    screen.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    screen.classList.toggle("is-docked", p >= 1);
+    $("#top").classList.toggle("is-compact", window.scrollY > 30);
+  };
+  let placing = false;
+  const queuePlace = () => { if (!placing) { placing = true; requestAnimationFrame(() => { placing = false; place(); }); } };
+  window.addEventListener("scroll", queuePlace, { passive: true });
+  window.addEventListener("resize", queuePlace);
+  place();
+
+  // On phones the screen scrolls away with the page; stop it when it's gone
   new IntersectionObserver(([e]) => {
-    if (pauseBtn.getAttribute("aria-pressed") === "true") return;
+    if (reduceMotion || canDock.matches) return;
     e.isIntersecting ? video.play().catch(() => {}) : video.pause();
-  }).observe(video);
+  }).observe(slot);
+
+  // The screen plays whichever film you're hovering, otherwise the reel for the list you're in
+  let showing = null, filmTimer = 0;
+  const showFilm = (el, n) => {
+    if (showing === el) return;
+    showing = el;
+    framesEl.innerHTML = el.dataset.stills.split(",").map((s) => `<img src="/media/stills/${s}.jpg" alt="" decoding="async" />`).join("");
+    const imgs = $$("img", framesEl);
+    let i = 0;
+    imgs[0].classList.add("on");
+    clearInterval(filmTimer);
+    if (!reduceMotion && imgs.length > 1) filmTimer = setInterval(() => { imgs[i].classList.remove("on"); i = (i + 1) % imgs.length; imgs[i].classList.add("on"); }, 650);
+    label.textContent = `${n} · ${el.dataset.title}`;
+    screen.classList.add("is-film");
+  };
+  const showReel = () => {
+    showing = null;
+    clearInterval(filmTimer);
+    framesEl.innerHTML = "";
+    label.textContent = `Reel ${REELS[current].n} · ${REELS[current].label}`;
+    screen.classList.remove("is-film");
+  };
+  const setReel = (key) => {
+    if (key === current) return;
+    current = key;
+    video.poster = REELS[key].poster;
+    video.src = REELS[key].src;
+    if (!reduceMotion) video.play().catch(() => {});
+    if (!showing) showReel();
+  };
 
   /* ---------- Lightbox: films and frames ---------- */
   const lb = $("#lb");
@@ -116,7 +154,7 @@
     lb.hidden = true;
     stage.innerHTML = "";
     document.body.style.overflow = "";
-    if (pauseBtn.getAttribute("aria-pressed") !== "true") video.play().catch(() => {});
+    if (!reduceMotion) video.play().catch(() => {});
     lastFocus?.focus();
   };
 
@@ -132,10 +170,16 @@
     if (e.key === "ArrowLeft" && !prev.hidden) step(-1);
   });
 
+  screen.addEventListener("click", (e) => {
+    if (e.target.closest("#reel-sound")) return;
+    if (showing) open(showing, null);
+    else $("#reel-sound").click();
+  });
+
   $("#reel-sound").addEventListener("click", () => {
     lastFocus = document.activeElement;
     job = null;
-    openFilm({ provider: "vimeo", id: REELS[current].vimeo }, REELS[current].caption);
+    openFilm({ provider: "vimeo", id: REELS[current].vimeo }, `${REELS[current].label} showreel`);
     show();
   });
 
@@ -165,6 +209,9 @@
 
   rows.forEach((row) => {
     const head = $(".rl-head", row);
+    const n = $(".rl-n", row).textContent;
+    head.addEventListener("mouseenter", () => showFilm(row, n));
+    head.addEventListener("focus", () => showFilm(row, n));
     const stage = $(".rl-stage", row);
     const count = $$(".rl-stage img", row).length;
     if (canHover) {
@@ -191,10 +238,17 @@
     $(".rl-play", row)?.addEventListener("click", () => open(row, null));
   });
   expand(rows[0]);
+  $$(".rl-list", workEl).forEach((list) => list.addEventListener("mouseleave", showReel));
 
-  /* ---------- Logo only once the big name has left the screen ---------- */
-  const logo = $("#logo");
-  new IntersectionObserver(([e]) => logo.classList.toggle("is-hidden", e.isIntersecting)).observe($(".name"));
+  // Reach the commercial list and the screen switches to the commercial reel
+  const lists = $$(".rl-list", workEl);
+  new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) setReel(e.target === lists[1] ? "commercial" : "narrative");
+  }), { rootMargin: "-45% 0px -45% 0px" }).observe(lists[0]);
+  new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) setReel("commercial");
+    else if (e.boundingClientRect.top > 0) setReel("narrative");
+  }), { rootMargin: "-45% 0px -45% 0px" }).observe(lists[1]);
 
   /* ---------- Quiet reveals ---------- */
   const obs = new IntersectionObserver((entries) => entries.forEach((e) => {

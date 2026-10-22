@@ -14,49 +14,37 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="top" id="top">
-    <a href="#reel" class="logo" id="logo" aria-label="Back to top">Charlie Painter_DP</a>
-    <p class="top-status mono"><span class="rec" aria-hidden="true"></span><span id="top-reel">Reel 01 · Narrative</span></p>
-    <nav class="top-nav mono" aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <nav class="top-left mono" aria-label="Sections"><a href="#work">Work</a><a href="#about">About</a></nav>
+    <a href="#reel" class="name" aria-label="Charlie Painter, Director of Photography — back to top">
+      <span class="name-main">Charlie Painter</span>
+      <span class="name-sub mono">Director of Photography</span>
+    </a>
+    <nav class="top-right mono" aria-label="Contact"><a href="#contact">Contact</a></nav>
   </header>
 
   <main>
-    <!-- REEL -->
-    <section class="reel" id="reel" aria-label="Showreel">
-      <div class="screen">
-        <video id="reel-video" class="screen-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-poster.jpg">
-          <source src="/media/reel-narrative.mp4" type="video/mp4" />
-        </video>
-        <div class="screen-ui mono">
-          <span id="reel-caption">Narrative showreel</span>
-          <span class="tc" id="tc" aria-hidden="true">01:00:00:00</span>
-        </div>
-      </div>
-      <div class="reel-foot">
-        <h1 class="name">Charlie Painter<span>Director of Photography</span></h1>
-        <div class="controls mono" role="group" aria-label="Reel">
-          <button class="ctl is-on" data-reel="narrative" aria-pressed="true">Narrative</button>
-          <button class="ctl" data-reel="commercial" aria-pressed="false">Commercial</button>
-          <button class="ctl" id="reel-pause" aria-pressed="false">Pause</button>
-          <button class="ctl ctl-solid" id="reel-sound">Watch with sound ↗</button>
-          <span class="ratio" aria-hidden="true">2.00 : 1</span>
-        </div>
-      </div>
-      <p class="laurels mono">
-        <span>Winner — Best Cinematography, SSIFF 2025</span>
-        <span>British Society of Cinematographers Mentee</span>
-        <span>London</span>
-      </p>
+    <!-- REEL: a big screen that docks bottom-left as you scroll, then plays whatever film you hover -->
+    <section class="hero" id="reel" aria-label="Showreel">
+      <div class="screen-slot" id="screen-slot"></div>
     </section>
+    <div class="screen" id="screen">
+      <video id="reel-video" class="screen-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-poster.jpg">
+        <source src="/media/reel-narrative.mp4" type="video/mp4" />
+      </video>
+      <div class="screen-frames" id="screen-frames" aria-hidden="true"></div>
+      <div class="screen-ui mono">
+        <span class="screen-label"><span class="rec" aria-hidden="true"></span><span id="screen-label">Reel 01 · Narrative</span></span>
+        <span class="tc" id="tc" aria-hidden="true">01:00:00:00</span>
+        <button class="screen-sound" id="reel-sound">Sound ↗</button>
+      </div>
+    </div>
 
+    <div class="rail">
     <!-- WORK: one film open at a time -->
     <section class="work" id="work" aria-label="Work">
       <div class="work-head">
@@ -112,6 +100,7 @@
       <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
       <p class="fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><a href="#reel">Back to top ↑</a></p>
     </footer>
+    </div>
   </main>
 
   <!-- LIGHTBOX: plays a film, or steps through a film's frames -->
