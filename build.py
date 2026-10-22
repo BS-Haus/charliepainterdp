@@ -65,16 +65,20 @@ def roll(all_items):
         )
         half = ' data-half="1"' if it["type"] == "reel" else ""
         name = it["title"] if it["type"] == "reel" else it.get("short", it["title"])
-        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono"><span>{esc(it["n"])}</span>{esc(name)}</p></div>')
+        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono"><span>{esc(it["n"])}</span><b>{esc(name)}</b></p></div>')
     return "\n".join(runs)
 
 
 def deck_map(all_items):
-    """The map on the deck: one segment per film, as long as its run of frames."""
-    return "".join(
-        f'<button class="seg{" seg-reel" if it["type"] == "reel" else ""}" data-item="{k}" style="flex-grow:{len(it["frames"])}" aria-label="{esc(it["title"])}"></button>'
-        for k, it in enumerate(all_items)
-    )
+    """The map on the deck: a half for each reel and its films; one segment per film, as long as its run of frames."""
+    halves = []
+    for group in ("narrative", "commercial"):
+        segs = "".join(
+            f'<button class="seg{" seg-reel" if it["type"] == "reel" else ""}" data-item="{k}" style="flex-grow:{len(it["frames"])};--i:{k}" aria-label="{esc(it["title"])}"></button>'
+            for k, it in enumerate(all_items) if it["group"] == group
+        )
+        halves.append(f'<div class="half"><span class="half-lbl">{group}</span><div class="segs">{segs}</div></div>')
+    return "".join(halves)
 
 
 def feed(all_items):

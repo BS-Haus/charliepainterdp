@@ -36,7 +36,8 @@
     <div class="viewer" id="viewer">
       <div class="frame" id="frame">
         <video id="reel" muted playsinline loop preload="auto" poster="/media/reel-narrative-v2-poster.jpg"></video>
-        <img class="still" id="still" alt="" />
+        <img class="still is-front" id="still" alt="" />
+        <img class="still" id="still-b" alt="" />
         <span class="shade" aria-hidden="true"></span>
         <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="v-n">R1</span><span id="v-kind">Showreel</span></p>
         <p class="corner c-tr mono" id="v-count"></p>
@@ -46,14 +47,13 @@
     </div>
     <div class="deck mono">
       <div class="keys" role="group" aria-label="Step through the work">
-        <button class="key" data-step="-film" aria-label="Previous film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2v8M10 2 4 6l6 4z"/></svg></button>
-        <button class="key" data-step="-1" aria-label="Previous frame"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M9 2 3 6l6 4z"/></svg></button>
-        <button class="key" data-step="1" aria-label="Next frame"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 2 6 4-6 4z"/></svg></button>
-        <button class="key" data-step="film" aria-label="Next film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10 2v8M2 2l6 4-6 4z"/></svg></button>
+        <button class="key" data-step="-film" aria-label="Previous film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2v8M10 2 4 6l6 4z"/></svg><span>Film</span></button>
+        <button class="key" data-step="-1" aria-label="Previous frame"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M9 2 3 6l6 4z"/></svg><span>Frame</span></button>
+        <button class="key" data-step="1" aria-label="Next frame"><span>Frame</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 2 6 4-6 4z"/></svg></button>
+        <button class="key" data-step="film" aria-label="Next film"><span>Film</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10 2v8M2 2l6 4-6 4z"/></svg></button>
       </div>
-      <div class="map" id="map">{{MAP}}</div>
-      <p class="hint" id="roll-hint">Scroll to pull the roll</p>
-      <p class="counter"><span id="c-now">001</span><span>/ {{FRAMES}}</span></p>
+      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub">{{MAP}}<span class="map-head" id="map-head" aria-hidden="true"></span></div>
+      <p class="counter" aria-live="polite"><span id="c-lbl">Reel</span><b id="c-now">R1</b><span id="c-of"></span></p>
     </div>
     <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
       <div class="strip" id="strip">

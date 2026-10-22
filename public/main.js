@@ -18,11 +18,11 @@
   const strip = $("#strip");
   const runs = $$(".run", strip);
   const frame = $("#frame");
-  const still = $("#still");
   const reel = $("#reel");
   const vN = $("#v-n"), vKind = $("#v-kind"), vCount = $("#v-count"), vTitle = $("#v-title"), vCredit = $("#v-credit"), vPlay = $("#v-play");
-  const hint = $("#roll-hint");
-  const segs = $$(".seg"), counter = $("#c-now");
+  const map = $("#map"), mapHead = $("#map-head"), segs = $$(".seg");
+  const cLbl = $("#c-lbl"), cNow = $("#c-now"), cOf = $("#c-of");
+  const films = runs.filter((r) => r.dataset.type === "film").length;
 
   // Every frame on the roll, with where its centre sits along the strip
   let cells = [];
@@ -48,6 +48,27 @@
     strip.style.transform = `translate3d(${x}px, 0, 0)`;
   };
 
+  // Two stills take turns: the new one is decoded behind, then dissolves in over the old in a few frames,
+  // so a fast pull never lands on a half-loaded picture. During the intro they cut instead.
+  const stills = [$("#still"), $("#still-b")];
+  let front = 0, stillToken = 0;
+  const setStill = (src, cut) => {
+    const a = stills[front];
+    if (a.dataset.src === src) return;
+    const token = ++stillToken;
+    if (cut) { a.src = a.dataset.src = src; return; }
+    const b = stills[1 - front];
+    b.src = b.dataset.src = src;
+    b.decode().catch(() => {}).then(() => {
+      if (token !== stillToken) return;
+      a.classList.replace("is-front", "is-back");
+      b.classList.remove("is-back");
+      b.classList.add("is-front");
+      front = 1 - front;
+      setTimeout(() => token === stillToken && a.classList.remove("is-back"), 180);
+    });
+  };
+
   // The viewer: a reel plays its video (seeking to the frame you're on); a film shows its still
   const preloaded = new Set();
   const preload = (k) => {
@@ -71,7 +92,10 @@
       vTitle.textContent = r.dataset.title;
       vCredit.textContent = r.dataset.credit;
       vPlay.textContent = r.dataset.type === "reel" ? "Watch with sound ↗" : r.dataset.id ? "Play film ↗" : "View frames ↗";
-      preload(c.run); preload(c.run + 1); preload(c.run - 1);
+      for (let d = -2; d <= 2; d++) preload(c.run + d);
+      cLbl.textContent = r.dataset.type === "reel" ? "Reel" : "Film";
+      cNow.textContent = r.dataset.n;
+      cOf.textContent = r.dataset.type === "reel" ? "" : `/ ${pad(films)}`;
     }
     const n = $$(".cell", r).length;
     if (r.dataset.type === "reel") {
@@ -83,11 +107,19 @@
     } else {
       frame.classList.add("is-film");
       reel.pause();
-      still.src = $$(".cell img", r)[c.f].src.replace("/thumbs/", "/stills/");
+      setStill($$(".cell img", r)[c.f].src.replace("/thumbs/", "/stills/"));
       vCount.textContent = `Frame ${pad(c.f + 1)} / ${pad(n)}`;
     }
-    counter.textContent = String(k + 1).padStart(3, "0");
+    placeHead();
   };
+
+  // The playhead on the map: inside the lit segment, as far along as the frame you're on
+  function placeHead() {
+    if (cur < 0) return;
+    const c = cells[cur], seg = segs[c.run], n = $$(".cell", runs[c.run]).length;
+    const m = map.getBoundingClientRect(), r = seg.getBoundingClientRect();
+    mapHead.style.left = `${r.left - m.left + ((c.f + 0.5) / n) * r.width}px`;
+  }
 
   // Reels show running timecode in the top-right corner
   const tc = () => {
@@ -106,7 +138,6 @@
       place(pos);
       const k = nearest(pos);
       if (k !== cur) show(k);
-      if (!portrait.matches && window.scrollY <= 4) topProgress.style.transform = `scaleX(${(pos - minPos()) / (maxPos() - minPos() || 1)})`;
     }
     tc();
     requestAnimationFrame(loop);
@@ -116,7 +147,6 @@
     target = clamp(to, minPos(), maxPos());
     lastInput = performance.now();
     settled = false;
-    hint.classList.add("is-gone");
   };
 
   // Wheel/trackpad over the gate pulls the roll; at either end the page scrolls as normal
@@ -184,7 +214,21 @@
     const s = key.dataset.step;
     s.endsWith("film") ? stepFilm(s.startsWith("-") ? -1 : 1) : stepFrame(Number(s));
   }));
-  segs.forEach((s) => s.addEventListener("click", () => cells.length && nudge(cells[firstOf(Number(s.dataset.item))].x)));
+  // Click or drag along the map to scrub: where you are along a segment is how far into that film you go
+  const scrubTo = (x) => {
+    const seg = segs.find((s) => x <= s.getBoundingClientRect().right + 1.5) || segs[segs.length - 1];
+    const r = seg.getBoundingClientRect(), run = Number(seg.dataset.item), n = $$(".cell", runs[run]).length;
+    nudge(cells[firstOf(run) + clamp(Math.floor(((x - r.left) / r.width) * n), 0, n - 1)].x);
+  };
+  let scrubbing = null;
+  map.addEventListener("pointerdown", (e) => {
+    if (e.button > 0 || !cells.length) return;
+    scrubbing = e.pointerId;
+    try { map.setPointerCapture(e.pointerId); } catch (err) {}
+    scrubTo(e.clientX);
+  });
+  map.addEventListener("pointermove", (e) => { if (scrubbing === e.pointerId) scrubTo(e.clientX); });
+  ["pointerup", "pointercancel"].forEach((t) => map.addEventListener(t, () => { scrubbing = null; }));
 
   // Arrow keys step a frame; with shift, a film — and light up the matching key
   document.addEventListener("keydown", (e) => {
@@ -208,6 +252,7 @@
     const keep = cur >= 0 ? cur : 0;
     measure();
     pos = target = cells[keep].x;
+    placeHead();
   });
 
   /* ---------- Intro: frames flicker through the gate like a projector threading up, then the roll slides in ---------- */
@@ -218,20 +263,28 @@
     requestAnimationFrame(loop);
   };
 
+  /* ---------- Power-on: the header flicks on label by label; the screen opens from a slit while the clips
+     flick through it; then the corners come up, the keys run a lamp test, the map fills and the roll threads in ---------- */
+  const body = document.body;
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   let seen = false;
   try { seen = sessionStorage.getItem("cp-intro") === "1"; } catch (e) {}
+  if (!seen && !reduceMotion) body.classList.add("go-top");
   if (portrait.matches || reduceMotion || seen) {
-    document.body.classList.remove("is-intro");
+    body.classList.remove("is-intro");
     startGate();
   } else {
     const firsts = runs.filter((r) => r.dataset.type === "film").map((r) => $(".cell img", r).src.replace("/thumbs/", "/stills/"));
     frame.classList.add("is-film");
-    let k = 0;
+    setStill(firsts[0], true);
+    const decoded = Promise.all(firsts.slice(0, 4).map((src) => { const i = new Image(); i.src = src; return i.decode().catch(() => {}); }));
+    let k = 1;
     const flick = () => {
-      still.src = firsts[k % firsts.length];
+      setStill(firsts[k % firsts.length], true);
       k++;
-      if (k < firsts.length + 4) return setTimeout(flick, k < 3 ? 160 : 85);
-      document.body.classList.remove("is-intro");
+      if (k < firsts.length + 3) return setTimeout(flick, k < 4 ? 150 : 85);
+      body.classList.remove("is-intro", "go-slit", "go-open");
+      body.classList.add("go-deck");
       startGate();
       // thread the roll in from the right
       const x = parseFloat(strip.dataset.x);
@@ -243,7 +296,13 @@
       setTimeout(() => strip.classList.remove("is-threading"), 1400);
       try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
     };
-    Promise.all(firsts.slice(0, 4).map((src) => { const i = new Image(); i.src = src; return i.decode().catch(() => {}); })).then(flick);
+    decoded.then(() => wait(250)).then(() => {
+      body.classList.add("go-slit");          // a sliver of picture across the middle
+      return wait(520);
+    }).then(() => {
+      body.classList.add("go-open");          // the shutter opens to the full frame
+      flick();
+    });
   }
 
   /* ======================================================================
@@ -281,15 +340,14 @@
   };
   window.addEventListener("scroll", lights, { passive: true });
   lights();
-  if (!portrait.matches) window.addEventListener("scroll", () => {
-    if (window.scrollY > 4) topProgress.style.transform = `scaleX(${clamp(window.scrollY / (document.documentElement.scrollHeight - innerHeight), 0, 1)})`;
-  }, { passive: true });
 
-  /* ---------- Rows of the sheet fade in as they arrive ---------- */
-  const revealObs = new IntersectionObserver((entries) => entries.forEach((e) => {
-    if (e.isIntersecting) { e.target.classList.add("in"); revealObs.unobserve(e.target); }
-  }), { threshold: 0.08 });
-  $$(".row").forEach((p) => revealObs.observe(p));
+  /* ---------- Rows of the sheet are always there; the first time each arrives it flickers on, like a frame ---------- */
+  if (!reduceMotion) {
+    const rowObs = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("is-lit"); rowObs.unobserve(e.target); }
+    }), { threshold: 0.2 });
+    $$(".row").forEach((r) => rowObs.observe(r));
+  }
 
   /* ======================================================================
      VIEWER — films and frames, full screen
