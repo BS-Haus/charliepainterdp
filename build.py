@@ -38,8 +38,8 @@ def reel_list(items, start=0):
         n = start + i + 1
         sub = f' <em>‘{esc(p["subtitle"])}’</em>' if p.get("subtitle") else ""
         shots = "".join(
-            f'<button class="shot" data-i="{k}" style="--i:{k}" tabindex="-1" aria-label="Frame {k + 1}"><img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" /></button>'
-            for k, st in enumerate(p["stills"][:5])
+            f'<button class="shot" data-i="{k}" style="--i:{k};--c:{k % 2};--r:{k // 2}" tabindex="-1" aria-label="Frame {k + 1}"><img src="/media/stills/{st}.jpg" alt="" loading="lazy" decoding="async" /></button>'
+            for k, st in enumerate(p["stills"][:4])
         )
         action = "Play" if p.get("video") else "View frames from"
         rows.append(f'''          <li class="row"{film_attrs(p)} data-n="{n:02d}" data-credit="{esc(credit(p))}" data-kind="{esc(p['kind'])}">
@@ -49,7 +49,7 @@ def reel_list(items, start=0):
               <span class="row-credit mono">{esc(credit(p))}</span>
               <span class="row-kind mono">{esc(p['kind'])}</span>
             </button>
-            <div class="shots">{shots}</div>
+            <div class="shots" style="--n:{min(4, len(p["stills"]))}">{shots}</div>
           </li>''')
     return "\n".join(rows)
 
