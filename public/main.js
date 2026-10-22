@@ -19,6 +19,15 @@
   const idxList = $(".idx-list");
   const stN = $("#st-n"), stKind = $("#st-kind"), stTitle = $("#st-title"), stCredit = $("#st-credit"), stPlay = $("#st-play"), stFrame = $("#st-frame");
   const films = steps.filter((s) => s.dataset.type === "film").length;
+  const topNow = $("#top-now"), topProgress = $("#top-progress");
+  let section = "work";
+  const readout = () => {
+    if (section !== "work") { topNow.innerHTML = `<b>${section === "about" ? "About" : "Contact"}</b>`; return; }
+    const s = steps[cur];
+    if (!s) return;
+    if (s.dataset.type === "reel") topNow.innerHTML = `<span class="rec"></span><b>${s.dataset.title}</b>`;
+    else topNow.innerHTML = `<span>${s.dataset.n} / ${pad(films)}</span><b>${s.dataset.title}</b><span>Frame ${pad(curFrame + 1)}</span>`;
+  };
 
   /* ---------- The roll: where you are in the scroll picks the reel or film, and the frame within it ---------- */
   let cur = -1, curFrame = -1;
@@ -73,6 +82,7 @@
       imgs.forEach((im, k) => im.classList.toggle("on", k === f));
       stFrame.textContent = `Frame ${pad(f + 1)} / ${pad(imgs.length)}`;
     }
+    readout();
   };
 
   const stepHeight = () => steps[0].offsetHeight;
@@ -85,6 +95,8 @@
     const n = s.dataset.type === "film" ? s.dataset.stills.split(",").length : 1;
     // frames turn over as you scroll through a film, like a roll running through the gate
     render(i, Math.min(n - 1, Math.floor((pos - i) * n)));
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    topProgress.style.transform = `scaleX(${max > 0 ? clamp(window.scrollY / max, 0, 1) : 0})`;
   };
   let queued = false;
   window.addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; onScroll(); }); } }, { passive: true });
@@ -108,6 +120,17 @@
     if (s.dataset.type === "reel" || s.dataset.id) openFilm(s);
     else openFrames(s, Math.max(0, curFrame));
   });
+
+  /* ---------- Nav: the section you're in is lit, and the readout follows it ---------- */
+  const navLinks = $$(".nav a");
+  const sections = navLinks.map((a) => $(a.getAttribute("href")));
+  const navObs = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    section = e.target.id;
+    navLinks.forEach((a, k) => a.classList.toggle("is-on", sections[k] === e.target));
+    readout();
+  }), { rootMargin: "-50% 0px -49% 0px" });
+  sections.forEach((el) => el && navObs.observe(el));
 
   /* ---------- Phones: sideways by default, so the work fills the screen; an upright crop if preferred ---------- */
   const turn = $("#turn");
