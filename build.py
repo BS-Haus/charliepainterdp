@@ -11,7 +11,7 @@ ROOT = Path(__file__).parent
 content = json.loads((ROOT / "content.json").read_text())
 esc = html.escape
 
-# The two showreels open their halves of the roll
+# The two showreels open their halves of the roll; their frames are stills pulled from the reel
 REELS = {
     "narrative": {"title": "Narrative showreel", "credit": "Features & shorts", "src": "/media/reel-narrative-v2.mp4", "poster": "/media/reel-narrative-v2-poster.jpg", "vimeo": "1149629056"},
     "commercial": {"title": "Commercial showreel", "credit": "Commercials & brand films", "src": "/media/reel-commercial-v2.mp4", "poster": "/media/reel-commercial-v2-poster.jpg", "vimeo": "1188991301"},
@@ -22,30 +22,73 @@ def credit(p):
     return " · ".join(x for x in [p.get("credit"), p.get("detail")] if x)
 
 
-def roll():
-    """One step per item on the roll: a reel, then its films. The stage reads these as you scroll."""
-    steps, bars, index, n = [], [], [], 0
+def items():
+    """Everything on the roll, in order: each half opens with its reel, then its films."""
+    out, n = [], 0
     for group in ("narrative", "commercial"):
         r = REELS[group]
-        index.append(f'          <p class="idx-group mono">{group.title()}</p>')
-        steps.append(
-            f'      <div class="step" data-type="reel" data-group="{group}" data-title="{esc(r["title"])}" data-credit="{esc(r["credit"])}" '
-            f'data-src="{r["src"]}" data-poster="{r["poster"]}" data-provider="vimeo" data-id="{r["vimeo"]}" data-kind="Showreel"></div>'
-        )
-        bars.append(f'        <button class="bar-item is-reel" data-step="{len(steps) - 1}"><span class="mono">{group.title()} reel</span></button>')
-        index.append(f'          <button class="idx-item" data-step="{len(steps) - 1}"><span class="mono">{"R1" if group == "narrative" else "R2"}</span><b>Showreel</b></button>')
+        out.append({
+            "type": "reel", "group": group, "n": "R1" if group == "narrative" else "R2", "title": r["title"],
+            "credit": r["credit"], "kind": "Showreel", "frames": [f"reel-{group}-{i}" for i in range(1, 9)],
+            "src": r["src"], "poster": r["poster"], "provider": "vimeo", "id": r["vimeo"],
+        })
         for p in content[group]:
             n += 1
-            v = p.get("video")
-            vattrs = f' data-provider="{v["provider"]}" data-id="{v["id"]}"' + (f' data-hash="{v["hash"]}"' if v.get("hash") else "") if v else ""
-            title = p["title"] + (f" — ‘{p['subtitle']}’" if p.get("subtitle") else "")
-            steps.append(
-                f'      <div class="step" data-type="film" data-group="{group}" data-n="{n:02d}" data-title="{esc(title)}" '
-                f'data-credit="{esc(credit(p))}" data-kind="{esc(p["kind"])}" data-stills="{",".join(p["stills"])}"{vattrs}></div>'
-            )
-            bars.append(f'        <button class="bar-item" data-step="{len(steps) - 1}"><span class="mono">{n:02d} {esc(p["title"])}</span></button>')
-            index.append(f'          <button class="idx-item" data-step="{len(steps) - 1}"><span class="mono">{n:02d}</span><b>{esc(p["title"])}</b><i class="mono">{esc(p["kind"])}</i></button>')
-    return "\n".join(steps), "\n".join(bars), "\n".join(index), n
+            v = p.get("video") or {}
+            out.append({
+                "type": "film", "group": group, "n": f"{n:02d}",
+                "title": p["title"] + (f" — ‘{p['subtitle']}’" if p.get("subtitle") else ""), "short": p["title"],
+                "credit": credit(p), "kind": p["kind"], "frames": p["stills"],
+                "provider": v.get("provider", ""), "id": v.get("id", ""), "hash": v.get("hash", ""),
+            })
+    return out, n
+
+
+def attrs(it):
+    a = f' data-type="{it["type"]}" data-group="{it["group"]}" data-n="{it["n"]}" data-title="{esc(it["title"])}" data-credit="{esc(it["credit"])}" data-kind="{esc(it["kind"])}"'
+    if it.get("src"):
+        a += f' data-src="{it["src"]}" data-poster="{it["poster"]}"'
+    if it.get("id"):
+        a += f' data-provider="{it["provider"]}" data-id="{it["id"]}"'
+    if it.get("hash"):
+        a += f' data-hash="{it["hash"]}"'
+    return a
+
+
+def roll(all_items):
+    """The roll: every frame of every film, side by side, each film labelled beneath its run."""
+    runs = []
+    for k, it in enumerate(all_items):
+        cells = "".join(
+            f'<span class="cell" data-f="{f}"><img src="/media/thumbs/{fr}.jpg" alt="" loading="{"eager" if k < 4 else "lazy"}" decoding="async" /></span>'
+            for f, fr in enumerate(it["frames"])
+        )
+        half = ' data-half="1"' if it["type"] == "reel" else ""
+        label = it["title"] if it["type"] == "reel" else f'{it["n"]} {it.get("short", it["title"])}'
+        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono">{esc(label)}</p></div>')
+    return "\n".join(runs)
+
+
+def feed(all_items):
+    """Portrait phones: one film per screen, full bleed; swipe sideways through its frames."""
+    out = []
+    for k, it in enumerate(all_items):
+        if it["type"] == "reel":
+            media = f'<video muted playsinline loop preload="none" poster="{it["poster"]}" data-src="{it["src"]}"></video>'
+        else:
+            media = '<div class="feed-frames">' + "".join(
+                f'<img src="/media/stills/{fr}.jpg" alt="" loading="lazy" decoding="async" />' for fr in it["frames"]
+            ) + "</div>"
+        count = "" if it["type"] == "reel" else f'<p class="corner c-tr mono feed-count">01 / {len(it["frames"]):02d}</p>'
+        play = "Watch with sound ↗" if it["type"] == "reel" else ("Play film ↗" if it.get("id") else "View frames ↗")
+        out.append(f'''      <article class="feed-item" data-item="{k}"{attrs(it)}>
+        {media}
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>{esc(it["n"])} · {esc(it["kind"])}</p>
+        {count}
+        <div class="corner c-bl"><h3 class="st-title">{esc(it["title"])}</h3><p class="st-credit mono">{esc(it["credit"])}</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">{play}</button></div>
+      </article>''')
+    return "\n".join(out)
 
 
 narr_more = "\n".join(
@@ -63,11 +106,10 @@ comm_extra = f"""        <div class="also-col">
           <p class="also-line">{" · ".join(esc(x) for x in content["commercial_more"])}</p>
         </div>"""
 
-steps, bars, index, films = roll()
+all_items, films = items()
 out = (ROOT / "template.html").read_text()
-out = out.replace("{{STEPS}}", steps)
-out = out.replace("{{BARS}}", bars)
-out = out.replace("{{INDEX}}", index)
+out = out.replace("{{ROLL}}", roll(all_items))
+out = out.replace("{{FEED}}", feed(all_items))
 out = out.replace("{{FILM_COUNT}}", f"{films:02d}")
 out = out.replace("{{ALSO}}", '      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
 (ROOT / "public" / "index.html").write_text(out)

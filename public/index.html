@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Charlie Painter — Director of Photography, London</title>
   <meta name="description" content="Charlie Painter is a London-based cinematographer working across narrative features, shorts and commercials. Winner of Best Cinematography at SSIFF 2025 and a British Society of Cinematographers mentee." />
   <meta name="theme-color" content="#050505" />
@@ -19,15 +19,7 @@
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="is-intro">
-  <!-- INTRO: the clips flick through a small frame, which then opens out into the full-bleed stage -->
-  <div class="intro" id="intro" aria-hidden="true">
-    <div class="intro-box">
-      <div class="intro-frame" id="intro-frame"></div>
-      <p class="intro-meta mono"><b>Charlie Painter<span>_DP</span></b><span id="intro-count">00</span></p>
-    </div>
-  </div>
-
-  <!-- HEADER: over the top of the roll -->
+  <!-- HEADER: always there -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
     <p class="top-now mono" id="top-now" aria-live="polite"></p>
@@ -39,96 +31,165 @@
     </nav>
   </header>
 
-  <!-- THE ROLL: full bleed. Scroll down and it runs through the reels and every film, frame by frame -->
-  <section class="roll" id="work" aria-label="Work">
-    <div class="roll-sticky" id="roll-sticky">
-    <div class="stage" id="stage">
-      <div class="stage-in" id="stage-in">
-        <video id="reel-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg">
-          <source src="/media/reel-narrative-v2.mp4" type="video/mp4" />
-        </video>
-        <div class="stage-frames" id="stage-frames" aria-hidden="true"></div>
-        <div class="stage-shade" aria-hidden="true"></div>
-
-        <!-- info in the four corners, like a monitor's overlay -->
-        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="st-n">Reel 01</span><span id="st-kind">Narrative</span></p>
-        <p class="corner c-tr mono" id="st-frame" aria-hidden="true"></p>
-        <div class="corner c-bl" aria-live="polite">
-          <h2 class="st-title" id="st-title">Narrative showreel</h2>
-          <p class="mono st-credit" id="st-credit">Features &amp; shorts</p>
-        </div>
-        <div class="corner c-br"><button class="st-play mono" id="st-play">Watch with sound ↗</button></div>
-
-        <!-- the edge of the roll: one bar per film, so you always know where you are -->
-        <nav class="bars" id="bars" aria-label="Jump to a film">
-        <button class="bar-item is-reel" data-step="0"><span class="mono">Narrative reel</span></button>
-        <button class="bar-item" data-step="1"><span class="mono">01 If</span></button>
-        <button class="bar-item" data-step="2"><span class="mono">02 Operation Dynamo</span></button>
-        <button class="bar-item" data-step="3"><span class="mono">03 Flush!</span></button>
-        <button class="bar-item" data-step="4"><span class="mono">04 Vetala</span></button>
-        <button class="bar-item" data-step="5"><span class="mono">05 Accomplice</span></button>
-        <button class="bar-item" data-step="6"><span class="mono">06 Confess</span></button>
-        <button class="bar-item" data-step="7"><span class="mono">07 Memories of a Life</span></button>
-        <button class="bar-item" data-step="8"><span class="mono">08 In Vitro Felicitas</span></button>
-        <button class="bar-item" data-step="9"><span class="mono">09 Brownies or Ice Cream?</span></button>
-        <button class="bar-item is-reel" data-step="10"><span class="mono">Commercial reel</span></button>
-        <button class="bar-item" data-step="11"><span class="mono">10 66°North</span></button>
-        <button class="bar-item" data-step="12"><span class="mono">11 John Smith’s</span></button>
-        <button class="bar-item" data-step="13"><span class="mono">12 Aberfeldy</span></button>
-        <button class="bar-item" data-step="14"><span class="mono">13 Vision Pro</span></button>
-        <button class="bar-item" data-step="15"><span class="mono">14 London Jazz Festival</span></button>
-        <button class="bar-item" data-step="16"><span class="mono">15 Phox Water</span></button>
-        </nav>
-
-        <div class="turn mono" id="turn" aria-hidden="true"><span>Turn your phone sideways ↻</span></div>
-        <button class="view-toggle mono" id="view-toggle">Upright view</button>
+  <!-- THE GATE: one viewer, with the whole roll running through beneath it -->
+  <section class="gate" id="work" aria-label="Work">
+    <div class="viewer" id="viewer">
+      <div class="frame" id="frame">
+        <video id="reel" muted playsinline loop preload="auto" poster="/media/reel-narrative-v2-poster.jpg"></video>
+        <img class="still" id="still" alt="" />
+        <span class="shade" aria-hidden="true"></span>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="v-n">R1</span><span id="v-kind">Showreel</span></p>
+        <p class="corner c-tr mono" id="v-count"></p>
+        <div class="corner c-bl"><h2 class="st-title" id="v-title">Narrative showreel</h2><p class="st-credit mono" id="v-credit"></p></div>
+        <div class="corner c-br"><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
       </div>
     </div>
-    <!-- the index: every film by name, so you can jump anywhere -->
-    <nav class="index" aria-label="Films">
-      <p class="idx-head mono"><span>Index</span><span>15 films</span></p>
-      <div class="idx-list">
-          <p class="idx-group mono">Narrative</p>
-          <button class="idx-item" data-step="0"><span class="mono">R1</span><b>Showreel</b></button>
-          <button class="idx-item" data-step="1"><span class="mono">01</span><b>If</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="2"><span class="mono">02</span><b>Operation Dynamo</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="3"><span class="mono">03</span><b>Flush!</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="4"><span class="mono">04</span><b>Vetala</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="5"><span class="mono">05</span><b>Accomplice</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="6"><span class="mono">06</span><b>Confess</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="7"><span class="mono">07</span><b>Memories of a Life</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="8"><span class="mono">08</span><b>In Vitro Felicitas</b><i class="mono">Short</i></button>
-          <button class="idx-item" data-step="9"><span class="mono">09</span><b>Brownies or Ice Cream?</b><i class="mono">Short</i></button>
-          <p class="idx-group mono">Commercial</p>
-          <button class="idx-item" data-step="10"><span class="mono">R2</span><b>Showreel</b></button>
-          <button class="idx-item" data-step="11"><span class="mono">10</span><b>66°North</b><i class="mono">Commercial</i></button>
-          <button class="idx-item" data-step="12"><span class="mono">11</span><b>John Smith’s</b><i class="mono">Commercial</i></button>
-          <button class="idx-item" data-step="13"><span class="mono">12</span><b>Aberfeldy</b><i class="mono">Brand film</i></button>
-          <button class="idx-item" data-step="14"><span class="mono">13</span><b>Vision Pro</b><i class="mono">Commercial</i></button>
-          <button class="idx-item" data-step="15"><span class="mono">14</span><b>London Jazz Festival</b><i class="mono">Brand film</i></button>
-          <button class="idx-item" data-step="16"><span class="mono">15</span><b>Phox Water</b><i class="mono">Commercial</i></button>
+    <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
+      <div class="strip" id="strip">
+        <div class="run" data-item="0" data-half="1" data-type="reel" data-group="narrative" data-n="R1" data-title="Narrative showreel" data-credit="Features &amp; shorts" data-kind="Showreel" data-src="/media/reel-narrative-v2.mp4" data-poster="/media/reel-narrative-v2-poster.jpg" data-provider="vimeo" data-id="1149629056"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/reel-narrative-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/reel-narrative-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/reel-narrative-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/reel-narrative-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/reel-narrative-5.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/reel-narrative-6.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="6"><img src="/media/thumbs/reel-narrative-7.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="7"><img src="/media/thumbs/reel-narrative-8.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">Narrative showreel</p></div>
+        <div class="run" data-item="1" data-type="film" data-group="narrative" data-n="01" data-title="If" data-credit="Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films" data-kind="Short" data-provider="vimeo" data-id="1088718265"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/iffilm-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/iffilm-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/iffilm-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/iffilm-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/iffilm-5.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">01 If</p></div>
+        <div class="run" data-item="2" data-type="film" data-group="narrative" data-n="02" data-title="Operation Dynamo" data-credit="Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films" data-kind="Short" data-provider="vimeo" data-id="1126894625" data-hash="97279ba9a1"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/operationdynamo-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/operationdynamo-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/operationdynamo-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/operationdynamo-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/operationdynamo-5.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">02 Operation Dynamo</p></div>
+        <div class="run" data-item="3" data-type="film" data-group="narrative" data-n="03" data-title="Flush!" data-credit="Dir. Nico Bourgeais · Fusion Alpha" data-kind="Short" data-provider="vimeo" data-id="1133511001" data-hash="98df98088f"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/flush-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/flush-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/flush-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/flush-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/flush-5.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">03 Flush!</p></div>
+        <div class="run" data-item="4" data-type="film" data-group="narrative" data-n="04" data-title="Vetala" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/vetala-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/vetala-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/vetala-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/vetala-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/vetala-5.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/vetala-6.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="6"><img src="/media/thumbs/vetala-7.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="7"><img src="/media/thumbs/vetala-8.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="8"><img src="/media/thumbs/vetala-9.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">04 Vetala</p></div>
+        <div class="run" data-item="5" data-type="film" data-group="narrative" data-n="05" data-title="Accomplice" data-credit="Dir. Dominic Fraser · CPC" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/accomplice-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/accomplice-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/accomplice-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/accomplice-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/accomplice-5.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/accomplice-6.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">05 Accomplice</p></div>
+        <div class="run" data-item="6" data-type="film" data-group="narrative" data-n="06" data-title="Confess" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/confess-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/confess-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/confess-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/confess-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/confess-5.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">06 Confess</p></div>
+        <div class="run" data-item="7" data-type="film" data-group="narrative" data-n="07" data-title="Memories of a Life" data-credit="Dir. Ellie Hague · Thulsa Films" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/moal-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/moal-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/moal-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/moal-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/moal-5.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">07 Memories of a Life</p></div>
+        <div class="run" data-item="8" data-type="film" data-group="narrative" data-n="08" data-title="In Vitro Felicitas" data-credit="Dir. Cyrus Mirzashafa · Thulsa Films" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">08 In Vitro Felicitas</p></div>
+        <div class="run" data-item="9" data-type="film" data-group="narrative" data-n="09" data-title="Brownies or Ice Cream?" data-credit="Dir. Stefan Poelman · Pink Momentum" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">09 Brownies or Ice Cream?</p></div>
+        <div class="run" data-item="10" data-half="1" data-type="reel" data-group="commercial" data-n="R2" data-title="Commercial showreel" data-credit="Commercials &amp; brand films" data-kind="Showreel" data-src="/media/reel-commercial-v2.mp4" data-poster="/media/reel-commercial-v2-poster.jpg" data-provider="vimeo" data-id="1188991301"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/reel-commercial-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/reel-commercial-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/reel-commercial-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/reel-commercial-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/reel-commercial-5.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/reel-commercial-6.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="6"><img src="/media/thumbs/reel-commercial-7.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="7"><img src="/media/thumbs/reel-commercial-8.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">Commercial showreel</p></div>
+        <div class="run" data-item="11" data-type="film" data-group="commercial" data-n="10" data-title="66°North — ‘Calming the Storm’" data-credit="Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook" data-kind="Commercial" data-provider="vimeo" data-id="1213570673" data-hash="ef3a99b161"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/66north-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/66north-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/66north-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/66north-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/66north-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">10 66°North</p></div>
+        <div class="run" data-item="12" data-type="film" data-group="commercial" data-n="11" data-title="John Smith’s — ‘Traditions’" data-credit="Dir. Dann Emmons · One Thousand Eyes" data-kind="Commercial" data-provider="vimeo" data-id="1189764769"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">11 John Smith’s</p></div>
+        <div class="run" data-item="13" data-type="film" data-group="commercial" data-n="12" data-title="Aberfeldy" data-credit="Dir. Jess Leuty · CPC" data-kind="Brand film" data-provider="vimeo" data-id="1176200194"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">12 Aberfeldy</p></div>
+        <div class="run" data-item="14" data-type="film" data-group="commercial" data-n="13" data-title="Vision Pro" data-credit="Dir. Nico Bourgeais · CPC" data-kind="Commercial" data-provider="vimeo" data-id="926185147"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">13 Vision Pro</p></div>
+        <div class="run" data-item="15" data-type="film" data-group="commercial" data-n="14" data-title="London Jazz Festival" data-credit="Dir. Lauren Smith · Serious Music" data-kind="Brand film" data-provider="youtube" data-id="ugaZUGlBulc"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">14 London Jazz Festival</p></div>
+        <div class="run" data-item="16" data-type="film" data-group="commercial" data-n="15" data-title="Phox Water" data-credit="" data-kind="Commercial"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/phox-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/phox-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/phox-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">15 Phox Water</p></div>
       </div>
-    </nav>
+      <span class="gate-line" aria-hidden="true"></span>
+      <p class="roll-hint mono" id="roll-hint">Scroll to pull the roll through ⟶</p>
     </div>
-    <div class="steps" id="steps">
-      <div class="step" data-type="reel" data-group="narrative" data-title="Narrative showreel" data-credit="Features &amp; shorts" data-src="/media/reel-narrative-v2.mp4" data-poster="/media/reel-narrative-v2-poster.jpg" data-provider="vimeo" data-id="1149629056" data-kind="Showreel"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="01" data-title="If" data-credit="Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films" data-kind="Short" data-stills="iffilm-1,iffilm-2,iffilm-3,iffilm-4,iffilm-5" data-provider="vimeo" data-id="1088718265"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="02" data-title="Operation Dynamo" data-credit="Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films" data-kind="Short" data-stills="operationdynamo-1,operationdynamo-2,operationdynamo-3,operationdynamo-4,operationdynamo-5" data-provider="vimeo" data-id="1126894625" data-hash="97279ba9a1"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="03" data-title="Flush!" data-credit="Dir. Nico Bourgeais · Fusion Alpha" data-kind="Short" data-stills="flush-1,flush-2,flush-3,flush-4,flush-5" data-provider="vimeo" data-id="1133511001" data-hash="98df98088f"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="04" data-title="Vetala" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short" data-stills="vetala-1,vetala-2,vetala-3,vetala-4,vetala-5,vetala-6,vetala-7,vetala-8,vetala-9"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="05" data-title="Accomplice" data-credit="Dir. Dominic Fraser · CPC" data-kind="Short" data-stills="accomplice-1,accomplice-2,accomplice-3,accomplice-4,accomplice-5,accomplice-6"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="06" data-title="Confess" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short" data-stills="confess-1,confess-2,confess-3,confess-4,confess-5"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="07" data-title="Memories of a Life" data-credit="Dir. Ellie Hague · Thulsa Films" data-kind="Short" data-stills="moal-1,moal-2,moal-3,moal-4,moal-5"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="08" data-title="In Vitro Felicitas" data-credit="Dir. Cyrus Mirzashafa · Thulsa Films" data-kind="Short" data-stills="invitrofelicitas-1"></div>
-      <div class="step" data-type="film" data-group="narrative" data-n="09" data-title="Brownies or Ice Cream?" data-credit="Dir. Stefan Poelman · Pink Momentum" data-kind="Short" data-stills="brownies-or-ice-cream-1,brownies-or-ice-cream-2,brownies-or-ice-cream-3"></div>
-      <div class="step" data-type="reel" data-group="commercial" data-title="Commercial showreel" data-credit="Commercials &amp; brand films" data-src="/media/reel-commercial-v2.mp4" data-poster="/media/reel-commercial-v2-poster.jpg" data-provider="vimeo" data-id="1188991301" data-kind="Showreel"></div>
-      <div class="step" data-type="film" data-group="commercial" data-n="10" data-title="66°North — ‘Calming the Storm’" data-credit="Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook" data-kind="Commercial" data-stills="66north-2,66north-1,66north-r1,66north-r2,66north-r3" data-provider="vimeo" data-id="1213570673" data-hash="ef3a99b161"></div>
-      <div class="step" data-type="film" data-group="commercial" data-n="11" data-title="John Smith’s — ‘Traditions’" data-credit="Dir. Dann Emmons · One Thousand Eyes" data-kind="Commercial" data-stills="johnsmiths-1,johnsmiths-r1,johnsmiths-r2,johnsmiths-r3" data-provider="vimeo" data-id="1189764769"></div>
-      <div class="step" data-type="film" data-group="commercial" data-n="12" data-title="Aberfeldy" data-credit="Dir. Jess Leuty · CPC" data-kind="Brand film" data-stills="aberfeldy-2,aberfeldy-r1,aberfeldy-r2,aberfeldy-r3,aberfeldy-r4" data-provider="vimeo" data-id="1176200194"></div>
-      <div class="step" data-type="film" data-group="commercial" data-n="13" data-title="Vision Pro" data-credit="Dir. Nico Bourgeais · CPC" data-kind="Commercial" data-stills="vision-pro-1,vision-pro-2,vision-pro-3,vision-pro-4,vision-pro-5" data-provider="vimeo" data-id="926185147"></div>
-      <div class="step" data-type="film" data-group="commercial" data-n="14" data-title="London Jazz Festival" data-credit="Dir. Lauren Smith · Serious Music" data-kind="Brand film" data-stills="london-jazz-festival-1,london-jazz-festival-2,london-jazz-festival-3,london-jazz-festival-r1,london-jazz-festival-r2,london-jazz-festival-r3" data-provider="youtube" data-id="ugaZUGlBulc"></div>
-      <div class="step" data-type="film" data-group="commercial" data-n="15" data-title="Phox Water" data-credit="" data-kind="Commercial" data-stills="phox-r1,phox-r2,phox-r3"></div>
-    </div>
+  </section>
+
+  <!-- PORTRAIT PHONES: the same work as a full-bleed vertical feed -->
+  <section class="feed" id="feed" aria-label="Work">
+      <article class="feed-item" data-item="0" data-type="reel" data-group="narrative" data-n="R1" data-title="Narrative showreel" data-credit="Features &amp; shorts" data-kind="Showreel" data-src="/media/reel-narrative-v2.mp4" data-poster="/media/reel-narrative-v2-poster.jpg" data-provider="vimeo" data-id="1149629056">
+        <video muted playsinline loop preload="none" poster="/media/reel-narrative-v2-poster.jpg" data-src="/media/reel-narrative-v2.mp4"></video>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>R1 · Showreel</p>
+        
+        <div class="corner c-bl"><h3 class="st-title">Narrative showreel</h3><p class="st-credit mono">Features &amp; shorts</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Watch with sound ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="1" data-type="film" data-group="narrative" data-n="01" data-title="If" data-credit="Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films" data-kind="Short" data-provider="vimeo" data-id="1088718265">
+        <div class="feed-frames"><img src="/media/stills/iffilm-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/iffilm-5.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>01 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">If</h3><p class="st-credit mono">Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="2" data-type="film" data-group="narrative" data-n="02" data-title="Operation Dynamo" data-credit="Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films" data-kind="Short" data-provider="vimeo" data-id="1126894625" data-hash="97279ba9a1">
+        <div class="feed-frames"><img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/operationdynamo-5.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>02 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">Operation Dynamo</h3><p class="st-credit mono">Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="3" data-type="film" data-group="narrative" data-n="03" data-title="Flush!" data-credit="Dir. Nico Bourgeais · Fusion Alpha" data-kind="Short" data-provider="vimeo" data-id="1133511001" data-hash="98df98088f">
+        <div class="feed-frames"><img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/flush-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/flush-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/flush-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/flush-5.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>03 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">Flush!</h3><p class="st-credit mono">Dir. Nico Bourgeais · Fusion Alpha</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="4" data-type="film" data-group="narrative" data-n="04" data-title="Vetala" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short">
+        <div class="feed-frames"><img src="/media/stills/vetala-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-5.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-6.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-7.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-8.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vetala-9.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>04 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 09</p>
+        <div class="corner c-bl"><h3 class="st-title">Vetala</h3><p class="st-credit mono">Dir. Ajit Mann · M &amp; K</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="5" data-type="film" data-group="narrative" data-n="05" data-title="Accomplice" data-credit="Dir. Dominic Fraser · CPC" data-kind="Short">
+        <div class="feed-frames"><img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-5.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/accomplice-6.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>05 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 06</p>
+        <div class="corner c-bl"><h3 class="st-title">Accomplice</h3><p class="st-credit mono">Dir. Dominic Fraser · CPC</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="6" data-type="film" data-group="narrative" data-n="06" data-title="Confess" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short">
+        <div class="feed-frames"><img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/confess-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/confess-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/confess-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/confess-5.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>06 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">Confess</h3><p class="st-credit mono">Dir. Ajit Mann · M &amp; K</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="7" data-type="film" data-group="narrative" data-n="07" data-title="Memories of a Life" data-credit="Dir. Ellie Hague · Thulsa Films" data-kind="Short">
+        <div class="feed-frames"><img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/moal-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/moal-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/moal-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/moal-5.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>07 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">Memories of a Life</h3><p class="st-credit mono">Dir. Ellie Hague · Thulsa Films</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="8" data-type="film" data-group="narrative" data-n="08" data-title="In Vitro Felicitas" data-credit="Dir. Cyrus Mirzashafa · Thulsa Films" data-kind="Short">
+        <div class="feed-frames"><img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>08 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 01</p>
+        <div class="corner c-bl"><h3 class="st-title">In Vitro Felicitas</h3><p class="st-credit mono">Dir. Cyrus Mirzashafa · Thulsa Films</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="9" data-type="film" data-group="narrative" data-n="09" data-title="Brownies or Ice Cream?" data-credit="Dir. Stefan Poelman · Pink Momentum" data-kind="Short">
+        <div class="feed-frames"><img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>09 · Short</p>
+        <p class="corner c-tr mono feed-count">01 / 03</p>
+        <div class="corner c-bl"><h3 class="st-title">Brownies or Ice Cream?</h3><p class="st-credit mono">Dir. Stefan Poelman · Pink Momentum</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="10" data-type="reel" data-group="commercial" data-n="R2" data-title="Commercial showreel" data-credit="Commercials &amp; brand films" data-kind="Showreel" data-src="/media/reel-commercial-v2.mp4" data-poster="/media/reel-commercial-v2-poster.jpg" data-provider="vimeo" data-id="1188991301">
+        <video muted playsinline loop preload="none" poster="/media/reel-commercial-v2-poster.jpg" data-src="/media/reel-commercial-v2.mp4"></video>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>R2 · Showreel</p>
+        
+        <div class="corner c-bl"><h3 class="st-title">Commercial showreel</h3><p class="st-credit mono">Commercials &amp; brand films</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Watch with sound ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="11" data-type="film" data-group="commercial" data-n="10" data-title="66°North — ‘Calming the Storm’" data-credit="Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook" data-kind="Commercial" data-provider="vimeo" data-id="1213570673" data-hash="ef3a99b161">
+        <div class="feed-frames"><img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/66north-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/66north-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/66north-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/66north-r3.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>10 · Commercial</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">66°North — ‘Calming the Storm’</h3><p class="st-credit mono">Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="12" data-type="film" data-group="commercial" data-n="11" data-title="John Smith’s — ‘Traditions’" data-credit="Dir. Dann Emmons · One Thousand Eyes" data-kind="Commercial" data-provider="vimeo" data-id="1189764769">
+        <div class="feed-frames"><img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>11 · Commercial</p>
+        <p class="corner c-tr mono feed-count">01 / 04</p>
+        <div class="corner c-bl"><h3 class="st-title">John Smith’s — ‘Traditions’</h3><p class="st-credit mono">Dir. Dann Emmons · One Thousand Eyes</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="13" data-type="film" data-group="commercial" data-n="12" data-title="Aberfeldy" data-credit="Dir. Jess Leuty · CPC" data-kind="Brand film" data-provider="vimeo" data-id="1176200194">
+        <div class="feed-frames"><img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>12 · Brand film</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">Aberfeldy</h3><p class="st-credit mono">Dir. Jess Leuty · CPC</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="14" data-type="film" data-group="commercial" data-n="13" data-title="Vision Pro" data-credit="Dir. Nico Bourgeais · CPC" data-kind="Commercial" data-provider="vimeo" data-id="926185147">
+        <div class="feed-frames"><img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>13 · Commercial</p>
+        <p class="corner c-tr mono feed-count">01 / 05</p>
+        <div class="corner c-bl"><h3 class="st-title">Vision Pro</h3><p class="st-credit mono">Dir. Nico Bourgeais · CPC</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="15" data-type="film" data-group="commercial" data-n="14" data-title="London Jazz Festival" data-credit="Dir. Lauren Smith · Serious Music" data-kind="Brand film" data-provider="youtube" data-id="ugaZUGlBulc">
+        <div class="feed-frames"><img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>14 · Brand film</p>
+        <p class="corner c-tr mono feed-count">01 / 06</p>
+        <div class="corner c-bl"><h3 class="st-title">London Jazz Festival</h3><p class="st-credit mono">Dir. Lauren Smith · Serious Music</p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">Play film ↗</button></div>
+      </article>
+      <article class="feed-item" data-item="16" data-type="film" data-group="commercial" data-n="15" data-title="Phox Water" data-credit="" data-kind="Commercial">
+        <div class="feed-frames"><img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/phox-r2.jpg" alt="" loading="lazy" decoding="async" /><img src="/media/stills/phox-r3.jpg" alt="" loading="lazy" decoding="async" /></div>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>15 · Commercial</p>
+        <p class="corner c-tr mono feed-count">01 / 03</p>
+        <div class="corner c-bl"><h3 class="st-title">Phox Water</h3><p class="st-credit mono"></p></div>
+        <div class="corner c-br"><button class="st-play mono feed-play">View frames ↗</button></div>
+      </article>
   </section>
 
   <div class="suite suite-2">

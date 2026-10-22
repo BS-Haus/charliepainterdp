@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Charlie Painter — Director of Photography, London</title>
   <meta name="description" content="Charlie Painter is a London-based cinematographer working across narrative features, shorts and commercials. Winner of Best Cinematography at SSIFF 2025 and a British Society of Cinematographers mentee." />
   <meta name="theme-color" content="#050505" />
@@ -19,15 +19,7 @@
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="is-intro">
-  <!-- INTRO: the clips flick through a small frame, which then opens out into the full-bleed stage -->
-  <div class="intro" id="intro" aria-hidden="true">
-    <div class="intro-box">
-      <div class="intro-frame" id="intro-frame"></div>
-      <p class="intro-meta mono"><b>Charlie Painter<span>_DP</span></b><span id="intro-count">00</span></p>
-    </div>
-  </div>
-
-  <!-- HEADER: over the top of the roll -->
+  <!-- HEADER: always there -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
     <p class="top-now mono" id="top-now" aria-live="polite"></p>
@@ -39,46 +31,31 @@
     </nav>
   </header>
 
-  <!-- THE ROLL: full bleed. Scroll down and it runs through the reels and every film, frame by frame -->
-  <section class="roll" id="work" aria-label="Work">
-    <div class="roll-sticky" id="roll-sticky">
-    <div class="stage" id="stage">
-      <div class="stage-in" id="stage-in">
-        <video id="reel-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg">
-          <source src="/media/reel-narrative-v2.mp4" type="video/mp4" />
-        </video>
-        <div class="stage-frames" id="stage-frames" aria-hidden="true"></div>
-        <div class="stage-shade" aria-hidden="true"></div>
-
-        <!-- info in the four corners, like a monitor's overlay -->
-        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="st-n">Reel 01</span><span id="st-kind">Narrative</span></p>
-        <p class="corner c-tr mono" id="st-frame" aria-hidden="true"></p>
-        <div class="corner c-bl" aria-live="polite">
-          <h2 class="st-title" id="st-title">Narrative showreel</h2>
-          <p class="mono st-credit" id="st-credit">Features &amp; shorts</p>
-        </div>
-        <div class="corner c-br"><button class="st-play mono" id="st-play">Watch with sound ↗</button></div>
-
-        <!-- the edge of the roll: one bar per film, so you always know where you are -->
-        <nav class="bars" id="bars" aria-label="Jump to a film">
-{{BARS}}
-        </nav>
-
-        <div class="turn mono" id="turn" aria-hidden="true"><span>Turn your phone sideways ↻</span></div>
-        <button class="view-toggle mono" id="view-toggle">Upright view</button>
+  <!-- THE GATE: one viewer, with the whole roll running through beneath it -->
+  <section class="gate" id="work" aria-label="Work">
+    <div class="viewer" id="viewer">
+      <div class="frame" id="frame">
+        <video id="reel" muted playsinline loop preload="auto" poster="/media/reel-narrative-v2-poster.jpg"></video>
+        <img class="still" id="still" alt="" />
+        <span class="shade" aria-hidden="true"></span>
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="v-n">R1</span><span id="v-kind">Showreel</span></p>
+        <p class="corner c-tr mono" id="v-count"></p>
+        <div class="corner c-bl"><h2 class="st-title" id="v-title">Narrative showreel</h2><p class="st-credit mono" id="v-credit"></p></div>
+        <div class="corner c-br"><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
       </div>
     </div>
-    <!-- the index: every film by name, so you can jump anywhere -->
-    <nav class="index" aria-label="Films">
-      <p class="idx-head mono"><span>Index</span><span>{{FILM_COUNT}} films</span></p>
-      <div class="idx-list">
-{{INDEX}}
+    <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
+      <div class="strip" id="strip">
+{{ROLL}}
       </div>
-    </nav>
+      <span class="gate-line" aria-hidden="true"></span>
+      <p class="roll-hint mono" id="roll-hint">Scroll to pull the roll through ⟶</p>
     </div>
-    <div class="steps" id="steps">
-{{STEPS}}
-    </div>
+  </section>
+
+  <!-- PORTRAIT PHONES: the same work as a full-bleed vertical feed -->
+  <section class="feed" id="feed" aria-label="Work">
+{{FEED}}
   </section>
 
   <div class="suite suite-2">
