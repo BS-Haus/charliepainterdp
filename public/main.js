@@ -3,221 +3,201 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const pad = (n) => String(n).padStart(2, "0");
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const canHover = window.matchMedia("(hover: hover)").matches;
-  const canDock = window.matchMedia("(min-width: 961px)");
+  const portraitPhone = window.matchMedia("(max-width: 760px) and (orientation: portrait)");
 
   $("#year").textContent = new Date().getFullYear();
 
-  const REELS = {
-    narrative: { n: "01", label: "Narrative", title: "Narrative showreel", src: "/media/reel-narrative-v2.mp4", poster: "/media/reel-narrative-v2-poster.jpg", vimeo: "1149629056" },
-    commercial: { n: "02", label: "Commercial", title: "Commercial showreel", src: "/media/reel-commercial-v2.mp4", poster: "/media/reel-commercial-v2-poster.jpg", vimeo: "1188991301" },
-  };
-
-  const player = $("#player");
+  const roll = $("#work");
+  const stage = $("#stage");
+  const stageIn = $("#stage-in");
   const video = $("#reel-video");
-  const frames = $("#player-frames");
-  const slotTop = $("#slot-top");
-  const slotDock = $("#slot-dock");
-  const tc = $("#tc");
-  const index = $("#scale-index");
-  const rows = $$(".row");
+  const framesEl = $("#stage-frames");
+  const steps = $$(".step");
+  const bars = $$("[data-step]"); // the phone bars and the index entries
+  const sticky = $("#roll-sticky");
+  const idxList = $(".idx-list");
+  const stN = $("#st-n"), stKind = $("#st-kind"), stTitle = $("#st-title"), stCredit = $("#st-credit"), stPlay = $("#st-play"), stFrame = $("#st-frame");
+  const films = steps.filter((s) => s.dataset.type === "film").length;
 
-  let reel = "narrative";
-  let docked = false;
-  let active = null;   // the film the list is on (by scroll or hover)
-  let showing = null;  // the film on the player, or null for the reel
-  let frame = 0;
-  let cycle = 0;
+  /* ---------- The roll: where you are in the scroll picks the reel or film, and the frame within it ---------- */
+  let cur = -1, curFrame = -1;
+  const preloaded = new Set();
+  const preload = (step) => {
+    if (!step || step.dataset.type !== "film" || preloaded.has(step)) return;
+    preloaded.add(step);
+    step.dataset.stills.split(",").forEach((s) => { const im = new Image(); im.src = `/media/stills/${s}.jpg`; });
+  };
 
-  /* ---------- The player travels from the monitor into the dock ---------- */
-  const place = () => {
-    const a = slotTop.getBoundingClientRect();
-    let x = a.left, y = a.top, w = a.width, h = a.height, p = 0;
-    if (canDock.matches) {
-      const b = slotDock.getBoundingClientRect();
-      // the move happens while the monitor's slot scrolls up out of view
-      p = clamp((40 - a.top) / (a.height * 0.85), 0, 1);
-      const e = reduceMotion ? (p >= 0.5 ? 1 : 0) : easeInOut(p);
-      x = lerp(a.left, b.left, e); y = lerp(a.top, b.top, e);
-      w = lerp(a.width, b.width, e); h = lerp(a.height, b.height, e);
+  const render = (i, f) => {
+    const s = steps[i];
+    if (i !== cur) {
+      cur = i;
+      curFrame = -1;
+      bars.forEach((b) => b.classList.toggle("is-on", Number(b.dataset.step) === i));
+      // keep the lit index entry in view without moving the page
+      const lit = $(`.idx-item[data-step="${i}"]`);
+      if (lit && idxList.clientHeight) {
+        const top = lit.offsetTop - idxList.offsetTop, bottom = top + lit.offsetHeight;
+        if (top < idxList.scrollTop || bottom > idxList.scrollTop + idxList.clientHeight) idxList.scrollTop = top - idxList.clientHeight / 2;
+      }
+      stTitle.textContent = s.dataset.title;
+      stCredit.textContent = s.dataset.credit;
+      if (s.dataset.type === "reel") {
+        stageIn.classList.remove("is-film");
+        framesEl.innerHTML = "";
+        if (video.dataset.src !== s.dataset.src) {
+          video.dataset.src = s.dataset.src;
+          video.poster = s.dataset.poster;
+          video.src = s.dataset.src;
+        }
+        if (!reduceMotion) video.play().catch(() => {});
+        stN.textContent = s.dataset.group === "narrative" ? "Reel 01" : "Reel 02";
+        stKind.textContent = s.dataset.group === "narrative" ? "Narrative" : "Commercial";
+        stPlay.textContent = "Watch with sound ↗";
+        stFrame.textContent = "";
+      } else {
+        video.pause();
+        stageIn.classList.add("is-film");
+        framesEl.innerHTML = s.dataset.stills.split(",").map((st) => `<img src="/media/stills/${st}.jpg" alt="" decoding="async" />`).join("");
+        stN.textContent = `${s.dataset.n} / ${pad(films)}`;
+        stKind.textContent = s.dataset.kind;
+        stPlay.textContent = s.dataset.id ? "Play film ↗" : "View frames ↗";
+      }
+      preload(steps[i + 1]);
+      preload(steps[i - 1]);
     }
-    player.style.width = `${w}px`;
-    player.style.height = `${h}px`;
-    player.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    const nowDocked = p >= 1;
-    if (nowDocked !== docked) {
-      docked = nowDocked;
-      document.body.classList.toggle("is-docked", docked);
-      update();
-    }
-  };
-
-  /* ---------- Reel or film: what the player is showing ---------- */
-  const setIndex = (p) => (index.style.transform = `translateX(${clamp(p, 0, 1) * (index.parentElement.clientWidth - 2)}px)`);
-  const tick = () => {
-    const t = video.currentTime || 0;
-    tc.textContent = `01:${pad(Math.floor(t / 60))}:${pad(Math.floor(t % 60))}:${pad(Math.floor((t % 1) * 25))}`;
-    if (video.duration) setIndex(t / video.duration);
-    place(); // keeps the player locked to its slot through panel animations and layout shifts
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-  if (reduceMotion) { video.removeAttribute("autoplay"); video.pause(); }
-
-  const dockLabel = $("#dock-label"), dockCount = $("#dock-count"), dockTitle = $("#dock-title"), dockCredit = $("#dock-credit");
-  const dockPlay = $("#dock-play"), dockFrames = $("#dock-frames");
-
-  const showFrame = (i) => {
-    const imgs = $$("img", frames);
-    if (!imgs.length) return;
-    frame = (i + imgs.length) % imgs.length;
-    imgs.forEach((im, k) => im.classList.toggle("on", k === frame));
-    $$(".shot", showing).forEach((s, k) => s.classList.toggle("is-on", k === frame));
-    dockCount.textContent = `${pad(frame + 1)} / ${pad(imgs.length)}`;
-  };
-  const startCycle = () => {
-    clearInterval(cycle);
-    if (!reduceMotion && $$("img", frames).length > 1) cycle = setInterval(() => showFrame(frame + 1), 800);
-  };
-
-  const showReel = () => {
-    showing = null;
-    clearInterval(cycle);
-    frames.innerHTML = "";
-    $$(".shot.is-on").forEach((s) => s.classList.remove("is-on"));
-    const r = REELS[reel];
-    dockLabel.textContent = `Reel ${r.n} — ${r.label}`;
-    dockCount.textContent = "2.39 : 1";
-    dockTitle.textContent = r.title;
-    dockCredit.textContent = "Scroll the list to step through the films.";
-    dockPlay.textContent = "Watch with sound ↗";
-    dockFrames.hidden = true;
-    if (!reduceMotion) video.play().catch(() => {});
-  };
-
-  const showFilm = (row, at = null) => {
-    if (row !== showing) {
-      $$(".shot.is-on").forEach((s) => s.classList.remove("is-on"));
-      showing = row;
-      video.pause();
-      frames.innerHTML = row.dataset.stills.split(",").map((s) => `<img src="/media/stills/${s}.jpg" alt="" decoding="async" />`).join("");
-      dockLabel.textContent = `${row.dataset.n} — ${row.dataset.kind}`;
-      dockTitle.textContent = row.dataset.title;
-      dockCredit.textContent = row.dataset.credit;
-      dockPlay.textContent = row.dataset.id ? "Play film ↗" : "View frames ↗";
-      dockFrames.hidden = !row.dataset.id;
-      showFrame(at ?? 0);
-      if (at == null) startCycle();
-    } else if (at != null) {
-      clearInterval(cycle);
-      showFrame(at);
+    if (s.dataset.type === "film" && f !== curFrame) {
+      curFrame = f;
+      const imgs = $$("img", framesEl);
+      imgs.forEach((im, k) => im.classList.toggle("on", k === f));
+      stFrame.textContent = `Frame ${pad(f + 1)} / ${pad(imgs.length)}`;
     }
   };
 
-  // Docked, the player follows the film you're on; up in the monitor, it plays the reel
-  function update() {
-    rows.forEach((r) => r.classList.toggle("is-on", docked && r === active));
-    if (docked && active) showFilm(active);
-    else showReel();
-  }
-  const setActive = (row) => { if (row !== active) { active = row; update(); } };
-
-  const setReel = (key) => {
-    if (key === reel) return;
-    reel = key;
-    video.poster = REELS[key].poster;
-    video.src = REELS[key].src;
-    if (!showing) showReel();
+  const stepHeight = () => steps[0].offsetHeight;
+  const stickyTop = () => parseFloat(getComputedStyle(sticky).top) || 0;
+  const onScroll = () => {
+    const into = stickyTop() - roll.getBoundingClientRect().top;
+    const pos = clamp(into / stepHeight(), 0, steps.length - 0.0001);
+    const i = Math.floor(pos);
+    const s = steps[i];
+    const n = s.dataset.type === "film" ? s.dataset.stills.split(",").length : 1;
+    // frames turn over as you scroll through a film, like a roll running through the gate
+    render(i, Math.min(n - 1, Math.floor((pos - i) * n)));
   };
+  let queued = false;
+  window.addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; onScroll(); }); } }, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
 
-  /* ---------- Films: scroll steps through them one by one; hover jumps straight to one ---------- */
-  const centreObs = new IntersectionObserver((entries) => entries.forEach((e) => {
-    if (e.isIntersecting && !e.target.closest("[hidden]")) setActive(e.target);
-  }), { rootMargin: "-48% 0px -48% 0px" });
-  rows.forEach((row) => {
-    centreObs.observe(row);
-    if (canHover) {
-      row.addEventListener("mouseenter", () => setActive(row));
-      $$(".shot", row).forEach((s) => s.addEventListener("mouseenter", () => { setActive(row); if (docked) showFilm(row, Number(s.dataset.i)); }));
-      row.addEventListener("mouseleave", () => { if (showing === row) startCycle(); });
-    }
-    $(".row-open", row).addEventListener("focus", () => setActive(row));
-    row.addEventListener("click", (e) => {
-      const shot = e.target.closest(".shot");
-      openRow(row, shot ? Number(shot.dataset.i) : null);
-    });
-  });
-
-  $$(".tab").forEach((t) => t.addEventListener("click", () => {
-    $$(".tab").forEach((x) => { const on = x === t; x.classList.toggle("is-on", on); x.setAttribute("aria-selected", String(on)); });
-    $$(".rows").forEach((l) => (l.hidden = l.dataset.set !== t.dataset.tab));
-    setReel(t.dataset.tab);
-    setActive($(`.rows[data-set="${t.dataset.tab}"] .row`));
+  // Bars jump straight to a film
+  bars.forEach((b) => b.addEventListener("click", () => {
+    const top = window.scrollY + roll.getBoundingClientRect().top - stickyTop() + Number(b.dataset.step) * stepHeight() + 2;
+    window.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
   }));
 
-  const playNow = () => (showing ? openRow(showing, showing.dataset.id ? null : frame) : openReel());
-  player.addEventListener("click", playNow);
-  player.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playNow(); } });
-  dockPlay.addEventListener("click", playNow);
-  dockFrames.addEventListener("click", () => showing && openRow(showing, frame));
-  $("#reel-play").addEventListener("click", openReel);
+  // The reel pauses once you've scrolled past the roll
+  new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) video.pause();
+    else if (!reduceMotion && steps[cur]?.dataset.type === "reel") video.play().catch(() => {});
+  }).observe(roll);
 
-  active = rows[0];
-  place();
-  update();
+  stPlay.addEventListener("click", () => {
+    const s = steps[cur];
+    if (s.dataset.type === "reel" || s.dataset.id) openFilm(s);
+    else openFrames(s, Math.max(0, curFrame));
+  });
 
-  /* ---------- Intro, then the grid draws itself in ---------- */
+  /* ---------- Phones: sideways by default, so the work fills the screen; an upright crop if preferred ---------- */
+  const turn = $("#turn");
+  const toggle = $("#view-toggle");
+  stage.append(turn, toggle); // keep these upright even when the picture is turned
+  let pref = null;
+  try { pref = sessionStorage.getItem("cp-view"); } catch (e) {}
+  const applyView = () => {
+    const rotated = portraitPhone.matches && pref !== "upright";
+    stage.classList.toggle("is-rotated", rotated);
+    toggle.textContent = rotated ? "Upright view" : "Sideways view";
+  };
+  toggle.addEventListener("click", () => {
+    pref = stage.classList.contains("is-rotated") ? "upright" : "sideways";
+    try { sessionStorage.setItem("cp-view", pref); } catch (e) {}
+    applyView();
+  });
+  portraitPhone.addEventListener?.("change", applyView);
+  applyView();
+  // a brief nudge the first time the roll is on screen sideways
+  let nudged = false;
+  new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting || nudged || !stage.classList.contains("is-rotated")) return;
+    nudged = true;
+    turn.classList.add("show");
+    setTimeout(() => turn.classList.remove("show"), 2600);
+  }, { threshold: 0.6 }).observe(stage);
+
+  /* ---------- Intro: the clips flick through a small frame, which opens out into the stage ---------- */
   const intro = $("#intro");
+  const frame = $("#intro-frame");
   const panels = $$(".panel");
   const revealObs = new IntersectionObserver((entries) => entries.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add("in"); revealObs.unobserve(e.target); }
   }), { threshold: 0.08 });
-  const startSuite = () => {
+  panels.forEach((p) => revealObs.observe(p));
+
+  const finish = (expand) => {
+    if (expand && !stage.classList.contains("is-rotated")) {
+      const r = frame.getBoundingClientRect(), s = stageIn.getBoundingClientRect();
+      stageIn.style.transition = "none";
+      stageIn.style.clipPath = `inset(${r.top - s.top}px ${s.right - r.right}px ${s.bottom - r.bottom}px ${r.left - s.left}px)`;
+      stageIn.getBoundingClientRect();
+      stageIn.style.transition = "";
+      requestAnimationFrame(() => requestAnimationFrame(() => (stageIn.style.clipPath = "inset(0px 0px 0px 0px)")));
+    }
+    intro.classList.add("out");
     document.body.classList.remove("is-intro");
-    panels.forEach((p) => {
-      if (p.getBoundingClientRect().top < window.innerHeight) p.classList.add("in");
-      else { p.style.setProperty("--d", 0); revealObs.observe(p); }
-    });
-    place();
+    setTimeout(() => (intro.hidden = true), 600);
+    if (!reduceMotion) video.play().catch(() => {});
+    try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
   };
 
   let seen = false;
   try { seen = sessionStorage.getItem("cp-intro") === "1"; } catch (e) {}
   if (reduceMotion || seen) {
     intro.hidden = true;
-    startSuite();
+    document.body.classList.remove("is-intro");
   } else {
-    const count = $("#intro-count"), bar = $("#intro-bar");
-    requestAnimationFrame(() => intro.classList.add("go"));
-    const t0 = performance.now(), DURATION = 1500;
-    const run = (now) => {
-      const p = Math.min(1, (now - t0) / DURATION);
-      const e = 1 - Math.pow(1 - p, 3);
-      count.textContent = pad(Math.round(e * 100));
-      bar.style.transform = `scaleX(${e})`;
-      if (p < 1) return requestAnimationFrame(run);
-      setTimeout(() => {
-        intro.classList.add("out");
-        startSuite();
-        setTimeout(() => (intro.hidden = true), 1000);
-        try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
-      }, 250);
+    // one frame from every film, then a second pass for pace
+    const pool = steps.filter((s) => s.dataset.type === "film").flatMap((s) => s.dataset.stills.split(",").slice(0, 2));
+    const order = pool.filter((_, k) => k % 2 === 0).concat(pool.filter((_, k) => k % 2 === 1)).slice(0, 24);
+    frame.innerHTML = order.map((s) => `<img src="/media/thumbs/${s}.jpg" alt="" />`).join("");
+    const imgs = $$("img", frame), count = $("#intro-count");
+    const FLICKS = imgs.length;
+    let k = 0;
+    const flick = () => {
+      imgs.forEach((im, j) => im.classList.toggle("on", j === k % imgs.length));
+      count.textContent = pad(Math.round(((k + 1) / FLICKS) * 100));
+      k++;
+      if (k < FLICKS) setTimeout(flick, k < 3 ? 160 : k > FLICKS - 4 ? 160 : 75);
+      else {
+        // land on the reel's first frame so the frame opens straight into the stage
+        imgs.forEach((im) => im.classList.remove("on"));
+        frame.style.background = `#000 url(${steps[0].dataset.poster}) center / cover`;
+        setTimeout(() => finish(true), 220);
+      }
     };
-    requestAnimationFrame(run);
+    Promise.all(imgs.slice(0, 6).map((im) => im.decode().catch(() => {}))).then(() => setTimeout(flick, 200));
   }
 
   /* ---------- Viewer: films and frames, full screen ---------- */
   const lb = $("#lb");
-  const stage = $("#lb-stage");
+  const lbStage = $("#lb-stage");
   const lbTitle = $("#lb-title");
   const lbCount = $("#lb-count");
   const prev = $("#lb-prev");
   const next = $("#lb-next");
   const filmBtn = $("#lb-film");
-  let lbRow = null, lbFrames = [], idx = 0, lastFocus = null;
+  let lbStep = null, lbFrames = [], idx = 0, lastFocus = null;
 
   const embed = ({ provider, id, hash }) =>
     provider === "youtube"
@@ -228,60 +208,54 @@
     lb.hidden = false;
     document.body.style.overflow = "hidden";
     video.pause();
-    clearInterval(cycle);
     requestAnimationFrame(() => lb.classList.add("is-open"));
     $("#lb-close").focus();
   };
 
-  const playFilm = (data, label) => {
-    stage.innerHTML = `<div class="film">${embed(data)}</div>`;
-    lbTitle.textContent = label;
+  const playIn = (s) => {
+    lbStage.innerHTML = `<div class="film">${embed(s.dataset)}</div>`;
+    lbTitle.textContent = s.dataset.title;
     lbCount.textContent = "";
     prev.hidden = next.hidden = filmBtn.hidden = true;
   };
 
   const showLbFrame = () => {
-    stage.innerHTML = `<img src="/media/stills/${lbFrames[idx]}.jpg" alt="Frame ${idx + 1} from ${lbRow.dataset.title}" />`;
+    lbStage.innerHTML = `<img src="/media/stills/${lbFrames[idx]}.jpg" alt="Frame ${idx + 1} from ${lbStep.dataset.title}" />`;
     lbCount.textContent = `Frame ${pad(idx + 1)} / ${pad(lbFrames.length)}`;
     prev.hidden = next.hidden = lbFrames.length < 2;
   };
 
-  function openRow(row, at) {
+  function openFilm(s) {
     lastFocus = document.activeElement;
-    lbRow = row;
-    if (at == null && row.dataset.id) {
-      playFilm(row.dataset, row.dataset.title);
-    } else {
-      lbFrames = row.dataset.stills.split(",");
-      idx = at || 0;
-      lbTitle.textContent = row.dataset.title;
-      filmBtn.hidden = !row.dataset.id;
-      showLbFrame();
-    }
+    lbStep = s;
+    playIn(s);
     show();
   }
 
-  function openReel() {
+  function openFrames(s, at) {
     lastFocus = document.activeElement;
-    lbRow = null;
-    playFilm({ provider: "vimeo", id: REELS[reel].vimeo }, REELS[reel].title);
+    lbStep = s;
+    lbFrames = s.dataset.stills.split(",");
+    idx = at || 0;
+    lbTitle.textContent = s.dataset.title;
+    filmBtn.hidden = !s.dataset.id;
+    showLbFrame();
     show();
   }
 
   const close = () => {
     lb.classList.remove("is-open");
     lb.hidden = true;
-    stage.innerHTML = "";
+    lbStage.innerHTML = "";
     document.body.style.overflow = "";
-    if (showing) startCycle();
-    else if (!reduceMotion) video.play().catch(() => {});
+    if (!reduceMotion && steps[cur]?.dataset.type === "reel") video.play().catch(() => {});
     lastFocus?.focus();
   };
 
   const step = (d) => { idx = (idx + d + lbFrames.length) % lbFrames.length; showLbFrame(); };
   prev.addEventListener("click", () => step(-1));
   next.addEventListener("click", () => step(1));
-  filmBtn.addEventListener("click", () => playFilm(lbRow.dataset, lbRow.dataset.title));
+  filmBtn.addEventListener("click", () => playIn(lbStep));
   $("#lb-close").addEventListener("click", close);
   document.addEventListener("keydown", (e) => {
     if (lb.hidden) return;

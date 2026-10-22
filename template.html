@@ -19,65 +19,66 @@
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="is-intro">
-  <!-- INTRO: the wordmark builds, then the grid draws itself in -->
+  <!-- INTRO: the clips flick through a small frame, which then opens out into the full-bleed stage -->
   <div class="intro" id="intro" aria-hidden="true">
-    <p class="intro-mark"><span class="intro-word">Charlie Painter</span><span class="intro-dp">_DP</span></p>
-    <p class="intro-meta mono"><span>Director of Photography</span><span id="intro-count">00</span></p>
-    <span class="intro-line"><span id="intro-bar"></span></span>
+    <div class="intro-box">
+      <div class="intro-frame" id="intro-frame"></div>
+      <p class="intro-meta mono"><b>Charlie Painter<span>_DP</span></b><span id="intro-count">00</span></p>
+    </div>
   </div>
 
-  <!-- One technical grid: every panel shares its hairlines with its neighbours -->
-  <div class="suite" id="top">
+  <!-- HEADER: over the top of the roll -->
+  <header class="top" id="top">
+    <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
+    <nav class="nav mono" aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-    <!-- MENU BAR -->
-    <header class="panel bar" style="--d:0">
-      <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
-      <nav class="nav mono" aria-label="Sections">
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  <!-- THE ROLL: full bleed. Scroll down and it runs through the reels and every film, frame by frame -->
+  <section class="roll" id="work" aria-label="Work">
+    <div class="roll-sticky" id="roll-sticky">
+    <div class="stage" id="stage">
+      <div class="stage-in" id="stage-in">
+        <video id="reel-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg">
+          <source src="/media/reel-narrative-v2.mp4" type="video/mp4" />
+        </video>
+        <div class="stage-frames" id="stage-frames" aria-hidden="true"></div>
+        <div class="stage-shade" aria-hidden="true"></div>
 
-    <!-- PROGRAM MONITOR: the reel plays big here, then docks into the work section as you scroll -->
-    <section class="panel monitor" id="reel" aria-label="Showreel" style="--d:1">
-      <div class="panel-head mono">
-        <span class="ph-label"><span class="rec" aria-hidden="true"></span><span id="top-label">Reel 01 — Narrative</span></span>
-        <span class="tc" id="tc" aria-hidden="true">01:00:00:00</span>
-      </div>
-      <div class="slot slot-top" id="slot-top"><span class="slot-idle mono">Playing below ↓</span></div>
-      <div class="panel-foot">
-        <div class="scale" aria-hidden="true"><span class="scale-ticks"></span><span class="scale-index" id="scale-index"></span></div>
-        <button class="key mono" id="reel-play">Watch with sound ↗</button>
-      </div>
-    </section>
-
-    <!-- WORK: the docked player on the left, the films on the right -->
-    <section class="panel dock" id="work" aria-label="Player" style="--d:2">
-      <div class="dock-in">
-        <div class="panel-head mono"><span class="ph-label" id="dock-label">Reel 01 — Narrative</span><span id="dock-count">2.39 : 1</span></div>
-        <div class="slot slot-dock" id="slot-dock"></div>
-        <div class="dock-meta">
-          <p class="dock-title" id="dock-title">Narrative showreel</p>
-          <p class="dock-credit" id="dock-credit">Scroll the list to step through the films.</p>
+        <div class="stage-info" aria-live="polite">
+          <p class="mono st-meta"><span class="rec" aria-hidden="true"></span><span id="st-n">Reel</span><span id="st-kind">Showreel</span></p>
+          <h2 class="st-title" id="st-title">Narrative showreel</h2>
+          <p class="mono st-credit" id="st-credit">Features &amp; shorts</p>
+          <button class="st-play mono" id="st-play">Watch with sound ↗</button>
         </div>
-        <div class="panel-foot"><button class="key mono" id="dock-play">Watch with sound ↗</button><button class="key mono" id="dock-frames" hidden>All frames</button></div>
-      </div>
-    </section>
 
-    <section class="panel bin" aria-label="Films" style="--d:3">
-      <div class="panel-head mono tabs" role="tablist">
-        <button class="tab is-on" role="tab" aria-selected="true" data-tab="narrative">Narrative <b>{{NARRATIVE_COUNT}}</b></button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="commercial">Commercial <b>{{COMMERCIAL_COUNT}}</b></button>
-      </div>
-      <ol class="rows" data-set="narrative">
-{{NARRATIVE}}
-      </ol>
-      <ol class="rows" data-set="commercial" hidden>
-{{COMMERCIAL}}
-      </ol>
-    </section>
+        <!-- the edge of the roll: one bar per film, so you always know where you are -->
+        <nav class="bars" id="bars" aria-label="Jump to a film">
+{{BARS}}
+        </nav>
+        <p class="st-frame mono" id="st-frame" aria-hidden="true"></p>
 
+        <div class="turn mono" id="turn" aria-hidden="true"><span>Turn your phone sideways ↻</span></div>
+        <button class="view-toggle mono" id="view-toggle">Upright view</button>
+      </div>
+    </div>
+    <!-- the index: every film by name, so you can jump anywhere -->
+    <nav class="index" aria-label="Films">
+      <p class="idx-head mono"><span>Index</span><span>{{FILM_COUNT}} films</span></p>
+      <div class="idx-list">
+{{INDEX}}
+      </div>
+    </nav>
+    </div>
+    <div class="steps" id="steps">
+{{STEPS}}
+    </div>
+  </section>
+
+  <div class="suite suite-2">
     <!-- ABOUT: one statement, then the detail -->
     <section class="panel about" id="about">
       <div class="panel-head mono"><span>About</span></div>
@@ -115,15 +116,6 @@
     </section>
 
     <footer class="panel fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
-  </div>
-
-  <!-- THE PLAYER: one screen that travels from the monitor to the dock -->
-  <div class="player" id="player" role="button" tabindex="0" aria-label="Open with sound">
-    <video id="reel-video" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg">
-      <source src="/media/reel-narrative-v2.mp4" type="video/mp4" />
-    </video>
-    <div class="player-frames" id="player-frames" aria-hidden="true"></div>
-    <span class="vf-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   </div>
 
   <!-- VIEWER -->
