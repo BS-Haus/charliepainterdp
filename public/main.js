@@ -59,7 +59,7 @@
     rows.forEach((r) => r.classList.remove("is-on"));
     clips.forEach((c) => c.classList.remove("is-on"));
     $$(".shot.is-on").forEach((s) => s.classList.remove("is-on"));
-    vfLabel.textContent = `Reel ${REELS[reel].n} · ${REELS[reel].label}`;
+    vfLabel.textContent = `Reel ${REELS[reel].n} — ${REELS[reel].label}`;
     if (!reduceMotion) video.play().catch(() => {});
   };
 
@@ -86,7 +86,7 @@
       b.addEventListener("mouseenter", () => { clearInterval(cycle); showFrame(k); });
       b.addEventListener("click", () => openRow(row, k));
     });
-    $("#src-n").textContent = `No. ${row.dataset.n} · ${row.dataset.kind}`;
+    $("#src-n").textContent = `${row.dataset.n} — ${row.dataset.kind}`;
     $("#src-title").textContent = row.dataset.title;
     $("#src-credit").textContent = row.dataset.credit;
     $("#src-play").textContent = row.dataset.id ? "Play film ↗" : "View frames ↗";
@@ -119,7 +119,7 @@
       clips.forEach((c) => c.classList.toggle("is-on", c.dataset.n === row.dataset.n));
       vfFrames.innerHTML = row.dataset.stills.split(",").map((s) => `<img src="/media/stills/${s}.jpg" alt="" decoding="async" />`).join("");
       monitor.classList.add("is-film");
-      vfLabel.textContent = `${row.dataset.n} · ${row.dataset.title}`;
+      vfLabel.textContent = `${row.dataset.n} — ${row.dataset.title}`;
       showFrame(at ?? 0);
       if (at == null) startCycle();
     } else if (at != null) {
@@ -176,6 +176,46 @@
   loadSource(rows[0]);
   showFrame(0);
   showReel();
+
+  /* ---------- Intro, then the panels draw themselves in ---------- */
+  const intro = $("#intro");
+  const panels = $$(".panel");
+  const revealObs = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("in"); revealObs.unobserve(e.target); }
+  }), { threshold: 0.08 });
+  const startSuite = () => {
+    document.body.classList.remove("is-intro");
+    // the first screen arrives in sequence; the rest as you scroll to them
+    panels.forEach((p) => {
+      if (p.getBoundingClientRect().top < window.innerHeight) p.classList.add("in");
+      else { p.style.setProperty("--d", 0); revealObs.observe(p); }
+    });
+  };
+
+  let seen = false;
+  try { seen = sessionStorage.getItem("cp-intro") === "1"; } catch (e) {}
+  if (reduceMotion || seen) {
+    intro.hidden = true;
+    startSuite();
+  } else {
+    const count = $("#intro-count"), bar = $("#intro-bar");
+    requestAnimationFrame(() => intro.classList.add("go"));
+    const t0 = performance.now(), DURATION = 1500;
+    const run = (now) => {
+      const p = Math.min(1, (now - t0) / DURATION);
+      const e = 1 - Math.pow(1 - p, 3);
+      count.textContent = pad(Math.round(e * 100));
+      bar.style.transform = `scaleX(${e})`;
+      if (p < 1) return requestAnimationFrame(run);
+      setTimeout(() => {
+        intro.classList.add("out");
+        startSuite();
+        setTimeout(() => (intro.hidden = true), 1000);
+        try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
+      }, 250);
+    };
+    requestAnimationFrame(run);
+  }
 
   /* ---------- Viewer: films and frames, full screen ---------- */
   const lb = $("#lb");

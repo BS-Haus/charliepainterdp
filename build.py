@@ -39,7 +39,7 @@ def reel_list(items, start=0):
         sub = f' <em>‘{esc(p["subtitle"])}’</em>' if p.get("subtitle") else ""
         shots = "".join(
             f'<button class="shot" data-i="{k}" tabindex="-1" aria-label="Frame {k + 1}"><img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" /></button>'
-            for k, st in enumerate(p["stills"][:6])
+            for k, st in enumerate(p["stills"][:5])
         )
         action = "Play" if p.get("video") else "View frames from"
         rows.append(f'''          <li class="row"{film_attrs(p)} data-n="{n:02d}" data-credit="{esc(credit(p))}" data-kind="{esc(p['kind'])}">
@@ -71,13 +71,13 @@ narr_more = "\n".join(
     for t, k, c in content["narrative_more"]
 )
 narr_extra = f"""        <div class="also-col">
-          <p class="mono">Also shot — narrative</p>
+          <p class="mono">Narrative — also shot</p>
           <ul class="also-list mono">
 {narr_more}
           </ul>
         </div>"""
 comm_extra = f"""        <div class="also-col">
-          <p class="mono">Also shot — commercial</p>
+          <p class="mono">Commercial — also shot</p>
           <p class="also-line">{" · ".join(esc(x) for x in content["commercial_more"])}</p>
         </div>"""
 
@@ -86,7 +86,7 @@ out = out.replace("{{NARRATIVE}}", reel_list(content["narrative"]))
 out = out.replace("{{COMMERCIAL}}", reel_list(content["commercial"], len(content["narrative"])))
 out = out.replace("{{NARRATIVE_COUNT}}", f'{len(content["narrative"]):02d}')
 out = out.replace("{{COMMERCIAL_COUNT}}", f'{len(content["commercial"]):02d}')
-out = out.replace("{{ALSO}}", '      <div class="panel-head mono"><span>Also shot</span></div>\n      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
+out = out.replace("{{ALSO}}", '      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
 out = out.replace("{{TL_NARRATIVE}}", timeline(content["narrative"]))
 out = out.replace("{{TL_COMMERCIAL}}", timeline(content["commercial"], len(content["narrative"])))
 out = out.replace("{{FILM_COUNT}}", f'{len(content["narrative"]) + len(content["commercial"]):02d}')
