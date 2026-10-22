@@ -22,7 +22,7 @@
   <!-- HEADER: always there -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
-    <p class="top-now mono" id="top-now" aria-live="polite"></p>
+    <p class="top-role mono">Director of photography<span>London</span></p>
     <span class="top-progress" id="top-progress" aria-hidden="true"></span>
     <nav class="nav mono" aria-label="Sections">
       <a href="#work">Work</a>
@@ -31,7 +31,7 @@
     </nav>
   </header>
 
-  <!-- THE GATE: one viewer, with the whole roll running through beneath it -->
+  <!-- THE GATE: one screen, a deck of keys, and the whole roll running through beneath -->
   <section class="gate" id="work" aria-label="Work">
     <div class="viewer" id="viewer">
       <div class="frame" id="frame">
@@ -44,12 +44,24 @@
         <div class="corner c-br"><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
       </div>
     </div>
+    <div class="deck mono">
+      <div class="keys" role="group" aria-label="Step through the work">
+        <button class="key" data-step="-film" aria-label="Previous film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2v8M10 2 4 6l6 4z"/></svg></button>
+        <button class="key" data-step="-1" aria-label="Previous frame"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M9 2 3 6l6 4z"/></svg></button>
+        <button class="key" data-step="1" aria-label="Next frame"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 2 6 4-6 4z"/></svg></button>
+        <button class="key" data-step="film" aria-label="Next film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10 2v8M2 2l6 4-6 4z"/></svg></button>
+      </div>
+      <div class="map" id="map">{{MAP}}</div>
+      <p class="hint" id="roll-hint">Scroll to pull the roll</p>
+      <p class="counter"><span id="c-now">001</span><span>/ {{FRAMES}}</span></p>
+    </div>
     <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
       <div class="strip" id="strip">
+        <div class="leader" aria-hidden="true"><span class="mono">Head</span></div>
 {{ROLL}}
+        <div class="leader tail" aria-hidden="true"><span class="mono">Tail</span></div>
       </div>
       <span class="gate-line" aria-hidden="true"></span>
-      <p class="roll-hint mono" id="roll-hint">Scroll to pull the roll through ⟶</p>
     </div>
   </section>
 
@@ -58,12 +70,18 @@
 {{FEED}}
   </section>
 
-  <div class="suite suite-2">
-    <!-- ABOUT: one statement, then the detail -->
-    <section class="panel about" id="about">
-      <div class="panel-head mono"><span>About</span></div>
-      <p class="about-line">A narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
-      <ul class="awards">
+  <!-- THE SHEET: everything else, numbered, on the same twelve columns -->
+  <div class="sheet">
+    <section class="row" id="about">
+      <p class="row-head mono"><span>01</span>About</p>
+      <div class="row-body">
+        <p class="about-line">A narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
+      </div>
+    </section>
+
+    <section class="row">
+      <p class="row-head mono"><span>02</span>Awards</p>
+      <ul class="row-body awards">
         <li><span class="mono">Winner</span><b>Best Cinematography</b><span class="mono">SSIFF 2025</span></li>
         <li><span class="mono">Nominee</span><b>Best Cinematography</b><span class="mono">YETI Film Fest</span></li>
         <li><span class="mono">Winner</span><b>Best Film</b><span class="mono">LakeCity</span></li>
@@ -71,31 +89,34 @@
         <li><span class="mono">Winner</span><b>Best Drama</b><span class="mono">Arena 51 Film Festival</span></li>
       </ul>
     </section>
-    <a class="panel press" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
-      <div class="panel-head mono"><span>Press</span><span>↗</span></div>
-      <blockquote>“Eighty-six years ago today, my great-great-uncle, Jack, was fighting for his life in Dunkirk.”</blockquote>
-      <p class="press-src mono">British Cinematographer — on <i>Operation Dynamo</i></p>
+
+    <a class="row press" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
+      <p class="row-head mono"><span>03</span>Press</p>
+      <div class="row-body">
+        <blockquote>“Eighty-six years ago today, my great-great-uncle, Jack, was fighting for his life in Dunkirk.”</blockquote>
+        <p class="press-src mono">British Cinematographer — on Operation Dynamo <i>↗</i></p>
+      </div>
     </a>
 
-    <!-- FULL CREDITS: there when you want it -->
-    <details class="panel credits">
-      <summary class="panel-head mono"><span>Full credits</span><span class="plus" aria-hidden="true"></span></summary>
+    <details class="row credits">
+      <summary class="row-head mono"><span>04</span>Full credits<i class="plus" aria-hidden="true"></i></summary>
 {{ALSO}}
     </details>
 
-    <!-- CONTACT -->
-    <section class="panel contact" id="contact">
-      <div class="panel-head mono"><span>Contact</span><span>London, UK</span></div>
-      <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-      <nav class="contact-links mono" aria-label="Elsewhere">
-        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
-        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
-        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
-        <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
-      </nav>
+    <section class="row" id="contact">
+      <p class="row-head mono"><span>05</span>Contact</p>
+      <div class="row-body">
+        <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+        <nav class="contact-links mono" aria-label="Elsewhere">
+          <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
+          <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
+          <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
+          <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
+        </nav>
+      </div>
     </section>
 
-    <footer class="panel fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+    <footer class="row fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></footer>
   </div>
 
   <!-- VIEWER -->

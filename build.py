@@ -13,7 +13,7 @@ esc = html.escape
 
 # The two showreels open their halves of the roll; their frames are stills pulled from the reel
 REELS = {
-    "narrative": {"title": "Narrative showreel", "credit": "Features & shorts", "src": "/media/reel-narrative-v2.mp4", "poster": "/media/reel-narrative-v2-poster.jpg", "vimeo": "1149629056"},
+    "narrative": {"title": "Narrative showreel", "credit": "Features & shorts", "src": "/media/reel-narrative-v3.mp4", "poster": "/media/reel-narrative-v2-poster.jpg", "vimeo": "1149629056"},
     "commercial": {"title": "Commercial showreel", "credit": "Commercials & brand films", "src": "/media/reel-commercial-v2.mp4", "poster": "/media/reel-commercial-v2-poster.jpg", "vimeo": "1188991301"},
 }
 
@@ -64,9 +64,17 @@ def roll(all_items):
             for f, fr in enumerate(it["frames"])
         )
         half = ' data-half="1"' if it["type"] == "reel" else ""
-        label = it["title"] if it["type"] == "reel" else f'{it["n"]} {it.get("short", it["title"])}'
-        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono">{esc(label)}</p></div>')
+        name = it["title"] if it["type"] == "reel" else it.get("short", it["title"])
+        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono"><span>{esc(it["n"])}</span>{esc(name)}</p></div>')
     return "\n".join(runs)
+
+
+def deck_map(all_items):
+    """The map on the deck: one segment per film, as long as its run of frames."""
+    return "".join(
+        f'<button class="seg{" seg-reel" if it["type"] == "reel" else ""}" data-item="{k}" style="flex-grow:{len(it["frames"])}" aria-label="{esc(it["title"])}"></button>'
+        for k, it in enumerate(all_items)
+    )
 
 
 def feed(all_items):
@@ -110,6 +118,8 @@ all_items, films = items()
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{ROLL}}", roll(all_items))
 out = out.replace("{{FEED}}", feed(all_items))
+out = out.replace("{{MAP}}", deck_map(all_items))
+out = out.replace("{{FRAMES}}", f'{sum(len(it["frames"]) for it in all_items):03d}')
 out = out.replace("{{FILM_COUNT}}", f"{films:02d}")
 out = out.replace("{{ALSO}}", '      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
 (ROOT / "public" / "index.html").write_text(out)

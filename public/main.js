@@ -8,9 +8,7 @@
 
   $("#year").textContent = new Date().getFullYear();
 
-  const topNow = $("#top-now"), topProgress = $("#top-progress");
-  const films = $$(".run").filter((r) => r.dataset.type === "film").length;
-  let section = "work";
+  const topProgress = $("#top-progress");
 
   /* ======================================================================
      THE GATE — one viewer; the whole roll runs through beneath it
@@ -24,6 +22,7 @@
   const reel = $("#reel");
   const vN = $("#v-n"), vKind = $("#v-kind"), vCount = $("#v-count"), vTitle = $("#v-title"), vCredit = $("#v-credit"), vPlay = $("#v-play");
   const hint = $("#roll-hint");
+  const segs = $$(".seg"), counter = $("#c-now");
 
   // Every frame on the roll, with where its centre sits along the strip
   let cells = [];
@@ -66,6 +65,7 @@
     cells.forEach((cc, j) => cc.el.classList.toggle("is-on", j === k));
     if (c.run !== prevRun) {
       runs.forEach((rr, j) => rr.classList.toggle("is-on", j === c.run));
+      segs.forEach((s, j) => s.classList.toggle("is-on", j === c.run));
       vN.textContent = r.dataset.n;
       vKind.textContent = r.dataset.kind;
       vTitle.textContent = r.dataset.title;
@@ -86,7 +86,7 @@
       still.src = $$(".cell img", r)[c.f].src.replace("/thumbs/", "/stills/");
       vCount.textContent = `Frame ${pad(c.f + 1)} / ${pad(n)}`;
     }
-    readout();
+    counter.textContent = String(k + 1).padStart(3, "0");
   };
 
   // Reels show running timecode in the top-right corner
@@ -170,16 +170,30 @@
     playCurrent();
   });
 
-  // Arrow keys step a frame; with shift, a film
+  // The deck: step a frame or a film, or jump anywhere on the map
+  const firstOf = (run) => cells.findIndex((c) => c.run === run);
+  const stepFrame = (dir) => nudge(cells[clamp(nearest(target) + dir, 0, cells.length - 1)].x);
+  const stepFilm = (dir) => {
+    const k = nearest(target), start = firstOf(cells[k].run);
+    if (dir < 0 && k > start) return nudge(cells[start].x);
+    nudge(cells[firstOf(clamp(cells[k].run + dir, 0, runs.length - 1))].x);
+  };
+  const press = (key) => { key.classList.add("is-hit"); setTimeout(() => key.classList.remove("is-hit"), 140); };
+  $$(".key").forEach((key) => key.addEventListener("click", () => {
+    if (!cells.length) return;
+    const s = key.dataset.step;
+    s.endsWith("film") ? stepFilm(s.startsWith("-") ? -1 : 1) : stepFrame(Number(s));
+  }));
+  segs.forEach((s) => s.addEventListener("click", () => cells.length && nudge(cells[firstOf(Number(s.dataset.item))].x)));
+
+  // Arrow keys step a frame; with shift, a film — and light up the matching key
   document.addEventListener("keydown", (e) => {
     if (!$("#lb").hidden || portrait.matches || cur < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
     if (gate.getBoundingClientRect().bottom < 100) return;
     e.preventDefault();
     const dir = e.key === "ArrowRight" ? 1 : -1;
-    if (e.shiftKey) {
-      const run = clamp(cells[cur].run + dir, 0, runs.length - 1);
-      nudge(cells[cells.findIndex((c) => c.run === run)].x);
-    } else nudge(cells[clamp(nearest(target) + dir, 0, cells.length - 1)].x);
+    e.shiftKey ? stepFilm(dir) : stepFrame(dir);
+    press($(`.key[data-step="${dir < 0 ? "-" : ""}${e.shiftKey ? "film" : 1}"]`));
   });
 
   function playCurrent() {
@@ -255,33 +269,27 @@
     });
   });
 
-  /* ---------- Header: what's on screen, and which section you're in ---------- */
-  function readout() {
-    if (section !== "work") { topNow.innerHTML = `<b>${section === "about" ? "About" : "Contact"}</b>`; return; }
-    if (cur < 0) return;
-    const r = runs[cells[cur].run];
-    topNow.innerHTML = r.dataset.type === "reel"
-      ? `<span class="rec"></span><b>${r.dataset.title}</b>`
-      : `<span>${r.dataset.n} / ${pad(films)}</span><b>${r.dataset.title}</b><span>Frame ${pad(cells[cur].f + 1)}</span>`;
-  }
+  /* ---------- Header: which section you're in ---------- */
   const navLinks = $$(".nav a");
   const sections = navLinks.map((a) => $(a.getAttribute("href")));
-  const navObs = new IntersectionObserver((entries) => entries.forEach((e) => {
-    if (!e.isIntersecting) return;
-    section = e.target.id;
-    navLinks.forEach((a, k) => a.classList.toggle("is-on", sections[k] === e.target));
-    readout();
-  }), { rootMargin: "-50% 0px -49% 0px" });
-  sections.forEach((el) => el && navObs.observe(el));
+  // a section is lit from the moment it crosses the middle of the screen (and contact, once you hit the bottom)
+  const lights = () => {
+    let on = 0;
+    sections.forEach((el, k) => { if (el && el.getBoundingClientRect().top < innerHeight / 2) on = k; });
+    if (window.scrollY + innerHeight >= document.documentElement.scrollHeight - 2) on = sections.length - 1;
+    navLinks.forEach((a, k) => a.classList.toggle("is-on", k === on));
+  };
+  window.addEventListener("scroll", lights, { passive: true });
+  lights();
   if (!portrait.matches) window.addEventListener("scroll", () => {
     if (window.scrollY > 4) topProgress.style.transform = `scaleX(${clamp(window.scrollY / (document.documentElement.scrollHeight - innerHeight), 0, 1)})`;
   }, { passive: true });
 
-  /* ---------- Panels fade in as they arrive ---------- */
+  /* ---------- Rows of the sheet fade in as they arrive ---------- */
   const revealObs = new IntersectionObserver((entries) => entries.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add("in"); revealObs.unobserve(e.target); }
   }), { threshold: 0.08 });
-  $$(".panel").forEach((p) => revealObs.observe(p));
+  $$(".row").forEach((p) => revealObs.observe(p));
 
   /* ======================================================================
      VIEWER — films and frames, full screen
