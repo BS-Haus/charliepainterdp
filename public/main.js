@@ -4,11 +4,8 @@
   const pad = (n) => String(n).padStart(2, "0");
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const portrait = window.matchMedia("(max-width: 760px) and (orientation: portrait)");
 
-  $("#year").textContent = new Date().getFullYear();
-
-  const topProgress = $("#top-progress");
+  $$(".year").forEach((y) => { y.textContent = new Date().getFullYear(); });
 
   /* ======================================================================
      THE GATE — one viewer; the whole roll runs through beneath it
@@ -151,7 +148,7 @@
 
   // Wheel/trackpad over the gate pulls the roll; at either end the page scrolls as normal
   gate.addEventListener("wheel", (e) => {
-    if (portrait.matches || window.scrollY > 4 || !cells.length) return;
+    if (window.scrollY > 4 || !cells.length) return;
     const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if ((d > 0 && target >= maxPos() - 0.5) || (d < 0 && target <= minPos() + 0.5)) return;
     e.preventDefault();
@@ -169,7 +166,7 @@
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
     if (!drag.axis && Math.hypot(dx, dy) > 6) {
       drag.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-      if (drag.axis === "x") { drag.el.setPointerCapture?.(drag.id); roll.classList.add("is-dragging"); }
+      if (drag.axis === "x") { try { drag.el.setPointerCapture(drag.id); } catch (err) {} roll.classList.add("is-dragging"); }
     }
     if (drag.axis === "x") {
       drag.moved = true;
@@ -232,8 +229,8 @@
 
   // Arrow keys step a frame; with shift, a film — and light up the matching key
   document.addEventListener("keydown", (e) => {
-    if (!$("#lb").hidden || portrait.matches || cur < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
-    if (gate.getBoundingClientRect().bottom < 100) return;
+    if (!$("#lb").hidden || cur < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
+    if (window.scrollY > gate.offsetHeight / 2) return;
     e.preventDefault();
     const dir = e.key === "ArrowRight" ? 1 : -1;
     e.shiftKey ? stepFilm(dir) : stepFrame(dir);
@@ -270,7 +267,7 @@
   let seen = false;
   try { seen = sessionStorage.getItem("cp-intro") === "1"; } catch (e) {}
   if (!seen && !reduceMotion) body.classList.add("go-top");
-  if (portrait.matches || reduceMotion || seen) {
+  if (reduceMotion || seen) {
     body.classList.remove("is-intro");
     startGate();
   } else {
@@ -305,28 +302,19 @@
     });
   }
 
-  /* ======================================================================
-     PORTRAIT PHONES — the feed
-     ====================================================================== */
-  const feedItems = $$(".feed-item");
-  const feedObs = new IntersectionObserver((entries) => entries.forEach((e) => {
-    const v = $("video", e.target);
-    if (e.isIntersecting) {
-      if (v) { if (!v.src) v.src = v.dataset.src; if (!reduceMotion) v.play().catch(() => {}); }
-      if (portrait.matches) topProgress.style.transform = `scaleX(${(feedItems.indexOf(e.target) + 1) / feedItems.length})`;
-    } else if (v) v.pause();
-  }), { threshold: 0.6 });
-  feedItems.forEach((it) => {
-    feedObs.observe(it);
-    const fs = $(".feed-frames", it), count = $(".feed-count", it);
-    if (fs && count) fs.addEventListener("scroll", () => {
-      count.textContent = `${pad(Math.round(fs.scrollLeft / fs.clientWidth) + 1)} / ${pad(fs.children.length)}`;
-    }, { passive: true });
-    $(".feed-play", it).addEventListener("click", () => {
-      if (it.dataset.type === "reel" || it.dataset.id) openFilm(it);
-      else openFrames(it, fs ? Math.round(fs.scrollLeft / fs.clientWidth) : 0);
-    });
-  });
+  /* ---------- Into the page: the sheet slides up over the gate and the gate fades to black; once it's
+     fully covered the reel stops, and starts again when you come back up ---------- */
+  let covered = false;
+  const cover = () => {
+    const c = clamp(window.scrollY / (gate.offsetHeight || 1), 0, 1);
+    gate.style.setProperty("--cover", c.toFixed(3));
+    if ((c > 0.98) === covered) return;
+    covered = c > 0.98;
+    if (covered) reel.pause();
+    else if (!reduceMotion && cur >= 0 && runs[cells[cur].run].dataset.type === "reel" && $("#lb").hidden) reel.play().catch(() => {});
+  };
+  window.addEventListener("scroll", cover, { passive: true });
+  cover();
 
   /* ---------- Header: which section you're in ---------- */
   const navLinks = $$(".nav a");
@@ -366,13 +354,12 @@
       ? `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Film"></iframe>`
       : `<iframe src="https://player.vimeo.com/video/${id}?${hash ? `h=${hash}&` : ""}autoplay=1&title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Film"></iframe>`;
 
-  const framesOf = (it) => (it.classList.contains("run") ? $$(".cell img", it) : $$(".feed-frames img", it)).map((im) => im.src.replace("/thumbs/", "/stills/"));
+  const framesOf = (run) => $$(".cell img", run).map((im) => im.src.replace("/thumbs/", "/stills/"));
 
   const openLb = () => {
     lb.hidden = false;
     document.body.style.overflow = "hidden";
     reel.pause();
-    $$(".feed video").forEach((v) => v.pause());
     requestAnimationFrame(() => lb.classList.add("is-open"));
     $("#lb-close").focus();
   };

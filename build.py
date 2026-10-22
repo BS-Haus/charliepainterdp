@@ -81,28 +81,6 @@ def deck_map(all_items):
     return "".join(halves)
 
 
-def feed(all_items):
-    """Portrait phones: one film per screen, full bleed; swipe sideways through its frames."""
-    out = []
-    for k, it in enumerate(all_items):
-        if it["type"] == "reel":
-            media = f'<video muted playsinline loop preload="none" poster="{it["poster"]}" data-src="{it["src"]}"></video>'
-        else:
-            media = '<div class="feed-frames">' + "".join(
-                f'<img src="/media/stills/{fr}.jpg" alt="" loading="lazy" decoding="async" />' for fr in it["frames"]
-            ) + "</div>"
-        count = "" if it["type"] == "reel" else f'<p class="corner c-tr mono feed-count">01 / {len(it["frames"]):02d}</p>'
-        play = "Watch with sound ↗" if it["type"] == "reel" else ("Play film ↗" if it.get("id") else "View frames ↗")
-        out.append(f'''      <article class="feed-item" data-item="{k}"{attrs(it)}>
-        {media}
-        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span>{esc(it["n"])} · {esc(it["kind"])}</p>
-        {count}
-        <div class="corner c-bl"><h3 class="st-title">{esc(it["title"])}</h3><p class="st-credit mono">{esc(it["credit"])}</p></div>
-        <div class="corner c-br"><button class="st-play mono feed-play">{play}</button></div>
-      </article>''')
-    return "\n".join(out)
-
-
 narr_more = "\n".join(
     f'          <li><span>{esc(t)}</span><span>{esc(c)}</span><span>{esc(k)}</span></li>'
     for t, k, c in content["narrative_more"]
@@ -121,7 +99,6 @@ comm_extra = f"""        <div class="also-col">
 all_items, films = items()
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{ROLL}}", roll(all_items))
-out = out.replace("{{FEED}}", feed(all_items))
 out = out.replace("{{MAP}}", deck_map(all_items))
 out = out.replace("{{FRAMES}}", f'{sum(len(it["frames"]) for it in all_items):03d}')
 out = out.replace("{{FILM_COUNT}}", f"{films:02d}")

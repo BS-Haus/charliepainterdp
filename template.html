@@ -23,7 +23,6 @@
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter<span>_DP</span></a>
     <p class="top-role mono">Director of photography<span>London</span></p>
-    <span class="top-progress" id="top-progress" aria-hidden="true"></span>
     <nav class="nav mono" aria-label="Sections">
       <a href="#work">Work</a>
       <a href="#about">About</a>
@@ -63,14 +62,10 @@
       </div>
       <span class="gate-line" aria-hidden="true"></span>
     </div>
+    <span class="fade" aria-hidden="true"></span>
   </section>
 
-  <!-- PORTRAIT PHONES: the same work as a full-bleed vertical feed -->
-  <section class="feed" id="feed" aria-label="Work">
-{{FEED}}
-  </section>
-
-  <!-- THE SHEET: everything else, numbered, on the same twelve columns -->
+  <!-- THE SHEET: everything else, numbered, on the same grid -->
   <div class="sheet">
     <section class="row" id="about">
       <p class="row-head mono"><span>01</span>About</p>
@@ -116,8 +111,11 @@
       </div>
     </section>
 
-    <footer class="row fine mono"><span>© <span id="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></footer>
+    <footer class="row fine mono"><span>© <span class="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></footer>
   </div>
+
+  <!-- BASE: the bottom of the unit, always there — the header's partner -->
+  <div class="base mono"><span>© <span class="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></div>
 
   <!-- VIEWER -->
   <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Viewer" hidden>
