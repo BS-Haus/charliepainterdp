@@ -31,42 +31,39 @@ def title_html(p):
     return f"{esc(p['title'])}{sub}"
 
 
-def reel_list(items):
-    """An accordion of films: clean title bars; the open one shows a main frame beside every frame."""
+def reel_list(items, start=0):
+    """Clean rows: number, title, credits, type, and a line of small shots that drive the channel."""
     rows = []
     for i, p in enumerate(items):
+        n = start + i + 1
         sub = f' <em>‘{esc(p["subtitle"])}’</em>' if p.get("subtitle") else ""
-        n = len(p["stills"])
-        cols = 3 if n > 6 else 2 if n > 1 else 1
-        stage = "".join(
-            f'<img src="/media/stills/{st}.jpg" alt="Frame {k + 1} from {esc(p["title"])}" loading="lazy" decoding="async" />'
-            for k, st in enumerate(p["stills"])
+        shots = "".join(
+            f'<button class="shot" data-i="{k}" tabindex="-1" aria-label="Frame {k + 1}"><img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" /></button>'
+            for k, st in enumerate(p["stills"][:6])
         )
-        thumbs = "".join(
-            f'<button class="rl-thumb" data-i="{k}" aria-label="Frame {k + 1}"><img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" /></button>'
-            for k, st in enumerate(p["stills"])
-        )
-        play = '<button class="rl-play">Play film ↗</button>' if p.get("video") else ""
-        rows.append(f'''        <li class="rl"{film_attrs(p)}>
-          <button class="rl-head" aria-expanded="false">
-            <span class="rl-n mono">{i + 1:02d}</span>
-            <span class="rl-title">{esc(p['title'])}{sub}</span>
-            <span class="rl-credit mono">{esc(credit(p))}</span>
-            <span class="rl-mini" aria-hidden="true">{"".join(f'<img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" />' for st in p["stills"][:5])}</span>
-            <span class="rl-kind mono">{esc(p['kind'])}</span>
-          </button>
-          <div class="rl-body"><div class="rl-inner">
-            <div class="rl-stage" aria-label="Frames from {esc(p['title'])} — move across to flick through, click to enlarge">{stage}<span class="rl-scrub"><span></span></span></div>
-            <div class="rl-side">
-              <div class="rl-thumbs" style="--cols:{cols}">{thumbs}</div>
-              <div class="rl-info mono">
-                <p><span class="rl-count"><span class="rl-i">01</span> / {n:02d}</span><br />{esc(credit(p))}</p>
-                <div class="rl-acts">{play}<button class="rl-frames">Enlarge</button></div>
-              </div>
-            </div>
-          </div></div>
-        </li>''')
+        action = "Play" if p.get("video") else "View frames from"
+        rows.append(f'''          <li class="row"{film_attrs(p)} data-n="{n:02d}" data-credit="{esc(credit(p))}" data-kind="{esc(p['kind'])}">
+            <button class="row-open" aria-label="{action} {esc(p['title'])}">
+              <span class="row-n mono">{n:02d}</span>
+              <span class="row-title">{esc(p['title'])}{sub}</span>
+              <span class="row-credit mono">{esc(credit(p))}</span>
+              <span class="row-kind mono">{esc(p['kind'])}</span>
+            </button>
+            <div class="shots">{shots}</div>
+          </li>''')
     return "\n".join(rows)
+
+
+def timeline(items, start=0):
+    """Each film as a clip on its track, made of its own frames; width follows how many frames it has."""
+    clips = []
+    for i, p in enumerate(items):
+        frames = "".join(f'<img src="/media/thumbs/{st}.jpg" alt="" loading="lazy" decoding="async" />' for st in p["stills"])
+        clips.append(
+            f'          <button class="clip" data-n="{start + i + 1:02d}" style="flex-grow:{len(p["stills"])}" aria-label="{esc(p["title"])}">'
+            f'<span class="clip-name mono">{esc(p["title"])}</span><span class="clip-frames">{frames}</span></button>'
+        )
+    return "\n".join(clips)
 
 
 narr_more = "\n".join(
@@ -86,9 +83,12 @@ comm_extra = f"""        <div class="also-col">
 
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{NARRATIVE}}", reel_list(content["narrative"]))
-out = out.replace("{{COMMERCIAL}}", reel_list(content["commercial"]))
+out = out.replace("{{COMMERCIAL}}", reel_list(content["commercial"], len(content["narrative"])))
 out = out.replace("{{NARRATIVE_COUNT}}", f'{len(content["narrative"]):02d}')
 out = out.replace("{{COMMERCIAL_COUNT}}", f'{len(content["commercial"]):02d}')
-out = out.replace("{{ALSO}}", narr_extra + "\n" + comm_extra)
+out = out.replace("{{ALSO}}", '      <div class="panel-head mono"><span>Also shot</span></div>\n      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
+out = out.replace("{{TL_NARRATIVE}}", timeline(content["narrative"]))
+out = out.replace("{{TL_COMMERCIAL}}", timeline(content["commercial"], len(content["narrative"])))
+out = out.replace("{{FILM_COUNT}}", f'{len(content["narrative"]) + len(content["commercial"]):02d}')
 (ROOT / "public" / "index.html").write_text(out)
 print("Built public/index.html")
