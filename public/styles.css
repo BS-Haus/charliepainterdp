@@ -54,17 +54,24 @@ ul { list-style: none; padding: 0; }
 .nav a { display: flex; align-items: center; padding: 0 clamp(16px, 2.4vw, 40px); color: var(--muted); border-left: 1px solid var(--line); transition: color .2s, background .2s; }
 .nav a:hover { color: var(--fg); background: var(--panel-2); }
 .nav a.is-on { color: var(--fg); background: var(--panel-2); }
+@media (min-width: 761px) {
+  .top { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mark { grid-column: 1 / 5; }
+  .top-now { grid-column: 5 / 9; }
+  .nav { grid-column: 9 / 13; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .nav a { padding: 0 var(--pad); }
+}
 
 /* THE ROLL — a contained screen and an index, held in place while a short run of scroll steps passes beneath */
 .roll { position: relative; margin: 0 var(--edge); }
 .roll-sticky {
   position: sticky; top: var(--head); z-index: 1;
-  height: calc(100vh - var(--head) - var(--edge)); height: calc(100svh - var(--head) - var(--edge));
-  margin-bottom: calc(-100vh + var(--head) + var(--edge)); margin-bottom: calc(-100svh + var(--head) + var(--edge));
-  display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 21vw, 330px);
+  /* full width so its edges line up with the header and panels; the player keeps 2:1 and the
+     script sets the matching negative margin */
+  display: grid; grid-template-rows: auto auto;
   border: 1px solid var(--line); border-top: 0; background: var(--panel);
 }
-.stage { position: relative; min-width: 0; height: 100%; overflow: hidden; background: #000; container-type: size; }
+.stage { position: relative; min-width: 0; aspect-ratio: 2 / 1; overflow: hidden; background: #000; container-type: size; }
 .stage-in { position: absolute; inset: 0; overflow: hidden; background: #000; }
 .stage-in video, .stage-frames img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .stage-frames img { opacity: 0; }
@@ -76,36 +83,37 @@ ul { list-style: none; padding: 0; }
 .step { height: 50vh; height: 50svh; }
 .step:last-child { height: 100vh; height: 100svh; }
 
-/* INDEX — every film by name; the one on screen is lit */
-.index { display: flex; flex-direction: column; min-height: 0; border-left: 1px solid var(--line); }
-.idx-head { display: flex; justify-content: space-between; padding: 14px var(--pad); color: var(--muted); border-bottom: 1px solid var(--faint); }
-.idx-head span:first-child { color: var(--fg); }
-.idx-list { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; padding-bottom: 8px; }
+/* INDEX — one strip of every film by name beneath the player; the one on screen is lit */
+.index { display: flex; align-items: stretch; height: 54px; min-width: 0; border-top: 1px solid var(--line); }
+.idx-head { display: flex; align-items: center; gap: 10px; padding: 0 var(--pad); color: var(--fg); border-right: 1px solid var(--line); white-space: nowrap; }
+.idx-head span:last-child { color: var(--muted); }
+.idx-list { flex: 1; display: flex; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; scroll-behavior: smooth; }
 .idx-list::-webkit-scrollbar { display: none; }
-.idx-group { padding: 16px var(--pad) 6px; color: var(--muted); }
-.idx-item { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; width: 100%; padding: 8px var(--pad); color: var(--muted); transition: color .2s, background .2s; }
-.idx-item b { font-weight: 300; font-size: 16px; letter-spacing: -0.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.idx-item i { font-style: normal; font-size: 10px; }
+.idx-group { display: flex; align-items: center; padding: 0 14px 0 var(--pad); color: var(--muted); white-space: nowrap; }
+.idx-group:not(:first-child) { border-left: 1px solid var(--line); }
+.idx-item { flex: none; display: flex; align-items: center; gap: 10px; padding: 0 16px; color: var(--muted); border-left: 1px solid var(--faint); transition: color .2s, background .2s; }
+.idx-item b { font-weight: 300; font-size: 15px; letter-spacing: -0.015em; white-space: nowrap; }
+.idx-item i { display: none; }
 .idx-item:hover { color: var(--fg); }
-.idx-item.is-on { color: var(--fg); background: var(--panel-2); box-shadow: inset 2px 0 0 var(--rec); }
+.idx-item.is-on { color: var(--fg); background: var(--panel-2); box-shadow: inset 0 2px 0 var(--rec); }
 .idx-item.is-on > span { color: var(--rec); }
 
 /* Info in the four corners, flush against the edges like tabs on a monitor */
 .corner { position: absolute; margin: 0; color: #fff; }
-.c-tl, .c-tr { top: 0; display: flex; align-items: center; gap: 12px; padding: 11px 14px; color: rgba(255,255,255,.88); background: rgba(0,0,0,.42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.c-tl { left: 0; border-right: 1px solid rgba(255,255,255,.22); border-bottom: 1px solid rgba(255,255,255,.22); }
-.c-tr { right: 0; border-left: 1px solid rgba(255,255,255,.22); border-bottom: 1px solid rgba(255,255,255,.22); font-variant-numeric: tabular-nums; }
+.c-tl, .c-tr { top: 0; display: flex; align-items: center; gap: 12px; padding: var(--pad); color: rgba(255,255,255,.9); text-shadow: 0 1px 10px rgba(0,0,0,.45); }
+.c-tl { left: 0; }
+.c-tr { right: 0; font-variant-numeric: tabular-nums; }
 .c-tr:empty { display: none; }
 .c-bl { bottom: 0; left: 0; right: 40%; display: grid; gap: 8px; padding: var(--pad); }
 .c-br { bottom: 0; right: 0; }
 .st-title { font-weight: 200; font-size: clamp(34px, 4.6vw, 84px); letter-spacing: -0.04em; line-height: .95; color: #fff; }
 .st-credit { color: rgba(255,255,255,.7); line-height: 1.6; }
 .st-play {
-  display: block; padding: 18px 24px; color: #fff; background: rgba(0,0,0,.42);
-  border-top: 1px solid rgba(255,255,255,.3); border-left: 1px solid rgba(255,255,255,.3);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .2s, color .2s;
+  display: block; padding: 18px 24px; color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.45);
+  border-top: 1px solid rgba(255,255,255,.35); border-left: 1px solid rgba(255,255,255,.35);
+  transition: background .2s, color .2s;
 }
-.st-play:hover { background: #fff; color: #000; }
+.st-play:hover { background: #fff; color: #000; text-shadow: none; }
 
 /* The edge of the roll: one bar per film; the one you're on is long and named */
 .bars { display: none; position: absolute; right: var(--edge); top: 50%; transform: translateY(-50%); flex-direction: column; align-items: flex-end; }
@@ -207,10 +215,12 @@ ul { list-style: none; padding: 0; }
   .top-now { display: none; }
   .roll { margin: 0; }
   .roll-sticky {
+    grid-template-rows: 1fr;
     height: calc(100vh - var(--head)); height: calc(100svh - var(--head));
     margin-bottom: calc(-100vh + var(--head)); margin-bottom: calc(-100svh + var(--head));
-    grid-template-columns: 1fr; border: 0;
+    border: 0;
   }
+  .stage { aspect-ratio: auto; height: 100%; }
   .index { display: none; }
   .bars { display: flex; }
   .step { height: 60vh; height: 60svh; }
@@ -223,7 +233,6 @@ ul { list-style: none; padding: 0; }
   .st-title { font-size: 28px; }
   .c-bl { gap: 4px; right: 40%; }
   .st-play { padding: 11px 14px; }
-  .c-tl, .c-tr { padding: 8px 10px; }
   .bar-item { height: 11px; }
 }
 
@@ -240,7 +249,6 @@ ul { list-style: none; padding: 0; }
   .st-title { font-size: 32px; }
   .st-credit { font-size: 10px; }
   .st-play { padding: 13px 16px; }
-  .c-tl, .c-tr { padding: 9px 11px; }
   .stage:not(.is-rotated) .c-bl { right: 0; bottom: 46px; }
   .stage:not(.is-rotated) .bars { display: none; }
 

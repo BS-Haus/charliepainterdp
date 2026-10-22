@@ -46,9 +46,9 @@
       bars.forEach((b) => b.classList.toggle("is-on", Number(b.dataset.step) === i));
       // keep the lit index entry in view without moving the page
       const lit = $(`.idx-item[data-step="${i}"]`);
-      if (lit && idxList.clientHeight) {
-        const top = lit.offsetTop - idxList.offsetTop, bottom = top + lit.offsetHeight;
-        if (top < idxList.scrollTop || bottom > idxList.scrollTop + idxList.clientHeight) idxList.scrollTop = top - idxList.clientHeight / 2;
+      if (lit && idxList.clientWidth) {
+        const left = lit.offsetLeft - idxList.offsetLeft, right = left + lit.offsetWidth;
+        if (left < idxList.scrollLeft || right > idxList.scrollLeft + idxList.clientWidth) idxList.scrollLeft = left - idxList.clientWidth / 2 + lit.offsetWidth / 2;
       }
       stTitle.textContent = s.dataset.title;
       stCredit.textContent = s.dataset.credit;
@@ -92,6 +92,13 @@
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
+
+  // On larger screens the player keeps its 2:1 shape, so the sticky block's height comes from its width
+  const phoneLayout = window.matchMedia("(max-width: 760px), (max-height: 520px) and (orientation: landscape)");
+  const fitSticky = () => { sticky.style.marginBottom = phoneLayout.matches ? "" : `-${sticky.offsetHeight}px`; };
+  fitSticky();
+  window.addEventListener("resize", fitSticky);
+  phoneLayout.addEventListener?.("change", fitSticky);
 
   const stepHeight = () => steps[0].offsetHeight;
   const stickyTop = () => parseFloat(getComputedStyle(sticky).top) || 0;
