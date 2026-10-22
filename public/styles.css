@@ -70,7 +70,7 @@ ul { list-style: none; padding: 0; }
 .stage-frames img { opacity: 0; }
 .stage-frames img.on { opacity: 1; }
 .stage-in.is-film video { visibility: hidden; }
-.stage-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 42%); }
+.stage-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,0) 34%), linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 20%); }
 .steps { position: relative; z-index: 0; pointer-events: none; }
 /* half a screen per film: quick to sweep through, slow enough to flick its frames */
 .step { height: 50vh; height: 50svh; }
@@ -90,13 +90,22 @@ ul { list-style: none; padding: 0; }
 .idx-item.is-on { color: var(--fg); background: var(--panel-2); box-shadow: inset 2px 0 0 var(--rec); }
 .idx-item.is-on > span { color: var(--rec); }
 
-/* Minimal overlay: number, title, credit, and a way to watch */
-.stage-info { position: absolute; left: var(--edge); bottom: var(--edge); right: 30%; display: grid; gap: 10px; justify-items: start; }
-.st-meta { display: flex; align-items: center; gap: 14px; color: rgba(255,255,255,.75); }
-.st-title { font-weight: 200; font-size: clamp(36px, 5.4vw, 96px); letter-spacing: -0.04em; line-height: .95; color: #fff; }
+/* Info in the four corners, flush against the edges like tabs on a monitor */
+.corner { position: absolute; margin: 0; color: #fff; }
+.c-tl, .c-tr { top: 0; display: flex; align-items: center; gap: 12px; padding: 11px 14px; color: rgba(255,255,255,.88); background: rgba(0,0,0,.42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.c-tl { left: 0; border-right: 1px solid rgba(255,255,255,.22); border-bottom: 1px solid rgba(255,255,255,.22); }
+.c-tr { right: 0; border-left: 1px solid rgba(255,255,255,.22); border-bottom: 1px solid rgba(255,255,255,.22); font-variant-numeric: tabular-nums; }
+.c-tr:empty { display: none; }
+.c-bl { bottom: 0; left: 0; right: 40%; display: grid; gap: 8px; padding: var(--pad); }
+.c-br { bottom: 0; right: 0; }
+.st-title { font-weight: 200; font-size: clamp(34px, 4.6vw, 84px); letter-spacing: -0.04em; line-height: .95; color: #fff; }
 .st-credit { color: rgba(255,255,255,.7); line-height: 1.6; }
-.st-play { margin-top: 10px; padding: 12px 16px; color: #fff; border: 1px solid rgba(255,255,255,.4); transition: background .2s, color .2s, border-color .2s; }
-.st-play:hover { background: #fff; color: #000; border-color: #fff; }
+.st-play {
+  display: block; padding: 18px 24px; color: #fff; background: rgba(0,0,0,.42);
+  border-top: 1px solid rgba(255,255,255,.3); border-left: 1px solid rgba(255,255,255,.3);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .2s, color .2s;
+}
+.st-play:hover { background: #fff; color: #000; }
 
 /* The edge of the roll: one bar per film; the one you're on is long and named */
 .bars { display: none; position: absolute; right: var(--edge); top: 50%; transform: translateY(-50%); flex-direction: column; align-items: flex-end; }
@@ -109,10 +118,11 @@ ul { list-style: none; padding: 0; }
 .bar-item:hover::after { background: rgba(255,255,255,.7); }
 .bar-item.is-on { color: #fff; }
 .bar-item.is-on::after { background: #fff; }
-.st-frame { position: absolute; right: var(--edge); bottom: var(--edge); color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
 
 /* Phone controls: only shown on small portrait screens */
 .turn, .view-toggle { display: none; z-index: 5; }
+.nav .view-toggle { align-items: center; justify-content: center; padding: 0 14px; color: var(--muted); border-left: 1px solid var(--line); font-size: 15px; letter-spacing: 0; }
+.nav .view-toggle:hover { color: var(--fg); }
 
 /* INFO PANELS — one hairline grid of connected boxes below the roll */
 .suite-2 { border-top: 0 !important; }
@@ -187,8 +197,8 @@ ul { list-style: none; padding: 0; }
 #intro-count { font-variant-numeric: tabular-nums; }
 .intro-meta b span { color: var(--muted); }
 .stage-in { transition: clip-path 1.2s var(--ease); }
-.js body.is-intro .top, .js body.is-intro .stage-info, .js body.is-intro .bars, .js body.is-intro .st-frame { opacity: 0; }
-.top, .stage-info, .bars, .st-frame { transition: opacity .8s ease .5s; }
+.js body.is-intro .top, .js body.is-intro .corner, .js body.is-intro .bars { opacity: 0; }
+.top, .corner, .bars { transition: opacity .8s ease .5s; }
 
 /* LANDSCAPE PHONES — the roll is the whole screen */
 @media (max-width: 760px), (max-height: 520px) and (orientation: landscape) {
@@ -210,9 +220,10 @@ ul { list-style: none; padding: 0; }
 @media (max-height: 520px) and (orientation: landscape) {
   :root { --head: 42px; }
   .mark { font-size: 16px; }
-  .st-title { font-size: 30px; }
-  .stage-info { gap: 6px; right: 40%; }
-  .st-play { padding: 9px 12px; margin-top: 4px; }
+  .st-title { font-size: 28px; }
+  .c-bl { gap: 4px; right: 40%; }
+  .st-play { padding: 11px 14px; }
+  .c-tl, .c-tr { padding: 8px 10px; }
   .bar-item { height: 11px; }
 }
 
@@ -225,21 +236,16 @@ ul { list-style: none; padding: 0; }
     inset: auto; top: 50%; left: 50%; width: 100cqh; height: 100cqw;
     transform: translate(-50%, -50%) rotate(90deg);
   }
-  .stage-info { right: var(--edge); gap: 8px; }
-  .st-title { font-size: 34px; }
-  .st-credit { font-size: 10.5px; }
-  .st-play { padding: 10px 14px; margin-top: 4px; }
-  .stage.is-rotated .stage-info { right: 38%; }
+  .c-bl { right: 34%; gap: 6px; }
+  .st-title { font-size: 32px; }
+  .st-credit { font-size: 10px; }
+  .st-play { padding: 13px 16px; }
+  .c-tl, .c-tr { padding: 9px 11px; }
+  .stage:not(.is-rotated) .c-bl { right: 0; bottom: 46px; }
   .stage:not(.is-rotated) .bars { display: none; }
-  .stage:not(.is-rotated) .view-toggle { bottom: auto; top: var(--edge); }
-  .stage.is-rotated .view-toggle { bottom: auto; left: auto; top: var(--edge); right: var(--edge); }
-  .stage:not(.is-rotated) .st-frame { display: none; }
+
   .bar-item { height: 10px; }
-  .st-frame { top: var(--edge); bottom: auto; }
-  .view-toggle {
-    display: flex; position: absolute; bottom: var(--edge); left: var(--edge); align-items: center; gap: 8px;
-    padding: 9px 12px; color: #fff; border: 1px solid rgba(255,255,255,.4); background: rgba(0,0,0,.35);
-  }
+  .nav .view-toggle { display: flex; }
   .turn { display: flex; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); justify-content: center; pointer-events: none; }
   .turn span { padding: 10px 14px; background: rgba(0,0,0,.55); color: #fff; opacity: 0; transition: opacity .5s; }
   .turn.show span { opacity: 1; }

@@ -64,7 +64,6 @@
         stN.textContent = s.dataset.group === "narrative" ? "Reel 01" : "Reel 02";
         stKind.textContent = s.dataset.group === "narrative" ? "Narrative" : "Commercial";
         stPlay.textContent = "Watch with sound ↗";
-        stFrame.textContent = "";
       } else {
         video.pause();
         stageIn.classList.add("is-film");
@@ -84,6 +83,15 @@
     }
     readout();
   };
+
+  const tick = () => {
+    if (steps[cur]?.dataset.type === "reel") {
+      const t = video.currentTime || 0;
+      stFrame.textContent = `TC 01:${pad(Math.floor(t / 60))}:${pad(Math.floor(t % 60))}:${pad(Math.floor((t % 1) * 25))}`;
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 
   const stepHeight = () => steps[0].offsetHeight;
   const stickyTop = () => parseFloat(getComputedStyle(sticky).top) || 0;
@@ -135,13 +143,15 @@
   /* ---------- Phones: sideways by default, so the work fills the screen; an upright crop if preferred ---------- */
   const turn = $("#turn");
   const toggle = $("#view-toggle");
-  stage.append(turn, toggle); // keep these upright even when the picture is turned
+  stage.append(turn); // keep the nudge upright even when the picture is turned
+  $(".nav").append(toggle);
   let pref = null;
   try { pref = sessionStorage.getItem("cp-view"); } catch (e) {}
   const applyView = () => {
     const rotated = portraitPhone.matches && pref !== "upright";
     stage.classList.toggle("is-rotated", rotated);
-    toggle.textContent = rotated ? "Upright view" : "Sideways view";
+    toggle.textContent = "↻";
+    toggle.setAttribute("aria-label", rotated ? "Switch to upright view" : "Switch to sideways view");
   };
   toggle.addEventListener("click", () => {
     pref = stage.classList.contains("is-rotated") ? "upright" : "sideways";

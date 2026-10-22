@@ -50,18 +50,19 @@
         <div class="stage-frames" id="stage-frames" aria-hidden="true"></div>
         <div class="stage-shade" aria-hidden="true"></div>
 
-        <div class="stage-info" aria-live="polite">
-          <p class="mono st-meta"><span class="rec" aria-hidden="true"></span><span id="st-n">Reel</span><span id="st-kind">Showreel</span></p>
+        <!-- info in the four corners, like a monitor's overlay -->
+        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="st-n">Reel 01</span><span id="st-kind">Narrative</span></p>
+        <p class="corner c-tr mono" id="st-frame" aria-hidden="true"></p>
+        <div class="corner c-bl" aria-live="polite">
           <h2 class="st-title" id="st-title">Narrative showreel</h2>
           <p class="mono st-credit" id="st-credit">Features &amp; shorts</p>
-          <button class="st-play mono" id="st-play">Watch with sound ↗</button>
         </div>
+        <div class="corner c-br"><button class="st-play mono" id="st-play">Watch with sound ↗</button></div>
 
         <!-- the edge of the roll: one bar per film, so you always know where you are -->
         <nav class="bars" id="bars" aria-label="Jump to a film">
 {{BARS}}
         </nav>
-        <p class="st-frame mono" id="st-frame" aria-hidden="true"></p>
 
         <div class="turn mono" id="turn" aria-hidden="true"><span>Turn your phone sideways ↻</span></div>
         <button class="view-toggle mono" id="view-toggle">Upright view</button>
