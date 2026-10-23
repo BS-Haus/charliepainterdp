@@ -37,7 +37,7 @@ def items():
             v = p.get("video") or {}
             out.append({
                 "type": "film", "group": group, "era": p.get("era", "contemporary"), "n": f"{n:02d}",
-                "title": p["title"] + (f" — ‘{p['subtitle']}’" if p.get("subtitle") else ""), "short": p["title"],
+                "title": p["title"] + (f" — ‘{p['subtitle']}’" if p.get("subtitle") else ""),
                 "credit": credit(p), "kind": p["kind"], "frames": p["stills"],
                 "provider": v.get("provider", ""), "id": v.get("id", ""), "hash": v.get("hash", ""),
             })
@@ -64,8 +64,7 @@ def roll(all_items):
             for f, fr in enumerate(it["frames"])
         )
         half = ' data-half="1"' if it["type"] == "reel" else ""
-        name = it["title"] if it["type"] == "reel" else it.get("short", it["title"])
-        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono"><span>{esc(it["n"])}</span><b>{esc(name)}</b></p></div>')
+        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono">{esc(it["n"])}</p></div>')
     return "\n".join(runs)
 
 

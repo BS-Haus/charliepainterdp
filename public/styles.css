@@ -144,12 +144,9 @@ i, b { font-style: normal; font-weight: inherit; }
 .cell.is-on::before { content: ""; position: absolute; inset: 0; z-index: 1; border: 1px solid var(--fg); }
 .cell::after { content: ""; position: absolute; left: 50%; top: calc(100% + 5px); width: 1px; height: 4px; background: var(--dim); }
 .cell.is-on::after { background: var(--rec); }
-/* labels: just the number, until its film is under the gate */
-.run-label { position: relative; width: 0; display: flex; gap: 10px; margin-top: 4px; padding: 12px 0 0 9px; border-left: 1px solid var(--line); color: var(--dim); white-space: nowrap; }
-.run-label b { display: none; color: var(--fg); }
-.run.is-on .run-label { z-index: 2; width: max-content; padding-right: 10px; border-left-color: var(--rec); background: var(--body); }
-.run.is-on .run-label span { color: var(--rec); }
-.run.is-on .run-label b { display: inline; }
+/* each film's start is marked with its number only — its name is already on the screen above */
+.run-label { width: 0; margin-top: 4px; padding: 12px 0 0 9px; border-left: 1px solid var(--line); color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.run.is-on .run-label { color: var(--rec); border-left-color: var(--rec); }
 /* head and tail leader: a ruler either side of the work, so the roll never starts on empty space */
 .leader {
   flex: none; position: relative; width: 50vw; height: var(--cell);
