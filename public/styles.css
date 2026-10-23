@@ -299,11 +299,12 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
   .viewer { height: calc(100vh - var(--head) - var(--deck) - var(--roll) - var(--base)); height: calc(100svh - var(--head) - var(--deck) - var(--roll) - var(--base)); min-height: 0; }
   .frame { width: 100cqw; }
   .st-title { flex-basis: 100%; }
-  .deck { grid-template-columns: minmax(0, 1fr); grid-template-rows: 50px minmax(0, 1fr); }
-  .togs { grid-column: 1; }
+  /* the map first, then the switches under it */
+  .deck { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 50px; }
+  .togs { grid-column: 1; grid-row: 2; border-top: 1px solid var(--hair); }
   .tog { flex-direction: column; justify-content: center; gap: 7px; padding: 0 4px; letter-spacing: .02em; }
   .tog i { transform: none; }   /* above the label here, so no nudge */
-  .map { grid-column: 1; border-top: 1px solid var(--hair); }
+  .map { grid-column: 1; grid-row: 1; }
   .half { padding: 0 14px; }
   .half:first-child { border-left: 0; }
   .fine { grid-template-columns: minmax(0, 1fr) auto; }
