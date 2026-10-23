@@ -19,9 +19,11 @@
   const vN = $("#v-n"), vKind = $("#v-kind"), vCount = $("#v-count"), vTitle = $("#v-title"), vCredit = $("#v-credit"), vPlay = $("#v-play");
   const map = $("#map"), mapHead = $("#map-head"), segs = $$(".seg");
 
-  // Every frame on the roll, with where its centre sits along the strip
-  let cells = [];
+  // Every frame on the roll, with where its centre sits along the strip — and where the gate is across the roll
+  const gateLine = $(".gate-line", roll);
+  let cells = [], gateX = 0;
   const measure = () => {
+    gateX = gateLine.offsetLeft + gateLine.offsetWidth / 2;
     const base = strip.getBoundingClientRect().left;   // positions are measured along the strip, wherever it sits now
     cells = $$(".run:not([hidden]) .cell", strip).map((c) => {
       const r = c.getBoundingClientRect();
@@ -38,7 +40,7 @@
     return best;
   };
   const place = (p) => {
-    const x = roll.clientWidth / 2 - p;
+    const x = gateX - p;
     strip.dataset.x = x;
     strip.style.transform = `translate3d(${x}px, 0, 0)`;
   };
