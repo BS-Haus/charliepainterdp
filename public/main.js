@@ -216,6 +216,7 @@
     runs.forEach((r) => { r.hidden = !passes(r, on); });
     segs.forEach((s) => { s.hidden = runs[Number(s.dataset.item)].hidden; });
     $$(".half", map).forEach((h) => { h.hidden = $$(".seg", h).every((s) => s.hidden); });
+    map.classList.toggle("is-solo", $$(".half", map).some((h) => h.hidden));
     measure();
     const k = Math.max(0, firstOf(keep));       // stay on the same film if it's still there, otherwise start at the top
     pos = target = cells[k].x;
