@@ -48,7 +48,9 @@ i, b { font-style: normal; font-weight: inherit; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 1px solid var(--rec); outline-offset: -1px; }
 .mono { font-family: var(--mono); font-weight: 400; font-size: var(--t-label); letter-spacing: .07em; line-height: 1.6; text-transform: lowercase; }
-.rec { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--rec); flex: none; box-shadow: 0 0 8px rgba(242, 35, 27, .7); animation: blink 1.6s steps(1) infinite; }
+/* the little lights: 4px, and nudged down to the middle of the lower-case letters (not the middle of the line,
+   which sits higher because it leaves room for capitals) — for IBM Plex Mono that's 0.106em */
+.rec { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--rec); flex: none; transform: translateY(.106em); box-shadow: 0 0 6px rgba(242, 35, 27, .7); animation: blink 1.6s steps(1) infinite; }
 @keyframes blink { 50% { opacity: .2; } }
 
 /* HEADER — the top of the unit: name, role, sections */
@@ -63,10 +65,10 @@ i, b { font-style: normal; font-weight: inherit; }
 .top-role span { color: var(--dim); }
 .nav { grid-column: 3 / 6; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .nav a { display: flex; align-items: center; gap: 10px; padding: 0 var(--pad); color: var(--mid); border-left: 1px solid var(--line); transition: color .2s, background .2s; }
-.nav a::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--line); transition: background .2s, box-shadow .2s; }
+.nav a::before { content: ""; flex: none; width: 4px; height: 4px; border-radius: 50%; background: var(--line); transform: translateY(.106em); transition: background .2s, box-shadow .2s; }
 .nav a:hover { color: var(--fg); background: var(--key); }
 .nav a.is-on { color: var(--fg); }
-.nav a.is-on::before { background: var(--rec); box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
+.nav a.is-on::before { background: var(--rec); box-shadow: 0 0 5px rgba(242, 35, 27, .8); }
 
 /* THE GATE — screen, deck, roll, edge to edge; together they fill the window under the header */
 /* into the page: the gate stays put under the header while the sheet slides up over it like a curtain,
@@ -114,10 +116,10 @@ i, b { font-style: normal; font-weight: inherit; }
 .tog-set + .tog-set { border-left: 1px solid var(--line); }
 .tog { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 0 var(--pad); color: var(--dim); white-space: nowrap; transition: color .2s, background .2s; }
 .tog + .tog { border-left: 1px solid var(--hair); }
-.tog i { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--line); transition: background .2s, box-shadow .2s; }
+.tog i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: var(--line); transform: translateY(.106em); transition: background .2s, box-shadow .2s; }
 .tog:hover { color: var(--fg); background: var(--key); }
 .tog.is-on { color: var(--fg); }
-.tog.is-on i { background: var(--rec); box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
+.tog.is-on i { background: var(--rec); box-shadow: 0 0 5px rgba(242, 35, 27, .8); }
 .tog.is-nope { animation: nope .3s ease-out; }   /* a switch that would empty the roll stays on */
 /* the map: narrative then commercial, across the nav columns — when one is off, the other takes the width */
 .map { position: relative; grid-column: 3 / 6; display: flex; cursor: ew-resize; touch-action: none; user-select: none; -webkit-user-select: none; }
@@ -304,6 +306,7 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
   .deck { grid-template-columns: minmax(0, 1fr); grid-template-rows: 50px minmax(0, 1fr); }
   .togs { grid-column: 1; }
   .tog { flex-direction: column; justify-content: center; gap: 7px; padding: 0 4px; letter-spacing: .02em; }
+  .tog i { transform: none; }   /* above the label here, so no nudge */
   .map { grid-column: 1; border-top: 1px solid var(--hair); }
   .half { padding: 0 14px; }
   .half:first-child { border-left: 0; }
