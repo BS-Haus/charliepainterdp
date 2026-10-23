@@ -28,7 +28,7 @@ def items():
     for group in ("narrative", "commercial"):
         r = REELS[group]
         out.append({
-            "type": "reel", "group": group, "n": "R1" if group == "narrative" else "R2", "title": r["title"],
+            "type": "reel", "group": group, "era": "all", "n": "R1" if group == "narrative" else "R2", "title": r["title"],
             "credit": r["credit"], "kind": "Showreel", "frames": [f"reel-{group}-{i}" for i in range(1, 9)],
             "src": r["src"], "poster": r["poster"], "provider": "vimeo", "id": r["vimeo"],
         })
@@ -36,7 +36,7 @@ def items():
             n += 1
             v = p.get("video") or {}
             out.append({
-                "type": "film", "group": group, "n": f"{n:02d}",
+                "type": "film", "group": group, "era": p.get("era", "contemporary"), "n": f"{n:02d}",
                 "title": p["title"] + (f" — ‘{p['subtitle']}’" if p.get("subtitle") else ""), "short": p["title"],
                 "credit": credit(p), "kind": p["kind"], "frames": p["stills"],
                 "provider": v.get("provider", ""), "id": v.get("id", ""), "hash": v.get("hash", ""),
@@ -45,7 +45,7 @@ def items():
 
 
 def attrs(it):
-    a = f' data-type="{it["type"]}" data-group="{it["group"]}" data-n="{it["n"]}" data-title="{esc(it["title"])}" data-credit="{esc(it["credit"])}" data-kind="{esc(it["kind"])}"'
+    a = f' data-type="{it["type"]}" data-group="{it["group"]}" data-era="{it["era"]}" data-n="{it["n"]}" data-title="{esc(it["title"])}" data-credit="{esc(it["credit"])}" data-kind="{esc(it["kind"])}"'
     if it.get("src"):
         a += f' data-src="{it["src"]}" data-poster="{it["poster"]}"'
     if it.get("id"):
@@ -81,12 +81,23 @@ def deck_map(all_items):
     return "".join(halves)
 
 
+# The switches on the deck, in two pairs. A film is on the roll when both of its pairs let it through.
+# The showreels mix period and contemporary work, so they only run while both of those are on.
+SWITCHES = (
+    ("era", (("period", "Period"), ("contemporary", "Contemporary"))),
+    ("group", (("narrative", "Narrative"), ("commercial", "Commercial"))),
+)
+
+
 def toggles():
-    """The switches on the deck: one per half of the work. Switch one off and the roll and the map close up around what's left."""
-    return "".join(
-        f'<button class="tog is-on" data-group="{g}" aria-pressed="true"><i aria-hidden="true"></i>{label}</button>'
-        for g, label in (("narrative", "Narrative"), ("commercial", "Commercial"))
-    )
+    sets, i = [], 0
+    for dim, options in SWITCHES:
+        buttons = ""
+        for val, label in options:
+            buttons += f'<button class="tog is-on" data-val="{val}" aria-pressed="true" style="--i:{i}"><i aria-hidden="true"></i>{label}</button>'
+            i += 1
+        sets.append(f'<div class="tog-set" data-dim="{dim}">{buttons}</div>')
+    return "".join(sets)
 
 
 narr_more = "\n".join(

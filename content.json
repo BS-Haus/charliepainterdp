@@ -16,7 +16,8 @@
         "iffilm-4",
         "iffilm-5"
       ],
-      "tint": "#36200c"
+      "tint": "#36200c",
+      "era": "contemporary"
     },
     {
       "title": "Operation Dynamo",
@@ -35,7 +36,8 @@
         "operationdynamo-4",
         "operationdynamo-5"
       ],
-      "tint": "#2e2013"
+      "tint": "#2e2013",
+      "era": "period"
     },
     {
       "title": "Flush!",
@@ -54,7 +56,8 @@
         "flush-4",
         "flush-5"
       ],
-      "tint": "#370b1a"
+      "tint": "#370b1a",
+      "era": "contemporary"
     },
     {
       "title": "Vetala",
@@ -72,7 +75,8 @@
         "vetala-8",
         "vetala-9"
       ],
-      "tint": "#292b16"
+      "tint": "#292b16",
+      "era": "contemporary"
     },
     {
       "title": "Accomplice",
@@ -87,7 +91,8 @@
         "accomplice-5",
         "accomplice-6"
       ],
-      "tint": "#112c30"
+      "tint": "#112c30",
+      "era": "contemporary"
     },
     {
       "title": "Confess",
@@ -101,7 +106,8 @@
         "confess-4",
         "confess-5"
       ],
-      "tint": "#391808"
+      "tint": "#391808",
+      "era": "contemporary"
     },
     {
       "title": "Memories of a Life",
@@ -115,7 +121,8 @@
         "moal-4",
         "moal-5"
       ],
-      "tint": "#3a0811"
+      "tint": "#3a0811",
+      "era": "contemporary"
     },
     {
       "title": "In Vitro Felicitas",
@@ -125,7 +132,8 @@
       "stills": [
         "invitrofelicitas-1"
       ],
-      "tint": "#311f11"
+      "tint": "#311f11",
+      "era": "contemporary"
     },
     {
       "title": "Brownies or Ice Cream?",
@@ -137,7 +145,8 @@
         "brownies-or-ice-cream-2",
         "brownies-or-ice-cream-3"
       ],
-      "tint": "#261c1c"
+      "tint": "#261c1c",
+      "era": "contemporary"
     }
   ],
   "narrative_more": [
@@ -196,7 +205,8 @@
         "66north-r2",
         "66north-r3"
       ],
-      "tint": "#07183a"
+      "tint": "#07183a",
+      "era": "contemporary"
     },
     {
       "title": "John Smith’s",
@@ -214,7 +224,8 @@
         "johnsmiths-r2",
         "johnsmiths-r3"
       ],
-      "tint": "#341f0d"
+      "tint": "#341f0d",
+      "era": "contemporary"
     },
     {
       "title": "Aberfeldy",
@@ -232,7 +243,8 @@
         "aberfeldy-r3",
         "aberfeldy-r4"
       ],
-      "tint": "#35220c"
+      "tint": "#35220c",
+      "era": "contemporary"
     },
     {
       "title": "Vision Pro",
@@ -250,7 +262,8 @@
         "vision-pro-4",
         "vision-pro-5"
       ],
-      "tint": "#36220b"
+      "tint": "#36220b",
+      "era": "contemporary"
     },
     {
       "title": "London Jazz Festival",
@@ -269,7 +282,8 @@
         "london-jazz-festival-r2",
         "london-jazz-festival-r3"
       ],
-      "tint": "#3b1207"
+      "tint": "#3b1207",
+      "era": "contemporary"
     },
     {
       "title": "Phox Water",
@@ -281,7 +295,8 @@
         "phox-r2",
         "phox-r3"
       ],
-      "tint": "#37210a"
+      "tint": "#37210a",
+      "era": "contemporary"
     }
   ],
   "commercial_more": [

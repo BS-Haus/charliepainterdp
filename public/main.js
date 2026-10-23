@@ -22,7 +22,7 @@
   // Every frame on the roll, with where its centre sits along the strip
   let cells = [];
   const measure = () => {
-    const base = strip.getBoundingClientRect().left - (parseFloat(strip.dataset.x) || 0);
+    const base = strip.getBoundingClientRect().left;   // positions are measured along the strip, wherever it sits now
     cells = $$(".run:not([hidden]) .cell", strip).map((c) => {
       const r = c.getBoundingClientRect();
       return { el: c, run: Number(c.closest(".run").dataset.item), f: Number(c.dataset.f), x: r.left - base + r.width / 2 };
@@ -202,15 +202,20 @@
     nudge(cells[next < 0 ? k : next].x);
   };
 
-  // The switches: take narrative or commercial off the roll and the roll, the map and the screen close up around
-  // what's left — a reel of just that half. One always stays on.
+  // The switches, in two pairs — period / contemporary and narrative / commercial. A film stays on the roll when
+  // both pairs let it through; the showreels mix both eras, so they only run while both eras are on. The roll,
+  // the map and the screen close up around what's left. A switch that would leave nothing on the roll stays on.
   const togs = $$(".tog");
-  const shown = new Set(togs.map((t) => t.dataset.group));
+  const dimOf = (t) => t.closest(".tog-set").dataset.dim;
+  const on = { era: new Set(), group: new Set() };
+  togs.forEach((t) => on[dimOf(t)].add(t.dataset.val));
+  const passes = (r, sel) => sel.group.has(r.dataset.group) && (r.dataset.era === "all" ? sel.era.size === 2 : sel.era.has(r.dataset.era));
   const applyShown = () => {
     const keep = cur >= 0 ? cells[cur].run : -1;
-    togs.forEach((t) => { const on = shown.has(t.dataset.group); t.classList.toggle("is-on", on); t.setAttribute("aria-pressed", on); });
-    runs.forEach((r) => { r.hidden = !shown.has(r.dataset.group); });
-    $$(".half", map).forEach((h) => { h.hidden = !shown.has(h.dataset.group); });
+    togs.forEach((t) => { const lit = on[dimOf(t)].has(t.dataset.val); t.classList.toggle("is-on", lit); t.setAttribute("aria-pressed", lit); });
+    runs.forEach((r) => { r.hidden = !passes(r, on); });
+    segs.forEach((s) => { s.hidden = runs[Number(s.dataset.item)].hidden; });
+    $$(".half", map).forEach((h) => { h.hidden = $$(".seg", h).every((s) => s.hidden); });
     measure();
     const k = Math.max(0, firstOf(keep));       // stay on the same film if it's still there, otherwise start at the top
     pos = target = cells[k].x;
@@ -220,15 +225,19 @@
   };
   togs.forEach((t) => t.addEventListener("click", () => {
     if (!cells.length) return;
-    const g = t.dataset.group;
-    if (shown.has(g) && shown.size === 1) { t.classList.remove("is-nope"); void t.offsetWidth; t.classList.add("is-nope"); return; }
-    shown.has(g) ? shown.delete(g) : shown.add(g);
+    const dim = dimOf(t), next = new Set(on[dim]);
+    next.has(t.dataset.val) ? next.delete(t.dataset.val) : next.add(t.dataset.val);
+    if (!next.size || !runs.some((r) => passes(r, { ...on, [dim]: next }))) {
+      t.classList.remove("is-nope"); void t.offsetWidth; t.classList.add("is-nope");
+      return;
+    }
+    on[dim] = next;
     applyShown();
   }));
 
   // Click or drag along the map to scrub: where you are along a segment is how far into that film you go
   const scrubTo = (x) => {
-    const live = segs.filter((s) => !s.closest(".half").hidden);
+    const live = segs.filter((s) => !s.hidden);
     const seg = live.find((s) => x <= s.getBoundingClientRect().right + 1.5) || live[live.length - 1];
     const r = seg.getBoundingClientRect(), run = Number(seg.dataset.item), n = $$(".cell", runs[run]).length;
     nudge(cells[firstOf(run) + clamp(Math.floor(((x - r.left) / r.width) * n), 0, n - 1)].x);
@@ -275,8 +284,8 @@
     requestAnimationFrame(loop);
   };
 
-  /* ---------- Power-on: the header flicks on label by label; the screen opens from a slit while the clips
-     flick through it; then the corners come up, the keys run a lamp test, the map fills and the roll threads in ---------- */
+  /* ---------- Power-on: the header fades up; the screen opens from a slit while the clips flick through it;
+     then the corners and switches come up, the map fills and the roll threads in ---------- */
   const body = document.body;
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   let seen = false;
@@ -343,14 +352,6 @@
   };
   window.addEventListener("scroll", lights, { passive: true });
   lights();
-
-  /* ---------- Rows of the sheet are always there; the first time each arrives it flickers on, like a frame ---------- */
-  if (!reduceMotion) {
-    const rowObs = new IntersectionObserver((entries) => entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("is-lit"); rowObs.unobserve(e.target); }
-    }), { threshold: 0.2 });
-    $$(".row").forEach((r) => rowObs.observe(r));
-  }
 
   /* ======================================================================
      VIEWER — films and frames, full screen
