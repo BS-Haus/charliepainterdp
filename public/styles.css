@@ -25,8 +25,8 @@
   --head: 46px;
   --deck: 50px;
   --base: 1px;              /* the sheet's top line always shows along the bottom of the window */
-  --cell: clamp(44px, 6.2vh, 64px);   /* height of a frame on the roll */
-  --roll: calc(var(--cell) + 62px);
+  --cell: clamp(50px, 7.4vh, 78px);   /* height of a frame on the roll */
+  --roll: calc(var(--cell) + 34px);   /* frame + the row of ticks and numbers + a little air */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: dark;
 }
@@ -56,14 +56,14 @@ i, b { font-style: normal; font-weight: inherit; }
 /* HEADER — the top of the unit: name, role, sections */
 .top {
   position: sticky; top: 0; z-index: 20; height: var(--head);
-  display: grid; grid-template-columns: var(--cols);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 33.333%);
   border-bottom: 1px solid var(--line); background: var(--body);
 }
-.mark { display: flex; align-items: center; padding: 0 var(--pad); font-weight: 400; font-size: 15px; letter-spacing: -0.025em; line-height: 1; white-space: nowrap; }
-.mark span { color: var(--dim); font-weight: 400; }
+/* the name, in its own box, sized to it; the role follows straight on */
+.mark { display: flex; align-items: center; padding: 0 var(--pad); font-weight: 400; font-size: clamp(18px, 1.5vw, 22px); letter-spacing: -0.03em; line-height: 1; white-space: nowrap; }
 .top-role { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 var(--pad); color: var(--mid); white-space: nowrap; overflow: hidden; border-left: 1px solid var(--line); }
 .top-role span { color: var(--dim); }
-.nav { grid-column: 3 / 6; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .nav a { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 0 var(--pad); color: var(--mid); border-left: 1px solid var(--line); transition: color .2s, background .2s; }
 .nav a::before { content: ""; flex: none; width: 4px; height: 4px; border-radius: 50%; background: var(--line); transform: translateY(.106em); transition: background .2s, box-shadow .2s; }
 .nav a:hover { color: var(--fg); background: var(--key); }
@@ -108,12 +108,13 @@ i, b { font-style: normal; font-weight: inherit; }
 .st-play:hover { text-decoration-color: currentColor; }
 
 /* THE DECK — on the same lines as the header: switches | the map of the work, which you can scrub */
-.deck { height: var(--deck); display: grid; grid-template-columns: var(--cols); border-top: 1px solid var(--line); color: var(--mid); }
+.deck { height: var(--deck); display: grid; grid-template-columns: auto minmax(0, 1fr); border-top: 1px solid var(--line); color: var(--mid); }
 /* switches: each lights its LED when that half of the work is on the roll */
-.togs { grid-column: 1 / 3; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.tog-set { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* switches: snug, sized to their labels, so the map gets the width */
+.togs { display: flex; }
+.tog-set { display: flex; }
 .tog-set + .tog-set { border-left: 1px solid var(--line); }
-.tog { display: flex; align-items: center; justify-content: center; gap: 14px; min-width: 0; padding: 0 var(--pad); color: var(--dim); white-space: nowrap; transition: color .2s, background .2s; }
+.tog { display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; padding: 0 16px; color: var(--dim); white-space: nowrap; transition: color .2s, background .2s; }
 .tog + .tog { border-left: 1px solid var(--hair); }
 .tog i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: var(--line); transform: translateY(.106em); transition: background .2s, box-shadow .2s; }
 .tog:hover { color: var(--fg); background: var(--key); }
@@ -121,8 +122,8 @@ i, b { font-style: normal; font-weight: inherit; }
 .tog.is-on i { background: var(--rec); box-shadow: 0 0 5px rgba(242, 35, 27, .8); }
 .tog.is-nope { animation: nope .3s ease-out; }   /* a switch that would empty the roll stays on */
 /* the map: narrative then commercial, across the nav columns — when one is off, the other takes the width */
-.map { position: relative; grid-column: 3 / 6; display: flex; cursor: ew-resize; touch-action: none; user-select: none; -webkit-user-select: none; }
-.half { flex: 1; display: flex; align-items: center; min-width: 0; padding: 0 var(--pad); border-left: 1px solid var(--line); }
+.map { position: relative; display: flex; cursor: ew-resize; touch-action: none; user-select: none; -webkit-user-select: none; }
+.half { flex: 1 1 0; display: flex; align-items: center; min-width: 0; padding: 0 var(--pad); border-left: 1px solid var(--line); }
 .segs { flex: 1; display: flex; gap: 3px; align-items: center; height: 100%; }
 .seg { position: relative; height: 5px; min-width: 3px; background: var(--line); pointer-events: none; transition: background .2s; }
 .seg-reel { background: rgba(241, 240, 236, .32); }
@@ -132,7 +133,7 @@ i, b { font-style: normal; font-weight: inherit; }
 /* THE ROLL — every frame of every film, side by side, on a ruled tape; the orange line is the gate */
 .roll { position: relative; height: var(--roll); overflow: hidden; border-top: 1px solid var(--line); cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline: none; }
 .roll.is-dragging { cursor: grabbing; }
-.strip { position: absolute; top: 16px; left: 0; display: flex; align-items: flex-start; gap: 12px; will-change: transform; }
+.strip { position: absolute; top: 10px; left: 0; display: flex; align-items: flex-start; gap: 12px; will-change: transform; }
 .run { position: relative; flex: none; }
 .run[data-half]:not(.leader + .run) { margin-left: 36px; }
 .cells { display: flex; gap: 2px; }
@@ -141,10 +142,11 @@ i, b { font-style: normal; font-weight: inherit; }
 .run.is-on .cell img { filter: none; opacity: .8; }
 .cell.is-on img { opacity: 1; }
 .cell.is-on::before { content: ""; position: absolute; inset: 0; z-index: 1; border: 1px solid var(--fg); }
-.cell::after { content: ""; position: absolute; left: 50%; top: calc(100% + 5px); width: 1px; height: 4px; background: var(--dim); }
+.cell::after { content: ""; position: absolute; left: 50%; top: calc(100% + 6px); width: 1px; height: 4px; background: var(--dim); }
 .cell.is-on::after { background: var(--rec); }
 /* each film's start is marked with its number only — its name is already on the screen above */
-.run-label { width: 0; margin-top: 4px; padding: 12px 0 0 9px; border-left: 1px solid var(--line); color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* each film's start: a slightly longer tick with its number beside it, on the same row as the frame ticks */
+.run-label { width: 0; height: 12px; margin-top: 3px; padding-left: 6px; border-left: 1px solid var(--line); font-size: 10px; line-height: 12px; color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .run.is-on .run-label { color: var(--rec); border-left-color: var(--rec); }
 /* head and tail leader: a ruler either side of the work, so the roll never starts on empty space */
 .leader {
@@ -163,11 +165,11 @@ i, b { font-style: normal; font-weight: inherit; }
     repeating-linear-gradient(90deg, var(--hair) 0 1px, transparent 1px 12px) left bottom / 100% 6px no-repeat;
   -webkit-mask: linear-gradient(270deg, transparent, #000 60%); mask: linear-gradient(270deg, transparent, #000 60%);
 }
-.leader span { position: absolute; top: calc(100% + 16px); right: 0; color: var(--dim); }
+.leader span { position: absolute; top: calc(100% + 3px); right: 0; font-size: 10px; line-height: 12px; color: var(--dim); }
 .leader.tail span { left: 0; right: auto; }
 /* the gate sits at the left, under the title: the frame you're on starts on the same line as the headline,
    and the rest of the roll runs off to the right */
-.gate-line { position: absolute; top: 6px; left: calc(var(--pad) + var(--cell)); z-index: 3; width: 1px; height: calc(var(--cell) + 24px); margin-left: -.5px; background: var(--rec); pointer-events: none; }
+.gate-line { position: absolute; top: 4px; left: calc(var(--pad) + var(--cell)); z-index: 3; width: 1px; height: calc(var(--cell) + 18px); margin-left: -.5px; background: var(--rec); pointer-events: none; }
 .gate-line::before { content: ""; position: absolute; top: -4px; left: -4px; border: 4.5px solid transparent; border-top: 5px solid var(--rec); }
 .roll:focus-visible { box-shadow: inset 0 0 0 1px var(--fg); outline: 0; }
 
@@ -262,7 +264,7 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
   .nav a::before { display: none; }
 }
 @media (max-width: 960px) {
-  .tog { padding: 0 12px; gap: 12px; }
+  .tog { padding: 0 12px; gap: 8px; }
   .row-head { grid-column: 1 / -1; padding-bottom: 0; }
   .row-body { grid-column: 1 / -1; border-left: 0; }
   .credits .row-head { padding-bottom: var(--pad); }
@@ -274,7 +276,7 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
 /* LANDSCAPE PHONES — the screen fills the phone, the roll becomes a thin line along the bottom */
 @media (max-height: 520px) and (orientation: landscape) {
   :root { --head: 40px; --cell: 26px; --roll: calc(var(--cell) + 18px); --deck: 0px; }
-  .top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .top { grid-template-columns: auto minmax(0, 1fr); }
   .top-role { display: none; }
   .nav { grid-column: 2; }
   .viewer { height: calc(100vh - var(--head) - var(--roll)); height: calc(100svh - var(--head) - var(--roll)); min-height: 0; }
@@ -289,7 +291,7 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
    edge to edge and cropped tall; swipe it (or the roll) sideways to pull through the work, scroll down
    and the sheet slides up over it */
 @media (max-width: 760px) and (orientation: portrait) {
-  :root { --head: 46px; --deck: 84px; --cell: 40px; --roll: calc(var(--cell) + 54px); }
+  :root { --head: 46px; --deck: 84px; --cell: 46px; --roll: calc(var(--cell) + 34px); }
   .top { display: flex; }
   .top-role { display: none; }
   .mark { margin-right: auto; }
@@ -301,7 +303,8 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
   .st-title { flex-basis: 100%; }
   /* the map first, then the switches under it */
   .deck { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 50px; }
-  .togs { grid-column: 1; grid-row: 2; border-top: 1px solid var(--hair); }
+  .togs { grid-column: 1; grid-row: 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--hair); }
+  .tog-set { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tog { flex-direction: column; justify-content: center; gap: 7px; padding: 0 4px; letter-spacing: .02em; }
   .tog i { transform: none; }   /* above the label here, so no nudge */
   .map { grid-column: 1; grid-row: 1; }

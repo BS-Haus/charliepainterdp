@@ -76,7 +76,8 @@ def deck_map(all_items):
             f'<button class="seg{" seg-reel" if it["type"] == "reel" else ""}" data-item="{k}" style="flex-grow:{len(it["frames"])};--i:{k}" aria-label="{esc(it["title"])}"></button>'
             for k, it in enumerate(all_items) if it["group"] == group
         )
-        halves.append(f'<div class="half" data-group="{group}"><div class="segs">{segs}</div></div>')
+        frames = sum(len(it["frames"]) for it in all_items if it["group"] == group)
+        halves.append(f'<div class="half" data-group="{group}" style="flex-grow:{frames}"><div class="segs">{segs}</div></div>')
     return "".join(halves)
 
 
