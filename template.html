@@ -30,7 +30,7 @@
     </nav>
   </header>
 
-  <!-- THE GATE: one screen, a scrub bar under it, the switches, and the whole roll running through beneath -->
+  <!-- THE GATE: one screen, a deck (switches + a map you can scrub), and the whole roll running through beneath -->
   <section class="gate" id="work" aria-label="Work">
     <div class="viewer" id="viewer">
       <div class="frame" id="frame">
@@ -40,12 +40,13 @@
         <span class="shade" aria-hidden="true"></span>
         <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="v-n">R1</span><span id="v-kind">Showreel</span></p>
         <p class="corner c-tr mono" id="v-count"></p>
-        <div class="corner c-b"><h2 class="st-title" id="v-title">Narrative showreel</h2><p class="st-credit mono" id="v-credit"></p><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
+        <div class="corner c-bl"><h2 class="st-title" id="v-title">Narrative showreel</h2><p class="st-credit mono" id="v-credit"></p></div>
+        <div class="corner c-br"><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
       </div>
     </div>
     <div class="deck mono">
-      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub">{{MAP}}<span class="map-head" id="map-head" aria-hidden="true"></span></div>
       <div class="togs" role="group" aria-label="Show">{{TOGGLES}}</div>
+      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub">{{MAP}}<span class="map-head" id="map-head" aria-hidden="true"></span></div>
     </div>
     <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
       <div class="strip" id="strip">
