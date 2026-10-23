@@ -233,7 +233,7 @@ i, b { font-style: normal; font-weight: inherit; }
 /* POWER-ON — the first time you arrive, the unit switches on like a camera: the labels fade up, the screen opens
    from a slit while the clips flick through it, then the switches come up, the map fills in and the roll threads
    through. Only the clips flick; everything else simply arrives. */
-@keyframes rise { from { opacity: 0; } }
+@keyframes rise { from { opacity: 0; } to { opacity: 1; } }   /* explicit end: it has to win over the intro's hidden state */
 @keyframes nope { 50% { opacity: .35; } }
 @keyframes fill { from { transform: scaleX(0); } }
 .js body.is-intro .mark, .js body.is-intro .top-role, .js body.is-intro .nav a,
