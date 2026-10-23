@@ -64,7 +64,7 @@ i, b { font-style: normal; font-weight: inherit; }
 .top-role { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 var(--pad); color: var(--mid); white-space: nowrap; overflow: hidden; border-left: 1px solid var(--line); }
 .top-role span { color: var(--dim); }
 .nav { grid-column: 3 / 6; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.nav a { display: flex; align-items: center; gap: 10px; padding: 0 var(--pad); color: var(--mid); border-left: 1px solid var(--line); transition: color .2s, background .2s; }
+.nav a { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 0 var(--pad); color: var(--mid); border-left: 1px solid var(--line); transition: color .2s, background .2s; }
 .nav a::before { content: ""; flex: none; width: 4px; height: 4px; border-radius: 50%; background: var(--line); transform: translateY(.106em); transition: background .2s, box-shadow .2s; }
 .nav a:hover { color: var(--fg); background: var(--key); }
 .nav a.is-on { color: var(--fg); }
@@ -114,7 +114,7 @@ i, b { font-style: normal; font-weight: inherit; }
 .togs { grid-column: 1 / 3; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .tog-set { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .tog-set + .tog-set { border-left: 1px solid var(--line); }
-.tog { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 0 var(--pad); color: var(--dim); white-space: nowrap; transition: color .2s, background .2s; }
+.tog { display: flex; align-items: center; justify-content: center; gap: 14px; min-width: 0; padding: 0 var(--pad); color: var(--dim); white-space: nowrap; transition: color .2s, background .2s; }
 .tog + .tog { border-left: 1px solid var(--hair); }
 .tog i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: var(--line); transform: translateY(.106em); transition: background .2s, box-shadow .2s; }
 .tog:hover { color: var(--fg); background: var(--key); }
@@ -257,13 +257,13 @@ body.go-deck .run-label, body.go-deck .leader span, body.go-deck .map-head, body
 /* NARROWER SCREENS — the role line gives way first, then the key labels, then the sheet stacks */
 @media (max-width: 1180px) {
   .top-role span { display: none; }
-  .nav a { padding: 0 14px; gap: 8px; }
+  .nav a { padding: 0 14px; gap: 12px; }
 }
 @media (max-width: 900px) {
   .nav a::before { display: none; }
 }
 @media (max-width: 960px) {
-  .tog { padding: 0 12px; gap: 8px; }
+  .tog { padding: 0 12px; gap: 12px; }
   .row-head { grid-column: 1 / -1; padding-bottom: 0; }
   .row-body { grid-column: 1 / -1; border-left: 0; }
   .credits .row-head { padding-bottom: var(--pad); }
