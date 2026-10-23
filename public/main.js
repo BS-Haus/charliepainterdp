@@ -18,14 +18,12 @@
   const reel = $("#reel");
   const vN = $("#v-n"), vKind = $("#v-kind"), vCount = $("#v-count"), vTitle = $("#v-title"), vCredit = $("#v-credit"), vPlay = $("#v-play");
   const map = $("#map"), mapHead = $("#map-head"), segs = $$(".seg");
-  const cLbl = $("#c-lbl"), cNow = $("#c-now"), cOf = $("#c-of");
-  const films = runs.filter((r) => r.dataset.type === "film").length;
 
   // Every frame on the roll, with where its centre sits along the strip
   let cells = [];
   const measure = () => {
     const base = strip.getBoundingClientRect().left - (parseFloat(strip.dataset.x) || 0);
-    cells = $$(".cell", strip).map((c) => {
+    cells = $$(".run:not([hidden]) .cell", strip).map((c) => {
       const r = c.getBoundingClientRect();
       return { el: c, run: Number(c.closest(".run").dataset.item), f: Number(c.dataset.f), x: r.left - base + r.width / 2 };
     });
@@ -90,9 +88,6 @@
       vCredit.textContent = r.dataset.credit;
       vPlay.textContent = r.dataset.type === "reel" ? "Watch with sound ↗" : r.dataset.id ? "Play film ↗" : "View frames ↗";
       for (let d = -2; d <= 2; d++) preload(c.run + d);
-      cLbl.textContent = r.dataset.type === "reel" ? "Reel" : "Film";
-      cNow.textContent = r.dataset.n;
-      cOf.textContent = r.dataset.type === "reel" ? "" : `/ ${pad(films)}`;
     }
     const n = $$(".cell", r).length;
     if (r.dataset.type === "reel") {
@@ -197,23 +192,44 @@
     playCurrent();
   });
 
-  // The deck: step a frame or a film, or jump anywhere on the map
+  // Stepping: a frame, or to the start of the next/previous film still on the roll
   const firstOf = (run) => cells.findIndex((c) => c.run === run);
   const stepFrame = (dir) => nudge(cells[clamp(nearest(target) + dir, 0, cells.length - 1)].x);
   const stepFilm = (dir) => {
     const k = nearest(target), start = firstOf(cells[k].run);
-    if (dir < 0 && k > start) return nudge(cells[start].x);
-    nudge(cells[firstOf(clamp(cells[k].run + dir, 0, runs.length - 1))].x);
+    if (dir < 0) return nudge(cells[k > start ? start : firstOf(cells[Math.max(0, start - 1)].run)].x);
+    const next = cells.findIndex((c, j) => j > k && c.run !== cells[k].run);
+    nudge(cells[next < 0 ? k : next].x);
   };
-  const press = (key) => { key.classList.add("is-hit"); setTimeout(() => key.classList.remove("is-hit"), 140); };
-  $$(".key").forEach((key) => key.addEventListener("click", () => {
+
+  // The switches: take narrative or commercial off the roll and the roll, the map and the screen close up around
+  // what's left — a reel of just that half. One always stays on.
+  const togs = $$(".tog");
+  const shown = new Set(togs.map((t) => t.dataset.group));
+  const applyShown = () => {
+    const keep = cur >= 0 ? cells[cur].run : -1;
+    togs.forEach((t) => { const on = shown.has(t.dataset.group); t.classList.toggle("is-on", on); t.setAttribute("aria-pressed", on); });
+    runs.forEach((r) => { r.hidden = !shown.has(r.dataset.group); });
+    $$(".half", map).forEach((h) => { h.hidden = !shown.has(h.dataset.group); });
+    measure();
+    const k = Math.max(0, firstOf(keep));       // stay on the same film if it's still there, otherwise start at the top
+    pos = target = cells[k].x;
+    cur = -1;
+    place(pos);
+    show(k);
+  };
+  togs.forEach((t) => t.addEventListener("click", () => {
     if (!cells.length) return;
-    const s = key.dataset.step;
-    s.endsWith("film") ? stepFilm(s.startsWith("-") ? -1 : 1) : stepFrame(Number(s));
+    const g = t.dataset.group;
+    if (shown.has(g) && shown.size === 1) { t.classList.remove("is-nope"); void t.offsetWidth; t.classList.add("is-nope"); return; }
+    shown.has(g) ? shown.delete(g) : shown.add(g);
+    applyShown();
   }));
+
   // Click or drag along the map to scrub: where you are along a segment is how far into that film you go
   const scrubTo = (x) => {
-    const seg = segs.find((s) => x <= s.getBoundingClientRect().right + 1.5) || segs[segs.length - 1];
+    const live = segs.filter((s) => !s.closest(".half").hidden);
+    const seg = live.find((s) => x <= s.getBoundingClientRect().right + 1.5) || live[live.length - 1];
     const r = seg.getBoundingClientRect(), run = Number(seg.dataset.item), n = $$(".cell", runs[run]).length;
     nudge(cells[firstOf(run) + clamp(Math.floor(((x - r.left) / r.width) * n), 0, n - 1)].x);
   };
@@ -227,14 +243,13 @@
   map.addEventListener("pointermove", (e) => { if (scrubbing === e.pointerId) scrubTo(e.clientX); });
   ["pointerup", "pointercancel"].forEach((t) => map.addEventListener(t, () => { scrubbing = null; }));
 
-  // Arrow keys step a frame; with shift, a film — and light up the matching key
+  // Arrow keys step a frame; with shift, a film
   document.addEventListener("keydown", (e) => {
     if (!$("#lb").hidden || cur < 0 || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
     if (window.scrollY > gate.offsetHeight / 2) return;
     e.preventDefault();
     const dir = e.key === "ArrowRight" ? 1 : -1;
     e.shiftKey ? stepFilm(dir) : stepFrame(dir);
-    press($(`.key[data-step="${dir < 0 ? "-" : ""}${e.shiftKey ? "film" : 1}"]`));
   });
 
   function playCurrent() {

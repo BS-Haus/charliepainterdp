@@ -77,8 +77,16 @@ def deck_map(all_items):
             f'<button class="seg{" seg-reel" if it["type"] == "reel" else ""}" data-item="{k}" style="flex-grow:{len(it["frames"])};--i:{k}" aria-label="{esc(it["title"])}"></button>'
             for k, it in enumerate(all_items) if it["group"] == group
         )
-        halves.append(f'<div class="half"><span class="half-lbl">{group}</span><div class="segs">{segs}</div></div>')
+        halves.append(f'<div class="half" data-group="{group}"><div class="segs">{segs}</div></div>')
     return "".join(halves)
+
+
+def toggles():
+    """The switches on the deck: one per half of the work. Switch one off and the roll and the map close up around what's left."""
+    return "".join(
+        f'<button class="tog is-on" data-group="{g}" aria-pressed="true"><i aria-hidden="true"></i>{label}</button>'
+        for g, label in (("narrative", "Narrative"), ("commercial", "Commercial"))
+    )
 
 
 narr_more = "\n".join(
@@ -100,7 +108,7 @@ all_items, films = items()
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{ROLL}}", roll(all_items))
 out = out.replace("{{MAP}}", deck_map(all_items))
-out = out.replace("{{FRAMES}}", f'{sum(len(it["frames"]) for it in all_items):03d}')
+out = out.replace("{{TOGGLES}}", toggles())
 out = out.replace("{{FILM_COUNT}}", f"{films:02d}")
 out = out.replace("{{ALSO}}", '      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
 (ROOT / "public" / "index.html").write_text(out)

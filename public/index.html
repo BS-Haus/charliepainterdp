@@ -30,7 +30,7 @@
     </nav>
   </header>
 
-  <!-- THE GATE: one screen, a deck of keys, and the whole roll running through beneath -->
+  <!-- THE GATE: one screen, a deck (switches + a map you can scrub), and the whole roll running through beneath -->
   <section class="gate" id="work" aria-label="Work">
     <div class="viewer" id="viewer">
       <div class="frame" id="frame">
@@ -45,14 +45,8 @@
       </div>
     </div>
     <div class="deck mono">
-      <div class="keys" role="group" aria-label="Step through the work">
-        <button class="key" data-step="-film" aria-label="Previous film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2v8M10 2 4 6l6 4z"/></svg><span>Film</span></button>
-        <button class="key" data-step="-1" aria-label="Previous frame"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M9 2 3 6l6 4z"/></svg><span>Frame</span></button>
-        <button class="key" data-step="1" aria-label="Next frame"><span>Frame</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 2 6 4-6 4z"/></svg></button>
-        <button class="key" data-step="film" aria-label="Next film"><span>Film</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10 2v8M2 2l6 4-6 4z"/></svg></button>
-      </div>
-      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub"><div class="half"><span class="half-lbl">narrative</span><div class="segs"><button class="seg seg-reel" data-item="0" style="flex-grow:8;--i:0" aria-label="Narrative showreel"></button><button class="seg" data-item="1" style="flex-grow:5;--i:1" aria-label="If"></button><button class="seg" data-item="2" style="flex-grow:5;--i:2" aria-label="Operation Dynamo"></button><button class="seg" data-item="3" style="flex-grow:5;--i:3" aria-label="Flush!"></button><button class="seg" data-item="4" style="flex-grow:9;--i:4" aria-label="Vetala"></button><button class="seg" data-item="5" style="flex-grow:6;--i:5" aria-label="Accomplice"></button><button class="seg" data-item="6" style="flex-grow:5;--i:6" aria-label="Confess"></button><button class="seg" data-item="7" style="flex-grow:5;--i:7" aria-label="Memories of a Life"></button><button class="seg" data-item="8" style="flex-grow:1;--i:8" aria-label="In Vitro Felicitas"></button><button class="seg" data-item="9" style="flex-grow:3;--i:9" aria-label="Brownies or Ice Cream?"></button></div></div><div class="half"><span class="half-lbl">commercial</span><div class="segs"><button class="seg seg-reel" data-item="10" style="flex-grow:8;--i:10" aria-label="Commercial showreel"></button><button class="seg" data-item="11" style="flex-grow:5;--i:11" aria-label="66°North — ‘Calming the Storm’"></button><button class="seg" data-item="12" style="flex-grow:4;--i:12" aria-label="John Smith’s — ‘Traditions’"></button><button class="seg" data-item="13" style="flex-grow:5;--i:13" aria-label="Aberfeldy"></button><button class="seg" data-item="14" style="flex-grow:5;--i:14" aria-label="Vision Pro"></button><button class="seg" data-item="15" style="flex-grow:6;--i:15" aria-label="London Jazz Festival"></button><button class="seg" data-item="16" style="flex-grow:3;--i:16" aria-label="Phox Water"></button></div></div><span class="map-head" id="map-head" aria-hidden="true"></span></div>
-      <p class="counter" aria-live="polite"><span id="c-lbl">Reel</span><b id="c-now">R1</b><span id="c-of"></span></p>
+      <div class="togs" role="group" aria-label="Show"><button class="tog is-on" data-group="narrative" aria-pressed="true"><i aria-hidden="true"></i>Narrative</button><button class="tog is-on" data-group="commercial" aria-pressed="true"><i aria-hidden="true"></i>Commercial</button></div>
+      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub"><div class="half" data-group="narrative"><div class="segs"><button class="seg seg-reel" data-item="0" style="flex-grow:8;--i:0" aria-label="Narrative showreel"></button><button class="seg" data-item="1" style="flex-grow:5;--i:1" aria-label="If"></button><button class="seg" data-item="2" style="flex-grow:5;--i:2" aria-label="Operation Dynamo"></button><button class="seg" data-item="3" style="flex-grow:5;--i:3" aria-label="Flush!"></button><button class="seg" data-item="4" style="flex-grow:9;--i:4" aria-label="Vetala"></button><button class="seg" data-item="5" style="flex-grow:6;--i:5" aria-label="Accomplice"></button><button class="seg" data-item="6" style="flex-grow:5;--i:6" aria-label="Confess"></button><button class="seg" data-item="7" style="flex-grow:5;--i:7" aria-label="Memories of a Life"></button><button class="seg" data-item="8" style="flex-grow:1;--i:8" aria-label="In Vitro Felicitas"></button><button class="seg" data-item="9" style="flex-grow:3;--i:9" aria-label="Brownies or Ice Cream?"></button></div></div><div class="half" data-group="commercial"><div class="segs"><button class="seg seg-reel" data-item="10" style="flex-grow:8;--i:10" aria-label="Commercial showreel"></button><button class="seg" data-item="11" style="flex-grow:5;--i:11" aria-label="66°North — ‘Calming the Storm’"></button><button class="seg" data-item="12" style="flex-grow:4;--i:12" aria-label="John Smith’s — ‘Traditions’"></button><button class="seg" data-item="13" style="flex-grow:5;--i:13" aria-label="Aberfeldy"></button><button class="seg" data-item="14" style="flex-grow:5;--i:14" aria-label="Vision Pro"></button><button class="seg" data-item="15" style="flex-grow:6;--i:15" aria-label="London Jazz Festival"></button><button class="seg" data-item="16" style="flex-grow:3;--i:16" aria-label="Phox Water"></button></div></div><span class="map-head" id="map-head" aria-hidden="true"></span></div>
     </div>
     <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
       <div class="strip" id="strip">
@@ -146,9 +140,6 @@
 
     <footer class="row fine mono"><span>© <span class="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></footer>
   </div>
-
-  <!-- BASE: the bottom of the unit, always there — the header's partner -->
-  <div class="base mono"><span>© <span class="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></div>
 
   <!-- VIEWER -->
   <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Viewer" hidden>
