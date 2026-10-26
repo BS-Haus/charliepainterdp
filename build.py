@@ -60,13 +60,14 @@ def film_tile(f, eager):
         f'<img src="/media/stills/{s}.jpg" alt="" loading="{"eager" if eager and i == 0 else "lazy"}" decoding="async" draggable="false" />'
         for i, s in enumerate(f["stills"])
     )
-    on = ' class="is-on"'
-    bars = "".join(f'<i{on if i == 0 else ""}></i>' for i in range(n)) if n > 1 else ""
-    arrows = '<button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>' if n > 1 else ""
+    # a small counter in the corner; the arrows either side of it only show on hover
+    count = (f'<div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button>'
+             f'<span><b class="tile-n">01</b> / {n:02d}</span>'
+             f'<button class="tile-step tile-next" aria-label="Next still">→</button></div>') if n > 1 else ""
     return f'''        <article class="tile" data-slug="{f["slug"]}">
           <div class="slides">{imgs}</div>
           <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit mono">{esc(credit_line(f) or f["kind"])}</p></div>
-          <div class="tile-bars" aria-hidden="true">{bars}</div>{arrows}
+          {count}
         </article>'''
 
 

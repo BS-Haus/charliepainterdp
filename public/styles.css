@@ -98,17 +98,12 @@ ul { list-style: none; padding: 0; }
 .tile-credit, .tile-kind { color: rgba(255, 255, 255, .78); }
 .tile-kind { display: flex; align-items: center; }
 .tile-watch { position: absolute; right: var(--pad); bottom: 18px; z-index: 2; color: #fff; }
-.tile-bars { position: absolute; top: 16px; left: var(--pad); right: var(--pad); z-index: 2; display: flex; gap: 3px; pointer-events: none; transition: opacity .3s; }
-.tile-bars i { flex: 1; max-width: 44px; height: 2px; background: rgba(255, 255, 255, .3); transition: background .25s; }
-.tile-bars i.is-on { background: var(--rec); }
-.tile-step {
-  position: absolute; top: 50%; z-index: 3; width: 34px; height: 34px; margin-top: -17px; color: #fff; font-family: var(--mono); font-size: 12px; line-height: 32px; text-align: center;
-  background: rgba(0, 0, 0, .55); border: 1px solid rgba(255, 255, 255, .28);
-  opacity: 0; transition: opacity .3s, background .15s, color .15s;
-}
-.tile-prev { left: 16px; } .tile-next { right: 16px; }
-.tile-step:hover { background: #fff; color: #000; }
-/* with a mouse, a frame is the picture and its still bars until you hover it */
+/* the still counter: small, white, bottom-right. With a mouse, the arrows either side of it appear on hover */
+.tile-count { position: absolute; right: calc(var(--pad) - 8px); bottom: 14px; z-index: 3; display: flex; align-items: center; color: rgba(255, 255, 255, .72); font-variant-numeric: tabular-nums; text-shadow: 0 0 10px rgba(0, 0, 0, .5); }
+.tile-count b { font-weight: 400; color: #fff; }
+.tile-step { padding: 6px 8px; color: rgba(255, 255, 255, .72); opacity: 0; transition: opacity .25s, color .15s; }
+.tile-step:hover { color: #fff; }
+/* with a mouse, a frame is just the picture and its counter until you hover it */
 @media (hover: hover) and (pointer: fine) {
   .grid .tile-cap { opacity: 0; transform: translateY(8px); }
   .grid .tile:hover .tile-cap, .grid .tile:focus-within .tile-cap { opacity: 1; transform: none; }
@@ -195,7 +190,7 @@ ul { list-style: none; padding: 0; }
   .grid .tile { aspect-ratio: 1.6 / 1; }
   .tile-reel { aspect-ratio: 16 / 10; }
   .tile-cap { padding: 36px 16px 14px; }
-  .tile-bars { top: 12px; left: 16px; right: 16px; }
+  .tile-count { right: 16px; bottom: 12px; }
   .tile-step { display: none; }
   .tile-watch { right: 16px; bottom: 14px; }
   .cv-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }

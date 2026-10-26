@@ -60,10 +60,10 @@
     let dragged = false;
     const slides = $(".slides", tile);
     if (slides) {
-      const bars = $$(".tile-bars i", tile);
+      const n = $(".tile-n", tile);
       const at = () => Math.round(slides.scrollLeft / slides.clientWidth);
       const go = (i) => slides.scrollTo({ left: Math.max(0, Math.min(slides.children.length - 1, i)) * slides.clientWidth, behavior: reduceMotion ? "auto" : "smooth" });
-      slides.addEventListener("scroll", () => { const i = at(); bars.forEach((bar, j) => bar.classList.toggle("is-on", j === i)); }, { passive: true });
+      slides.addEventListener("scroll", () => { if (n) n.textContent = pad(at() + 1); }, { passive: true });
       $(".tile-prev", tile)?.addEventListener("click", (e) => { e.stopPropagation(); go(at() - 1); });
       $(".tile-next", tile)?.addEventListener("click", (e) => { e.stopPropagation(); go(at() + 1); });
       // drag with a mouse (touch already swipes natively)
