@@ -11,116 +11,109 @@ ROOT = Path(__file__).parent
 content = json.loads((ROOT / "content.json").read_text())
 esc = html.escape
 
-# The two showreels open their halves of the roll; their frames are stills pulled from the reel
+# Each half of the work opens with its showreel; a reel's "stills" are frames pulled from it
 REELS = {
-    "narrative": {"title": "Narrative showreel", "credit": "Features & shorts", "src": "/media/reel-narrative-v3.mp4", "poster": "/media/reel-narrative-v2-poster.jpg", "vimeo": "1149629056"},
-    "commercial": {"title": "Commercial showreel", "credit": "Commercials & brand films", "src": "/media/reel-commercial-v2.mp4", "poster": "/media/reel-commercial-v2-poster.jpg", "vimeo": "1188991301"},
+    "narrative": {"slug": "narrativeshowreel", "title": "Narrative showreel", "kind": "Showreel", "note": "Features & shorts",
+                  "src": "/media/reel-narrative-v3.mp4", "poster": "/media/reel-narrative-v2-poster.jpg",
+                  "video": {"provider": "vimeo", "id": "1149629056"}, "stills": [f"reel-narrative-{i}" for i in range(1, 9)]},
+    "commercial": {"slug": "commercial-showreel", "title": "Commercial showreel", "kind": "Showreel", "note": "Commercials & brand films",
+                   "src": "/media/reel-commercial-v2.mp4", "poster": "/media/reel-commercial-v2-poster.jpg",
+                   "video": {"provider": "vimeo", "id": "1188991301"}, "stills": [f"reel-commercial-{i}" for i in range(1, 9)]},
 }
+LABELS = {"narrative": "Narrative", "commercial": "Commercial"}
 
 
-def credit(p):
-    return " · ".join(x for x in [p.get("credit"), p.get("detail")] if x)
+def title_of(f):
+    return f["title"] + (f" ‘{f['subtitle']}’" if f.get("subtitle") else "")
 
 
-def items():
-    """Everything on the roll, in order: each half opens with its reel, then its films."""
-    out, n = [], 0
+def credit_line(f):
+    return " / ".join(x for x in (f.get("director"), f.get("production")) if x)
+
+
+def projects():
+    """Every project in page order (narrative first) — the data the project view is built from."""
+    out = []
     for group in ("narrative", "commercial"):
         r = REELS[group]
-        out.append({
-            "type": "reel", "group": group, "era": "all", "n": "R1" if group == "narrative" else "R2", "title": r["title"],
-            "credit": r["credit"], "kind": "Showreel", "frames": [f"reel-{group}-{i}" for i in range(1, 9)],
-            "src": r["src"], "poster": r["poster"], "provider": "vimeo", "id": r["vimeo"],
-        })
-        for p in content[group]:
-            n += 1
-            v = p.get("video") or {}
-            out.append({
-                "type": "film", "group": group, "era": p.get("era", "contemporary"), "n": f"{n:02d}",
-                "title": p["title"] + (f" — ‘{p['subtitle']}’" if p.get("subtitle") else ""),
-                "credit": credit(p), "kind": p["kind"], "frames": p["stills"],
-                "provider": v.get("provider", ""), "id": v.get("id", ""), "hash": v.get("hash", ""),
-            })
-    return out, n
+        out.append({"slug": r["slug"], "group": group, "title": r["title"], "kind": r["kind"], "note": r["note"],
+                    "director": "", "production": "", "video": r["video"], "stills": r["stills"]})
+        for f in content[group]:
+            out.append({"slug": f["slug"], "group": group, "title": title_of(f), "kind": f["kind"], "note": f.get("note", ""),
+                        "director": f.get("director", ""), "production": f.get("production", ""),
+                        "video": f.get("video"), "stills": f["stills"]})
+    return out
 
 
-def attrs(it):
-    a = f' data-type="{it["type"]}" data-group="{it["group"]}" data-era="{it["era"]}" data-n="{it["n"]}" data-title="{esc(it["title"])}" data-credit="{esc(it["credit"])}" data-kind="{esc(it["kind"])}"'
-    if it.get("src"):
-        a += f' data-src="{it["src"]}" data-poster="{it["poster"]}"'
-    if it.get("id"):
-        a += f' data-provider="{it["provider"]}" data-id="{it["id"]}"'
-    if it.get("hash"):
-        a += f' data-hash="{it["hash"]}"'
-    return a
+def reel_tile(group):
+    r = REELS[group]
+    return f'''        <article class="tile tile-reel" data-slug="{r["slug"]}">
+          <video muted playsinline loop preload="none" poster="{r["poster"]}" data-src="{r["src"]}"></video>
+          <div class="tile-cap"><p class="tile-kind mono"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/{r["slug"]}">{esc(r["title"])}</a></h3><p class="tile-credit mono">{esc(r["note"])}</p></div>
+          <span class="tile-watch mono" aria-hidden="true">Watch with sound ↗</span>
+        </article>'''
 
 
-def roll(all_items):
-    """The roll: every frame of every film, side by side, each film labelled beneath its run."""
-    runs = []
-    for k, it in enumerate(all_items):
-        cells = "".join(
-            f'<span class="cell" data-f="{f}"><img src="/media/thumbs/{fr}.jpg" alt="" loading="{"eager" if k < 4 else "lazy"}" decoding="async" /></span>'
-            for f, fr in enumerate(it["frames"])
-        )
-        half = ' data-half="1"' if it["type"] == "reel" else ""
-        runs.append(f'        <div class="run" data-item="{k}"{half}{attrs(it)}><div class="cells">{cells}</div><p class="run-label mono">{esc(it["n"])}</p></div>')
-    return "\n".join(runs)
+def film_tile(f, eager):
+    n = len(f["stills"])
+    imgs = "".join(
+        f'<img src="/media/stills/{s}.jpg" alt="" loading="{"eager" if eager and i == 0 else "lazy"}" decoding="async" draggable="false" />'
+        for i, s in enumerate(f["stills"])
+    )
+    on = ' class="is-on"'
+    bars = "".join(f'<i{on if i == 0 else ""}></i>' for i in range(n)) if n > 1 else ""
+    arrows = '<button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>' if n > 1 else ""
+    return f'''        <article class="tile" data-slug="{f["slug"]}">
+          <div class="slides">{imgs}</div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit mono">{esc(credit_line(f) or f["kind"])}</p></div>
+          <div class="tile-bars" aria-hidden="true">{bars}</div>{arrows}
+        </article>'''
 
 
-def deck_map(all_items):
-    """The map on the deck: a half for each reel and its films; one segment per film, as long as its run of frames."""
-    halves = []
-    for group in ("narrative", "commercial"):
-        segs = "".join(
-            f'<button class="seg{" seg-reel" if it["type"] == "reel" else ""}" data-item="{k}" style="flex-grow:{len(it["frames"])};--i:{k}" aria-label="{esc(it["title"])}"></button>'
-            for k, it in enumerate(all_items) if it["group"] == group
-        )
-        frames = sum(len(it["frames"]) for it in all_items if it["group"] == group)
-        halves.append(f'<div class="half" data-group="{group}" style="flex-grow:{frames}"><div class="segs">{segs}</div></div>')
-    return "".join(halves)
+def group_section(group, first):
+    films = content[group]
+    tiles = "\n".join(film_tile(f, first and i < 2) for i, f in enumerate(films))
+    count = f'{len(films)} {"films" if group == "narrative" else "projects"}'
+    return f'''      <section class="group" data-group="{group}" aria-label="{LABELS[group]}">
+        <header class="group-head mono"><h2>{LABELS[group]}</h2><span>{count} + showreel</span></header>
+{reel_tile(group)}
+        <div class="grid">
+{tiles}
+        </div>
+      </section>'''
 
 
-# The switches on the deck, in two pairs. A film is on the roll when both of its pairs let it through.
-# The showreels mix period and contemporary work, so they only run while both of those are on.
-SWITCHES = (
-    ("era", (("period", "Period"), ("contemporary", "Contemporary"))),
-    ("group", (("narrative", "Narrative"), ("commercial", "Commercial"))),
-)
+def cv_rows(rows):
+    return "\n".join(
+        f'          <li><span class="cv-t">{esc(t)}</span><span class="cv-c">{esc(" / ".join(x for x in (d, p) if x))}</span></li>'
+        for t, d, p in rows
+    )
 
 
-def toggles():
-    sets, i = [], 0
-    for dim, options in SWITCHES:
-        buttons = ""
-        for val, label in options:
-            buttons += f'<button class="tog is-on" data-val="{val}" aria-pressed="true" style="--i:{i}"><i aria-hidden="true"></i>{label}</button>'
-            i += 1
-        sets.append(f'<div class="tog-set" data-dim="{dim}">{buttons}</div>')
-    return "".join(sets)
+def cv():
+    blocks = []
+    for key, label in (("feature", "Feature film"), ("short", "Short film"), ("commercial", "Commercial")):
+        blocks.append(f'''      <div class="cv-block">
+        <h3 class="mono">{label}</h3>
+        <ul class="cv-list">
+{cv_rows(content["cv"][key])}
+        </ul>
+      </div>''')
+    return "\n".join(blocks)
 
 
-narr_more = "\n".join(
-    f'          <li><span>{esc(t)}</span><span>{esc(c)}</span><span>{esc(k)}</span></li>'
-    for t, k, c in content["narrative_more"]
-)
-narr_extra = f"""        <div class="also-col">
-          <p class="mono">Narrative — also shot</p>
-          <ul class="also-list mono">
-{narr_more}
-          </ul>
-        </div>"""
-comm_extra = f"""        <div class="also-col">
-          <p class="mono">Commercial — also shot</p>
-          <p class="also-line">{" · ".join(esc(x) for x in content["commercial_more"])}</p>
-        </div>"""
+def awards():
+    return "\n".join(
+        f'          <li><span class="mono">{esc(r)}</span><span class="cv-t">{esc(a)}</span><span class="cv-c">{esc(f)}</span></li>'
+        for r, a, f in content["awards"]
+    )
 
-all_items, films = items()
+
 out = (ROOT / "template.html").read_text()
-out = out.replace("{{ROLL}}", roll(all_items))
-out = out.replace("{{MAP}}", deck_map(all_items))
-out = out.replace("{{TOGGLES}}", toggles())
-out = out.replace("{{FILM_COUNT}}", f"{films:02d}")
-out = out.replace("{{ALSO}}", '      <div class="also-cols">\n' + narr_extra + "\n" + comm_extra + "\n      </div>")
+out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
+out = out.replace("{{CV}}", cv())
+out = out.replace("{{AWARDS}}", awards())
+out = out.replace("{{ABOUT}}", esc(content["about"]))
+out = out.replace("{{PROJECTS}}", json.dumps(projects(), ensure_ascii=False).replace("</", "<\\/"))
 (ROOT / "public" / "index.html").write_text(out)
 print("Built public/index.html")

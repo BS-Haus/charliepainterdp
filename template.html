@@ -14,114 +14,88 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body class="is-intro">
-  <!-- HEADER: always there -->
+<body>
+  <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections. Frosts the work passing under -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter</a>
     <p class="top-role mono">Director of photography<span>London</span></p>
+    <div class="switch-cell">
+      <div class="switch" role="radiogroup" aria-label="Show first">
+        <button role="radio" aria-checked="true" data-first="narrative">Narrative</button>
+        <button role="radio" aria-checked="false" data-first="commercial">Commercial</button>
+        <span class="switch-lens" aria-hidden="true"></span>
+      </div>
+    </div>
     <nav class="nav mono" aria-label="Sections">
       <a href="#work">Work</a>
-      <a href="#about">About</a>
+      <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- THE GATE: one screen, the whole roll running through beneath it, and a bar of switches + a map you can scrub -->
-  <section class="gate" id="work" aria-label="Work">
-    <div class="viewer" id="viewer">
-      <div class="frame" id="frame">
-        <video id="reel" muted playsinline loop preload="auto" poster="/media/reel-narrative-v2-poster.jpg"></video>
-        <img class="still is-front" id="still" alt="" />
-        <img class="still" id="still-b" alt="" />
-        <span class="shade" aria-hidden="true"></span>
-        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="v-n">R1</span><span id="v-kind">Showreel</span></p>
-        <p class="corner c-tr mono" id="v-count"></p>
-        <div class="corner c-b"><h2 class="st-title" id="v-title">Narrative showreel</h2><p class="st-credit mono" id="v-credit"></p><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
+  <main>
+    <!-- WORK: one page; the switch decides which half comes first -->
+    <div class="work" id="work">
+      <div class="work-head mono">
+        <p><span class="rec" aria-hidden="true"></span>Selected work</p>
+        <p class="hint"><span class="hint-touch">Swipe a frame for more stills</span><span class="hint-mouse">Hover a frame, then swipe or drag for more stills</span></p>
+      </div>
+      <div class="groups" id="groups">
+{{GROUPS}}
       </div>
     </div>
-    <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
-      <div class="strip" id="strip">
-        <div class="leader" aria-hidden="true"><span class="mono">Head</span></div>
-{{ROLL}}
-        <div class="leader tail" aria-hidden="true"><span class="mono">Tail</span></div>
-      </div>
-      <span class="gate-line" aria-hidden="true"></span>
-    </div>
-    <div class="deck mono">
-      <div class="togs" role="group" aria-label="Show">{{TOGGLES}}</div>
-      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub">{{MAP}}<span class="map-head" id="map-head" aria-hidden="true"></span></div>
-    </div>
-    <span class="fade" aria-hidden="true"></span>
-  </section>
 
-  <!-- THE SHEET: everything else, numbered, on the same grid -->
-  <div class="sheet">
-    <section class="row" id="about">
-      <p class="row-head mono"><span>01</span>About</p>
-      <div class="row-body">
-        <p class="about-line">A narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
+    <!-- CV: the standard list, because it's what producers read -->
+    <section class="cv" id="cv" aria-label="CV">
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="mono">Director / Prod Co.</p></header>
+{{CV}}
+      <div class="cv-block">
+        <h3 class="mono">Awards</h3>
+        <ul class="cv-list awards">
+{{AWARDS}}
+        </ul>
       </div>
     </section>
 
-    <section class="row">
-      <p class="row-head mono"><span>02</span>Awards</p>
-      <ul class="row-body awards">
-        <li><span class="mono">Winner</span><b>Best Cinematography</b><span class="mono">SSIFF 2025</span></li>
-        <li><span class="mono">Nominee</span><b>Best Cinematography</b><span class="mono">YETI Film Fest</span></li>
-        <li><span class="mono">Winner</span><b>Best Film</b><span class="mono">LakeCity</span></li>
-        <li><span class="mono">Winner</span><b>Best Film</b><span class="mono">Cambridge Short Film Festival</span></li>
-        <li><span class="mono">Winner</span><b>Best Drama</b><span class="mono">Arena 51 Film Festival</span></li>
-      </ul>
+    <!-- CONTACT -->
+    <section class="contact" id="contact" aria-label="Contact">
+      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="mono">London, UK</p></header>
+      <p class="about">{{ABOUT}}</p>
+      <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+      <nav class="links mono" aria-label="Elsewhere">
+        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
+        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
+        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
+        <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
+      </nav>
     </section>
+  </main>
 
-    <a class="row press" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
-      <p class="row-head mono"><span>03</span>Press</p>
-      <div class="row-body">
-        <blockquote>“Eighty-six years ago today, my great-great-uncle, Jack, was fighting for his life in Dunkirk.”</blockquote>
-        <p class="press-src mono">British Cinematographer — on Operation Dynamo <i>↗</i></p>
-      </div>
-    </a>
+  <footer class="foot mono"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
 
-    <details class="row credits">
-      <summary class="row-head mono"><span>04</span>Full credits<i class="plus" aria-hidden="true"></i></summary>
-{{ALSO}}
-    </details>
-
-    <section class="row" id="contact">
-      <p class="row-head mono"><span>05</span>Contact</p>
-      <div class="row-body">
-        <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-        <nav class="contact-links mono" aria-label="Elsewhere">
-          <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
-          <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
-          <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
-          <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
-        </nav>
-      </div>
-    </section>
-
-    <footer class="row fine mono"><span>© <span class="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></footer>
-  </div>
-
-  <!-- VIEWER -->
-  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Viewer" hidden>
-    <div class="lb-bar mono">
-      <span id="lb-title"></span>
-      <span id="lb-count"></span>
-      <button id="lb-close">Close ✕</button>
+  <!-- PROJECT: slides up over the page — the film, its credits, then every still -->
+  <div class="proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
+    <div class="proj-bar mono">
+      <a class="proj-back" href="#work">← Selected work</a>
+      <span class="proj-pos" id="proj-pos"></span>
+      <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
     </div>
-    <div class="lb-stage" id="lb-stage"></div>
-    <div class="lb-nav mono" id="lb-nav">
-      <button id="lb-prev">← Prev</button>
-      <button id="lb-film" hidden>Play film ↗</button>
-      <button id="lb-next">Next →</button>
+    <div class="proj-scroll" id="proj-scroll">
+      <div class="proj-player" id="proj-player"></div>
+      <header class="proj-head">
+        <h2 class="proj-title" id="proj-title"></h2>
+        <dl class="proj-credits mono" id="proj-credits"></dl>
+      </header>
+      <div class="proj-stills" id="proj-stills"></div>
+      <a class="proj-follow" id="proj-follow" href="#"><span class="mono">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
     </div>
   </div>
 
+  <script>window.PROJECTS = {{PROJECTS}};</script>
   <script src="/main.js" defer></script>
 </body>
 </html>

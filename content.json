@@ -17,7 +17,33 @@
         "iffilm-5"
       ],
       "tint": "#36200c",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "iffilm",
+      "director": "Cyrus Mirzashafa",
+      "production": "Thulsa Films",
+      "note": "Starring Clive Russell"
+    },
+    {
+      "title": "Vetala",
+      "credit": "Dir. Ajit Mann",
+      "detail": "M & K",
+      "kind": "Short",
+      "stills": [
+        "vetala-1",
+        "vetala-2",
+        "vetala-3",
+        "vetala-4",
+        "vetala-5",
+        "vetala-6",
+        "vetala-7",
+        "vetala-8",
+        "vetala-9"
+      ],
+      "tint": "#292b16",
+      "era": "contemporary",
+      "slug": "vetala",
+      "director": "Ajit Mann",
+      "production": "M & K"
     },
     {
       "title": "Operation Dynamo",
@@ -37,7 +63,29 @@
         "operationdynamo-5"
       ],
       "tint": "#2e2013",
-      "era": "period"
+      "era": "period",
+      "slug": "operationdynamo",
+      "director": "George Rowlands",
+      "production": "CPC"
+    },
+    {
+      "title": "Accomplice",
+      "credit": "Dir. Dominic Fraser",
+      "detail": "CPC",
+      "kind": "Short",
+      "stills": [
+        "accomplice-1",
+        "accomplice-2",
+        "accomplice-3",
+        "accomplice-4",
+        "accomplice-5",
+        "accomplice-6"
+      ],
+      "tint": "#112c30",
+      "era": "contemporary",
+      "slug": "accomplice",
+      "director": "Dominic Fraser",
+      "production": "CPC"
     },
     {
       "title": "Flush!",
@@ -57,42 +105,24 @@
         "flush-5"
       ],
       "tint": "#370b1a",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "flush",
+      "director": "Nico Bourgeais",
+      "production": "Fusion Alpha"
     },
     {
-      "title": "Vetala",
-      "credit": "Dir. Ajit Mann",
-      "detail": "M & K",
+      "title": "In Vitro Felicitas",
+      "credit": "Dir. Cyrus Mirzashafa",
+      "detail": "Thulsa Films",
       "kind": "Short",
       "stills": [
-        "vetala-1",
-        "vetala-2",
-        "vetala-3",
-        "vetala-4",
-        "vetala-5",
-        "vetala-6",
-        "vetala-7",
-        "vetala-8",
-        "vetala-9"
+        "invitrofelicitas-1"
       ],
-      "tint": "#292b16",
-      "era": "contemporary"
-    },
-    {
-      "title": "Accomplice",
-      "credit": "Dir. Dominic Fraser",
-      "detail": "CPC",
-      "kind": "Short",
-      "stills": [
-        "accomplice-1",
-        "accomplice-2",
-        "accomplice-3",
-        "accomplice-4",
-        "accomplice-5",
-        "accomplice-6"
-      ],
-      "tint": "#112c30",
-      "era": "contemporary"
+      "tint": "#311f11",
+      "era": "contemporary",
+      "slug": "invitrofelicitas",
+      "director": "Cyrus Mirzashafa",
+      "production": "Thulsa Films"
     },
     {
       "title": "Confess",
@@ -107,7 +137,10 @@
         "confess-5"
       ],
       "tint": "#391808",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "confess",
+      "director": "Ajit Mann",
+      "production": "M & K"
     },
     {
       "title": "Memories of a Life",
@@ -122,18 +155,10 @@
         "moal-5"
       ],
       "tint": "#3a0811",
-      "era": "contemporary"
-    },
-    {
-      "title": "In Vitro Felicitas",
-      "credit": "Dir. Cyrus Mirzashafa",
-      "detail": "Thulsa Films",
-      "kind": "Short",
-      "stills": [
-        "invitrofelicitas-1"
-      ],
-      "tint": "#311f11",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "moal",
+      "director": "Ellie Hague",
+      "production": "Thulsa Films"
     },
     {
       "title": "Brownies or Ice Cream?",
@@ -146,7 +171,10 @@
         "brownies-or-ice-cream-3"
       ],
       "tint": "#261c1c",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "brownies-or-ice-cream",
+      "director": "Stefan Poelman",
+      "production": "Pink Momentum"
     }
   ],
   "narrative_more": [
@@ -206,7 +234,11 @@
         "66north-r3"
       ],
       "tint": "#07183a",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "66north",
+      "director": "Dann Emmons",
+      "production": "One Thousand Eyes",
+      "note": "Talent Oli Cook"
     },
     {
       "title": "John Smith’s",
@@ -225,7 +257,10 @@
         "johnsmiths-r3"
       ],
       "tint": "#341f0d",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "johnsmiths",
+      "director": "Dann Emmons",
+      "production": "One Thousand Eyes"
     },
     {
       "title": "Aberfeldy",
@@ -244,7 +279,10 @@
         "aberfeldy-r4"
       ],
       "tint": "#35220c",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "aberfeldy",
+      "director": "Jess Leuty",
+      "production": "CPC"
     },
     {
       "title": "Vision Pro",
@@ -263,7 +301,10 @@
         "vision-pro-5"
       ],
       "tint": "#36220b",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "vision-pro",
+      "director": "Nico Bourgeais",
+      "production": "CPC"
     },
     {
       "title": "London Jazz Festival",
@@ -283,7 +324,10 @@
         "london-jazz-festival-r3"
       ],
       "tint": "#3b1207",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "london-jazz-festival",
+      "director": "Lauren Smith",
+      "production": "Serious Music"
     },
     {
       "title": "Phox Water",
@@ -296,7 +340,10 @@
         "phox-r3"
       ],
       "tint": "#37210a",
-      "era": "contemporary"
+      "era": "contemporary",
+      "slug": "phox-water",
+      "director": "",
+      "production": ""
     }
   ],
   "commercial_more": [
@@ -305,5 +352,171 @@
     "LJF 25",
     "Elizabeth Day",
     "NAQ Music"
-  ]
+  ],
+  "cv": {
+    "feature": [
+      [
+        "Nice To See You Anyway",
+        "Cyrus Mirzashafa",
+        "Thulsa Films"
+      ],
+      [
+        "Cynthia",
+        "James Hood",
+        "Banshee"
+      ]
+    ],
+    "short": [
+      [
+        "Carry With Both Hands",
+        "Tim Rogg",
+        "St Maur Pictures"
+      ],
+      [
+        "If (Starring Clive Russell)",
+        "Cyrus Mirzashafa",
+        "Thulsa Films"
+      ],
+      [
+        "Vetala",
+        "Ajit Mann",
+        "M & K"
+      ],
+      [
+        "Operation Dynamo",
+        "George Rowlands",
+        "CPC"
+      ],
+      [
+        "Flush!",
+        "Nico Bourgeais",
+        "Fusion Alpha"
+      ],
+      [
+        "In Vitro Felicitas",
+        "Cyrus Mirzashafa",
+        "Thulsa Films"
+      ],
+      [
+        "Mired",
+        "James Hood",
+        "Banshee"
+      ],
+      [
+        "Memories of a Life",
+        "Ellie Hague",
+        "Thulsa Films"
+      ],
+      [
+        "Dukh",
+        "Ajit Mann",
+        "M & K"
+      ],
+      [
+        "Brownies or Ice Cream?",
+        "Stefan Poelman",
+        "Pink Momentum"
+      ],
+      [
+        "What Could’ve Been?",
+        "Niamh Ennis",
+        "CPC"
+      ],
+      [
+        "Would Smith?",
+        "Matty Mahoney",
+        "Mohawk"
+      ],
+      [
+        "Confess",
+        "Ajit Mann",
+        "M & K"
+      ]
+    ],
+    "commercial": [
+      [
+        "66°North",
+        "Dann Emmons",
+        "One Thousand Eyes"
+      ],
+      [
+        "John Smith’s",
+        "Dann Emmons",
+        "One Thousand Eyes"
+      ],
+      [
+        "Aberfeldy",
+        "Jess Leuty",
+        "CPC"
+      ],
+      [
+        "Vision Pro",
+        "Nico Bourgeais",
+        "CPC"
+      ],
+      [
+        "Mars",
+        "",
+        ""
+      ],
+      [
+        "Peroni",
+        "",
+        ""
+      ],
+      [
+        "LJF 25",
+        "Lauren Smith",
+        "Serious Music"
+      ],
+      [
+        "Serious Music",
+        "",
+        ""
+      ],
+      [
+        "Elizabeth Day",
+        "",
+        ""
+      ],
+      [
+        "NAQ Music",
+        "",
+        ""
+      ],
+      [
+        "Phox Water",
+        "",
+        ""
+      ]
+    ]
+  },
+  "awards": [
+    [
+      "Winner",
+      "Best Cinematography",
+      "SSIFF 2025"
+    ],
+    [
+      "Nominee",
+      "Best Cinematography",
+      "YETI Film Fest"
+    ],
+    [
+      "Winner",
+      "Best Film",
+      "LakeCity"
+    ],
+    [
+      "Winner",
+      "Best Film",
+      "Cambridge Short Film Festival"
+    ],
+    [
+      "Winner",
+      "Best Drama",
+      "Arena 51 Film Festival"
+    ]
+  ],
+  "about": "Charlie Painter is a narrative features & shorts cinematographer, based in London, and a British Society of Cinematographers mentee."
 }

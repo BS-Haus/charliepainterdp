@@ -14,147 +14,226 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body class="is-intro">
-  <!-- HEADER: always there -->
+<body>
+  <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections. Frosts the work passing under -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter</a>
     <p class="top-role mono">Director of photography<span>London</span></p>
+    <div class="switch-cell">
+      <div class="switch" role="radiogroup" aria-label="Show first">
+        <button role="radio" aria-checked="true" data-first="narrative">Narrative</button>
+        <button role="radio" aria-checked="false" data-first="commercial">Commercial</button>
+        <span class="switch-lens" aria-hidden="true"></span>
+      </div>
+    </div>
     <nav class="nav mono" aria-label="Sections">
       <a href="#work">Work</a>
-      <a href="#about">About</a>
+      <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- THE GATE: one screen, the whole roll running through beneath it, and a bar of switches + a map you can scrub -->
-  <section class="gate" id="work" aria-label="Work">
-    <div class="viewer" id="viewer">
-      <div class="frame" id="frame">
-        <video id="reel" muted playsinline loop preload="auto" poster="/media/reel-narrative-v2-poster.jpg"></video>
-        <img class="still is-front" id="still" alt="" />
-        <img class="still" id="still-b" alt="" />
-        <span class="shade" aria-hidden="true"></span>
-        <p class="corner c-tl mono"><span class="rec" aria-hidden="true"></span><span id="v-n">R1</span><span id="v-kind">Showreel</span></p>
-        <p class="corner c-tr mono" id="v-count"></p>
-        <div class="corner c-b"><h2 class="st-title" id="v-title">Narrative showreel</h2><p class="st-credit mono" id="v-credit"></p><button class="st-play mono" id="v-play">Watch with sound ↗</button></div>
+  <main>
+    <!-- WORK: one page; the switch decides which half comes first -->
+    <div class="work" id="work">
+      <div class="work-head mono">
+        <p><span class="rec" aria-hidden="true"></span>Selected work</p>
+        <p class="hint"><span class="hint-touch">Swipe a frame for more stills</span><span class="hint-mouse">Hover a frame, then swipe or drag for more stills</span></p>
       </div>
-    </div>
-    <div class="roll" id="roll" aria-label="The roll — scroll, drag or use the arrow keys to move through the work" tabindex="0">
-      <div class="strip" id="strip">
-        <div class="leader" aria-hidden="true"><span class="mono">Head</span></div>
-        <div class="run" data-item="0" data-half="1" data-type="reel" data-group="narrative" data-era="all" data-n="R1" data-title="Narrative showreel" data-credit="Features &amp; shorts" data-kind="Showreel" data-src="/media/reel-narrative-v3.mp4" data-poster="/media/reel-narrative-v2-poster.jpg" data-provider="vimeo" data-id="1149629056"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/reel-narrative-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/reel-narrative-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/reel-narrative-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/reel-narrative-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/reel-narrative-5.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/reel-narrative-6.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="6"><img src="/media/thumbs/reel-narrative-7.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="7"><img src="/media/thumbs/reel-narrative-8.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">R1</p></div>
-        <div class="run" data-item="1" data-type="film" data-group="narrative" data-era="contemporary" data-n="01" data-title="If" data-credit="Dir. Cyrus Mirzashafa · Starring Clive Russell · Thulsa Films" data-kind="Short" data-provider="vimeo" data-id="1088718265"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/iffilm-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/iffilm-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/iffilm-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/iffilm-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/iffilm-5.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">01</p></div>
-        <div class="run" data-item="2" data-type="film" data-group="narrative" data-era="period" data-n="02" data-title="Operation Dynamo" data-credit="Starring George Rowlands, Nico Bourgeais, Phoebe Shepherd · Thulsa Films" data-kind="Short" data-provider="vimeo" data-id="1126894625" data-hash="97279ba9a1"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/operationdynamo-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/operationdynamo-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/operationdynamo-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/operationdynamo-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/operationdynamo-5.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">02</p></div>
-        <div class="run" data-item="3" data-type="film" data-group="narrative" data-era="contemporary" data-n="03" data-title="Flush!" data-credit="Dir. Nico Bourgeais · Fusion Alpha" data-kind="Short" data-provider="vimeo" data-id="1133511001" data-hash="98df98088f"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/flush-1.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/flush-2.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/flush-3.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/flush-4.jpg" alt="" loading="eager" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/flush-5.jpg" alt="" loading="eager" decoding="async" /></span></div><p class="run-label mono">03</p></div>
-        <div class="run" data-item="4" data-type="film" data-group="narrative" data-era="contemporary" data-n="04" data-title="Vetala" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/vetala-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/vetala-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/vetala-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/vetala-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/vetala-5.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/vetala-6.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="6"><img src="/media/thumbs/vetala-7.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="7"><img src="/media/thumbs/vetala-8.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="8"><img src="/media/thumbs/vetala-9.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">04</p></div>
-        <div class="run" data-item="5" data-type="film" data-group="narrative" data-era="contemporary" data-n="05" data-title="Accomplice" data-credit="Dir. Dominic Fraser · CPC" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/accomplice-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/accomplice-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/accomplice-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/accomplice-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/accomplice-5.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/accomplice-6.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">05</p></div>
-        <div class="run" data-item="6" data-type="film" data-group="narrative" data-era="contemporary" data-n="06" data-title="Confess" data-credit="Dir. Ajit Mann · M &amp; K" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/confess-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/confess-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/confess-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/confess-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/confess-5.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">06</p></div>
-        <div class="run" data-item="7" data-type="film" data-group="narrative" data-era="contemporary" data-n="07" data-title="Memories of a Life" data-credit="Dir. Ellie Hague · Thulsa Films" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/moal-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/moal-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/moal-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/moal-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/moal-5.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">07</p></div>
-        <div class="run" data-item="8" data-type="film" data-group="narrative" data-era="contemporary" data-n="08" data-title="In Vitro Felicitas" data-credit="Dir. Cyrus Mirzashafa · Thulsa Films" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">08</p></div>
-        <div class="run" data-item="9" data-type="film" data-group="narrative" data-era="contemporary" data-n="09" data-title="Brownies or Ice Cream?" data-credit="Dir. Stefan Poelman · Pink Momentum" data-kind="Short"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">09</p></div>
-        <div class="run" data-item="10" data-half="1" data-type="reel" data-group="commercial" data-era="all" data-n="R2" data-title="Commercial showreel" data-credit="Commercials &amp; brand films" data-kind="Showreel" data-src="/media/reel-commercial-v2.mp4" data-poster="/media/reel-commercial-v2-poster.jpg" data-provider="vimeo" data-id="1188991301"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/reel-commercial-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/reel-commercial-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/reel-commercial-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/reel-commercial-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/reel-commercial-5.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/reel-commercial-6.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="6"><img src="/media/thumbs/reel-commercial-7.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="7"><img src="/media/thumbs/reel-commercial-8.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">R2</p></div>
-        <div class="run" data-item="11" data-type="film" data-group="commercial" data-era="contemporary" data-n="10" data-title="66°North — ‘Calming the Storm’" data-credit="Dir. Dann Emmons · One Thousand Eyes · Talent Oli Cook" data-kind="Commercial" data-provider="vimeo" data-id="1213570673" data-hash="ef3a99b161"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/66north-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/66north-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/66north-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/66north-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/66north-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">10</p></div>
-        <div class="run" data-item="12" data-type="film" data-group="commercial" data-era="contemporary" data-n="11" data-title="John Smith’s — ‘Traditions’" data-credit="Dir. Dann Emmons · One Thousand Eyes" data-kind="Commercial" data-provider="vimeo" data-id="1189764769"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">11</p></div>
-        <div class="run" data-item="13" data-type="film" data-group="commercial" data-era="contemporary" data-n="12" data-title="Aberfeldy" data-credit="Dir. Jess Leuty · CPC" data-kind="Brand film" data-provider="vimeo" data-id="1176200194"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">12</p></div>
-        <div class="run" data-item="14" data-type="film" data-group="commercial" data-era="contemporary" data-n="13" data-title="Vision Pro" data-credit="Dir. Nico Bourgeais · CPC" data-kind="Commercial" data-provider="vimeo" data-id="926185147"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">13</p></div>
-        <div class="run" data-item="15" data-type="film" data-group="commercial" data-era="contemporary" data-n="14" data-title="London Jazz Festival" data-credit="Dir. Lauren Smith · Serious Music" data-kind="Brand film" data-provider="youtube" data-id="ugaZUGlBulc"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="3"><img src="/media/thumbs/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="4"><img src="/media/thumbs/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="5"><img src="/media/thumbs/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">14</p></div>
-        <div class="run" data-item="16" data-type="film" data-group="commercial" data-era="contemporary" data-n="15" data-title="Phox Water" data-credit="" data-kind="Commercial"><div class="cells"><span class="cell" data-f="0"><img src="/media/thumbs/phox-r1.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="1"><img src="/media/thumbs/phox-r2.jpg" alt="" loading="lazy" decoding="async" /></span><span class="cell" data-f="2"><img src="/media/thumbs/phox-r3.jpg" alt="" loading="lazy" decoding="async" /></span></div><p class="run-label mono">15</p></div>
-        <div class="leader tail" aria-hidden="true"><span class="mono">Tail</span></div>
-      </div>
-      <span class="gate-line" aria-hidden="true"></span>
-    </div>
-    <div class="deck mono">
-      <div class="togs" role="group" aria-label="Show"><div class="tog-set" data-dim="era"><button class="tog is-on" data-val="period" aria-pressed="true" style="--i:0"><i aria-hidden="true"></i>Period</button><button class="tog is-on" data-val="contemporary" aria-pressed="true" style="--i:1"><i aria-hidden="true"></i>Contemporary</button></div><div class="tog-set" data-dim="group"><button class="tog is-on" data-val="narrative" aria-pressed="true" style="--i:2"><i aria-hidden="true"></i>Narrative</button><button class="tog is-on" data-val="commercial" aria-pressed="true" style="--i:3"><i aria-hidden="true"></i>Commercial</button></div></div>
-      <div class="map" id="map" aria-label="Map of the work — click or drag to scrub"><div class="half" data-group="narrative" style="flex-grow:52"><div class="segs"><button class="seg seg-reel" data-item="0" style="flex-grow:8;--i:0" aria-label="Narrative showreel"></button><button class="seg" data-item="1" style="flex-grow:5;--i:1" aria-label="If"></button><button class="seg" data-item="2" style="flex-grow:5;--i:2" aria-label="Operation Dynamo"></button><button class="seg" data-item="3" style="flex-grow:5;--i:3" aria-label="Flush!"></button><button class="seg" data-item="4" style="flex-grow:9;--i:4" aria-label="Vetala"></button><button class="seg" data-item="5" style="flex-grow:6;--i:5" aria-label="Accomplice"></button><button class="seg" data-item="6" style="flex-grow:5;--i:6" aria-label="Confess"></button><button class="seg" data-item="7" style="flex-grow:5;--i:7" aria-label="Memories of a Life"></button><button class="seg" data-item="8" style="flex-grow:1;--i:8" aria-label="In Vitro Felicitas"></button><button class="seg" data-item="9" style="flex-grow:3;--i:9" aria-label="Brownies or Ice Cream?"></button></div></div><div class="half" data-group="commercial" style="flex-grow:36"><div class="segs"><button class="seg seg-reel" data-item="10" style="flex-grow:8;--i:10" aria-label="Commercial showreel"></button><button class="seg" data-item="11" style="flex-grow:5;--i:11" aria-label="66°North — ‘Calming the Storm’"></button><button class="seg" data-item="12" style="flex-grow:4;--i:12" aria-label="John Smith’s — ‘Traditions’"></button><button class="seg" data-item="13" style="flex-grow:5;--i:13" aria-label="Aberfeldy"></button><button class="seg" data-item="14" style="flex-grow:5;--i:14" aria-label="Vision Pro"></button><button class="seg" data-item="15" style="flex-grow:6;--i:15" aria-label="London Jazz Festival"></button><button class="seg" data-item="16" style="flex-grow:3;--i:16" aria-label="Phox Water"></button></div></div><span class="map-head" id="map-head" aria-hidden="true"></span></div>
-    </div>
-    <span class="fade" aria-hidden="true"></span>
-  </section>
-
-  <!-- THE SHEET: everything else, numbered, on the same grid -->
-  <div class="sheet">
-    <section class="row" id="about">
-      <p class="row-head mono"><span>01</span>About</p>
-      <div class="row-body">
-        <p class="about-line">A narrative features &amp; shorts cinematographer based in London, and a British Society of Cinematographers mentee.</p>
-      </div>
-    </section>
-
-    <section class="row">
-      <p class="row-head mono"><span>02</span>Awards</p>
-      <ul class="row-body awards">
-        <li><span class="mono">Winner</span><b>Best Cinematography</b><span class="mono">SSIFF 2025</span></li>
-        <li><span class="mono">Nominee</span><b>Best Cinematography</b><span class="mono">YETI Film Fest</span></li>
-        <li><span class="mono">Winner</span><b>Best Film</b><span class="mono">LakeCity</span></li>
-        <li><span class="mono">Winner</span><b>Best Film</b><span class="mono">Cambridge Short Film Festival</span></li>
-        <li><span class="mono">Winner</span><b>Best Drama</b><span class="mono">Arena 51 Film Festival</span></li>
-      </ul>
-    </section>
-
-    <a class="row press" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
-      <p class="row-head mono"><span>03</span>Press</p>
-      <div class="row-body">
-        <blockquote>“Eighty-six years ago today, my great-great-uncle, Jack, was fighting for his life in Dunkirk.”</blockquote>
-        <p class="press-src mono">British Cinematographer — on Operation Dynamo <i>↗</i></p>
-      </div>
-    </a>
-
-    <details class="row credits">
-      <summary class="row-head mono"><span>04</span>Full credits<i class="plus" aria-hidden="true"></i></summary>
-      <div class="also-cols">
-        <div class="also-col">
-          <p class="mono">Narrative — also shot</p>
-          <ul class="also-list mono">
-          <li><span>Carry With Both Hands</span><span>Tim Rogg / St Maur Pictures</span><span>Feature</span></li>
-          <li><span>Cynthia</span><span>James Hood / Banshee</span><span>Short</span></li>
-          <li><span>What Could’ve Been?</span><span>Niamh Ennis / CPC</span><span>Short</span></li>
-          <li><span>Would Smith?</span><span>Matty Mahoney / Mohawk</span><span>Short</span></li>
-          <li><span>Nice To See You Anyway</span><span>Cyrus Mirzashafa / Thulsa Films</span><span>Short</span></li>
-          <li><span>Mired</span><span>James Hood / Banshee</span><span>Short</span></li>
-          <li><span>Dukh</span><span>Ajit Mann / M &amp; K</span><span>Short</span></li>
-          </ul>
+      <div class="groups" id="groups">
+      <section class="group" data-group="narrative" aria-label="Narrative">
+        <header class="group-head mono"><h2>Narrative</h2><span>9 films + showreel</span></header>
+        <article class="tile tile-reel" data-slug="narrativeshowreel">
+          <video muted playsinline loop preload="none" poster="/media/reel-narrative-v2-poster.jpg" data-src="/media/reel-narrative-v3.mp4"></video>
+          <div class="tile-cap"><p class="tile-kind mono"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/narrativeshowreel">Narrative showreel</a></h3><p class="tile-credit mono">Features &amp; shorts</p></div>
+          <span class="tile-watch mono" aria-hidden="true">Watch with sound ↗</span>
+        </article>
+        <div class="grid">
+        <article class="tile" data-slug="iffilm">
+          <div class="slides"><img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/iffilm-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/iffilm">If</a></h3><p class="tile-credit mono">Cyrus Mirzashafa / Thulsa Films</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="vetala">
+          <div class="slides"><img src="/media/stills/vetala-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/vetala-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-6.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-7.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-8.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-9.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/vetala">Vetala</a></h3><p class="tile-credit mono">Ajit Mann / M &amp; K</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="operationdynamo">
+          <div class="slides"><img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit mono">George Rowlands / CPC</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="accomplice">
+          <div class="slides"><img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-6.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/accomplice">Accomplice</a></h3><p class="tile-credit mono">Dominic Fraser / CPC</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="flush">
+          <div class="slides"><img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/flush">Flush!</a></h3><p class="tile-credit mono">Nico Bourgeais / Fusion Alpha</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="invitrofelicitas">
+          <div class="slides"><img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit mono">Cyrus Mirzashafa / Thulsa Films</p></div>
+          <div class="tile-bars" aria-hidden="true"></div>
+        </article>
+        <article class="tile" data-slug="confess">
+          <div class="slides"><img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/confess">Confess</a></h3><p class="tile-credit mono">Ajit Mann / M &amp; K</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="moal">
+          <div class="slides"><img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/moal">Memories of a Life</a></h3><p class="tile-credit mono">Ellie Hague / Thulsa Films</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="brownies-or-ice-cream">
+          <div class="slides"><img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit mono">Stefan Poelman / Pink Momentum</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
         </div>
-        <div class="also-col">
-          <p class="mono">Commercial — also shot</p>
-          <p class="also-line">Mars · Peroni · LJF 25 · Elizabeth Day · NAQ Music</p>
+      </section>
+      <section class="group" data-group="commercial" aria-label="Commercial">
+        <header class="group-head mono"><h2>Commercial</h2><span>6 projects + showreel</span></header>
+        <article class="tile tile-reel" data-slug="commercial-showreel">
+          <video muted playsinline loop preload="none" poster="/media/reel-commercial-v2-poster.jpg" data-src="/media/reel-commercial-v2.mp4"></video>
+          <div class="tile-cap"><p class="tile-kind mono"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/commercial-showreel">Commercial showreel</a></h3><p class="tile-credit mono">Commercials &amp; brand films</p></div>
+          <span class="tile-watch mono" aria-hidden="true">Watch with sound ↗</span>
+        </article>
+        <div class="grid">
+        <article class="tile" data-slug="66north">
+          <div class="slides"><img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit mono">Dann Emmons / One Thousand Eyes</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="johnsmiths">
+          <div class="slides"><img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit mono">Dann Emmons / One Thousand Eyes</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="aberfeldy">
+          <div class="slides"><img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/aberfeldy">Aberfeldy</a></h3><p class="tile-credit mono">Jess Leuty / CPC</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="vision-pro">
+          <div class="slides"><img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/vision-pro">Vision Pro</a></h3><p class="tile-credit mono">Nico Bourgeais / CPC</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="london-jazz-festival">
+          <div class="slides"><img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit mono">Lauren Smith / Serious Music</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
+        <article class="tile" data-slug="phox-water">
+          <div class="slides"><img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/phox-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/phox-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/phox-water">Phox Water</a></h3><p class="tile-credit mono">Commercial</p></div>
+          <div class="tile-bars" aria-hidden="true"><i class="is-on"></i><i></i><i></i></div><button class="tile-step tile-prev" aria-label="Previous still">←</button><button class="tile-step tile-next" aria-label="Next still">→</button>
+        </article>
         </div>
+      </section>
       </div>
-    </details>
+    </div>
 
-    <section class="row" id="contact">
-      <p class="row-head mono"><span>05</span>Contact</p>
-      <div class="row-body">
-        <a class="contact-mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-        <nav class="contact-links mono" aria-label="Elsewhere">
-          <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
-          <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
-          <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
-          <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
-        </nav>
+    <!-- CV: the standard list, because it's what producers read -->
+    <section class="cv" id="cv" aria-label="CV">
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="mono">Director / Prod Co.</p></header>
+      <div class="cv-block">
+        <h3 class="mono">Feature film</h3>
+        <ul class="cv-list">
+          <li><span class="cv-t">Nice To See You Anyway</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
+          <li><span class="cv-t">Cynthia</span><span class="cv-c">James Hood / Banshee</span></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="mono">Short film</h3>
+        <ul class="cv-list">
+          <li><span class="cv-t">Carry With Both Hands</span><span class="cv-c">Tim Rogg / St Maur Pictures</span></li>
+          <li><span class="cv-t">If (Starring Clive Russell)</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
+          <li><span class="cv-t">Vetala</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
+          <li><span class="cv-t">Operation Dynamo</span><span class="cv-c">George Rowlands / CPC</span></li>
+          <li><span class="cv-t">Flush!</span><span class="cv-c">Nico Bourgeais / Fusion Alpha</span></li>
+          <li><span class="cv-t">In Vitro Felicitas</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
+          <li><span class="cv-t">Mired</span><span class="cv-c">James Hood / Banshee</span></li>
+          <li><span class="cv-t">Memories of a Life</span><span class="cv-c">Ellie Hague / Thulsa Films</span></li>
+          <li><span class="cv-t">Dukh</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
+          <li><span class="cv-t">Brownies or Ice Cream?</span><span class="cv-c">Stefan Poelman / Pink Momentum</span></li>
+          <li><span class="cv-t">What Could’ve Been?</span><span class="cv-c">Niamh Ennis / CPC</span></li>
+          <li><span class="cv-t">Would Smith?</span><span class="cv-c">Matty Mahoney / Mohawk</span></li>
+          <li><span class="cv-t">Confess</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="mono">Commercial</h3>
+        <ul class="cv-list">
+          <li><span class="cv-t">66°North</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
+          <li><span class="cv-t">John Smith’s</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
+          <li><span class="cv-t">Aberfeldy</span><span class="cv-c">Jess Leuty / CPC</span></li>
+          <li><span class="cv-t">Vision Pro</span><span class="cv-c">Nico Bourgeais / CPC</span></li>
+          <li><span class="cv-t">Mars</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">Peroni</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">LJF 25</span><span class="cv-c">Lauren Smith / Serious Music</span></li>
+          <li><span class="cv-t">Serious Music</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">Elizabeth Day</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">NAQ Music</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">Phox Water</span><span class="cv-c"></span></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="mono">Awards</h3>
+        <ul class="cv-list awards">
+          <li><span class="mono">Winner</span><span class="cv-t">Best Cinematography</span><span class="cv-c">SSIFF 2025</span></li>
+          <li><span class="mono">Nominee</span><span class="cv-t">Best Cinematography</span><span class="cv-c">YETI Film Fest</span></li>
+          <li><span class="mono">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">LakeCity</span></li>
+          <li><span class="mono">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">Cambridge Short Film Festival</span></li>
+          <li><span class="mono">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
+        </ul>
       </div>
     </section>
 
-    <footer class="row fine mono"><span>© <span class="year">2026</span> Charlie Painter</span><span>London, UK</span><a href="#top">Top ↑</a></footer>
+    <!-- CONTACT -->
+    <section class="contact" id="contact" aria-label="Contact">
+      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="mono">London, UK</p></header>
+      <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
+      <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+      <nav class="links mono" aria-label="Elsewhere">
+        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
+        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
+        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
+        <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="foot mono"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+
+  <!-- PROJECT: slides up over the page — the film, its credits, then every still -->
+  <div class="proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
+    <div class="proj-bar mono">
+      <a class="proj-back" href="#work">← Selected work</a>
+      <span class="proj-pos" id="proj-pos"></span>
+      <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
+    </div>
+    <div class="proj-scroll" id="proj-scroll">
+      <div class="proj-player" id="proj-player"></div>
+      <header class="proj-head">
+        <h2 class="proj-title" id="proj-title"></h2>
+        <dl class="proj-credits mono" id="proj-credits"></dl>
+      </header>
+      <div class="proj-stills" id="proj-stills"></div>
+      <a class="proj-follow" id="proj-follow" href="#"><span class="mono">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
+    </div>
   </div>
 
-  <!-- VIEWER -->
-  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Viewer" hidden>
-    <div class="lb-bar mono">
-      <span id="lb-title"></span>
-      <span id="lb-count"></span>
-      <button id="lb-close">Close ✕</button>
-    </div>
-    <div class="lb-stage" id="lb-stage"></div>
-    <div class="lb-nav mono" id="lb-nav">
-      <button id="lb-prev">← Prev</button>
-      <button id="lb-film" hidden>Play film ↗</button>
-      <button id="lb-next">Next →</button>
-    </div>
-  </div>
-
+  <script>window.PROJECTS = [{"slug": "narrativeshowreel", "group": "narrative", "title": "Narrative showreel", "kind": "Showreel", "note": "Features & shorts", "director": "", "production": "", "video": {"provider": "vimeo", "id": "1149629056"}, "stills": ["reel-narrative-1", "reel-narrative-2", "reel-narrative-3", "reel-narrative-4", "reel-narrative-5", "reel-narrative-6", "reel-narrative-7", "reel-narrative-8"]}, {"slug": "iffilm", "group": "narrative", "title": "If", "kind": "Short", "note": "Starring Clive Russell", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": {"provider": "vimeo", "id": "1088718265"}, "stills": ["iffilm-1", "iffilm-2", "iffilm-3", "iffilm-4", "iffilm-5"]}, {"slug": "vetala", "group": "narrative", "title": "Vetala", "kind": "Short", "note": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["vetala-1", "vetala-2", "vetala-3", "vetala-4", "vetala-5", "vetala-6", "vetala-7", "vetala-8", "vetala-9"]}, {"slug": "operationdynamo", "group": "narrative", "title": "Operation Dynamo", "kind": "Short", "note": "", "director": "George Rowlands", "production": "CPC", "video": {"provider": "vimeo", "id": "1126894625", "hash": "97279ba9a1"}, "stills": ["operationdynamo-1", "operationdynamo-2", "operationdynamo-3", "operationdynamo-4", "operationdynamo-5"]}, {"slug": "accomplice", "group": "narrative", "title": "Accomplice", "kind": "Short", "note": "", "director": "Dominic Fraser", "production": "CPC", "video": null, "stills": ["accomplice-1", "accomplice-2", "accomplice-3", "accomplice-4", "accomplice-5", "accomplice-6"]}, {"slug": "flush", "group": "narrative", "title": "Flush!", "kind": "Short", "note": "", "director": "Nico Bourgeais", "production": "Fusion Alpha", "video": {"provider": "vimeo", "id": "1133511001", "hash": "98df98088f"}, "stills": ["flush-1", "flush-2", "flush-3", "flush-4", "flush-5"]}, {"slug": "invitrofelicitas", "group": "narrative", "title": "In Vitro Felicitas", "kind": "Short", "note": "", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": null, "stills": ["invitrofelicitas-1"]}, {"slug": "confess", "group": "narrative", "title": "Confess", "kind": "Short", "note": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["confess-1", "confess-2", "confess-3", "confess-4", "confess-5"]}, {"slug": "moal", "group": "narrative", "title": "Memories of a Life", "kind": "Short", "note": "", "director": "Ellie Hague", "production": "Thulsa Films", "video": null, "stills": ["moal-1", "moal-2", "moal-3", "moal-4", "moal-5"]}, {"slug": "brownies-or-ice-cream", "group": "narrative", "title": "Brownies or Ice Cream?", "kind": "Short", "note": "", "director": "Stefan Poelman", "production": "Pink Momentum", "video": null, "stills": ["brownies-or-ice-cream-1", "brownies-or-ice-cream-2", "brownies-or-ice-cream-3"]}, {"slug": "commercial-showreel", "group": "commercial", "title": "Commercial showreel", "kind": "Showreel", "note": "Commercials & brand films", "director": "", "production": "", "video": {"provider": "vimeo", "id": "1188991301"}, "stills": ["reel-commercial-1", "reel-commercial-2", "reel-commercial-3", "reel-commercial-4", "reel-commercial-5", "reel-commercial-6", "reel-commercial-7", "reel-commercial-8"]}, {"slug": "66north", "group": "commercial", "title": "66°North ‘Calming the Storm’", "kind": "Commercial", "note": "Talent Oli Cook", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1213570673", "hash": "ef3a99b161"}, "stills": ["66north-2", "66north-1", "66north-r1", "66north-r2", "66north-r3"]}, {"slug": "johnsmiths", "group": "commercial", "title": "John Smith’s ‘Traditions’", "kind": "Commercial", "note": "", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1189764769"}, "stills": ["johnsmiths-1", "johnsmiths-r1", "johnsmiths-r2", "johnsmiths-r3"]}, {"slug": "aberfeldy", "group": "commercial", "title": "Aberfeldy", "kind": "Brand film", "note": "", "director": "Jess Leuty", "production": "CPC", "video": {"provider": "vimeo", "id": "1176200194"}, "stills": ["aberfeldy-2", "aberfeldy-r1", "aberfeldy-r2", "aberfeldy-r3", "aberfeldy-r4"]}, {"slug": "vision-pro", "group": "commercial", "title": "Vision Pro", "kind": "Commercial", "note": "", "director": "Nico Bourgeais", "production": "CPC", "video": {"provider": "vimeo", "id": "926185147"}, "stills": ["vision-pro-1", "vision-pro-2", "vision-pro-3", "vision-pro-4", "vision-pro-5"]}, {"slug": "london-jazz-festival", "group": "commercial", "title": "London Jazz Festival", "kind": "Brand film", "note": "", "director": "Lauren Smith", "production": "Serious Music", "video": {"provider": "youtube", "id": "ugaZUGlBulc"}, "stills": ["london-jazz-festival-1", "london-jazz-festival-2", "london-jazz-festival-3", "london-jazz-festival-r1", "london-jazz-festival-r2", "london-jazz-festival-r3"]}, {"slug": "phox-water", "group": "commercial", "title": "Phox Water", "kind": "Commercial", "note": "", "director": "", "production": "", "video": null, "stills": ["phox-r1", "phox-r2", "phox-r3"]}];</script>
   <script src="/main.js" defer></script>
 </body>
 </html>
