@@ -14,24 +14,24 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:wght@400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-  <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections. Frosts the work passing under -->
+  <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter</a>
     <p class="top-role mono">Director of photography<span>London</span></p>
     <div class="switch-cell">
-      <div class="switch" role="radiogroup" aria-label="Show first">
+      <div class="switch mono" role="radiogroup" aria-label="Show first" data-first="narrative">
         <button role="radio" aria-checked="true" data-first="narrative">Narrative</button>
+        <span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span>
         <button role="radio" aria-checked="false" data-first="commercial">Commercial</button>
-        <span class="switch-lens" aria-hidden="true"></span>
       </div>
     </div>
     <nav class="nav mono" aria-label="Sections">
-      <a href="#work">Work</a>
+      <a href="#work">Selected work</a>
       <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -40,10 +40,6 @@
   <main>
     <!-- WORK: one page; the switch decides which half comes first -->
     <div class="work" id="work">
-      <div class="work-head mono">
-        <p><span class="rec" aria-hidden="true"></span>Selected work</p>
-        <p class="hint"><span class="hint-touch">Swipe a frame for more stills</span><span class="hint-mouse">Hover a frame, then swipe or drag for more stills</span></p>
-      </div>
       <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
         <header class="group-head mono"><h2>Narrative</h2><span>9 films + showreel</span></header>

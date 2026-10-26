@@ -12,16 +12,9 @@
      THE SWITCH — narrative or commercial first. Nothing is hidden: the two halves swap places
      ====================================================================== */
   const sw = $(".switch");
-  const lens = $(".switch-lens", sw);
   const swButtons = $$("button", sw);
   const groupsEl = $("#groups");
   const work = $("#work");
-
-  const placeLens = () => {
-    const on = swButtons.find((b) => b.getAttribute("aria-checked") === "true");
-    sw.style.setProperty("--lens-w", `${on.offsetWidth}px`);
-    sw.style.setProperty("--lens-x", `${on.offsetLeft - 3}px`);
-  };
 
   // Each half glides to its new place (measure, swap, then play the difference back)
   const putFirst = (group) => {
@@ -39,14 +32,18 @@
     });
   };
 
-  swButtons.forEach((b) => b.addEventListener("click", () => {
-    swButtons.forEach((x) => x.setAttribute("aria-checked", String(x === b)));
-    placeLens();
-    putFirst(b.dataset.first);
-  }));
-  placeLens();
-  document.fonts?.ready.then(placeLens);
-  window.addEventListener("resize", placeLens);
+  // click a side, or the switch itself to throw it the other way
+  const choose = (group) => {
+    swButtons.forEach((x) => x.setAttribute("aria-checked", String(x.dataset.first === group)));
+    sw.dataset.first = group;
+    putFirst(group);
+  };
+  swButtons.forEach((b) => b.addEventListener("click", () => choose(b.dataset.first)));
+  $(".switch-track", sw).addEventListener("click", () => choose(sw.dataset.first === "narrative" ? "commercial" : "narrative"));
+  sw.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]', sw).focus(); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]', sw).focus(); }
+  });
 
   /* ======================================================================
      FRAMES — each film's frame holds all its stills: swipe (touch or trackpad), drag, or use the arrows.
