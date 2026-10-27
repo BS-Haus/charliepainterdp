@@ -43,6 +43,7 @@
     const span = hero.offsetHeight - bar.offsetHeight;
     const c = clamp(window.scrollY / (span || 1), 0, 1);
     hero.style.setProperty("--cover", c.toFixed(3));
+    hero.classList.toggle("is-past", c > 0.35);   // what's playing has faded by now
     bar.classList.toggle("is-top", bar.getBoundingClientRect().top <= 0.5);
     if ((c >= 0.999) !== covered) {
       covered = c >= 0.999;
