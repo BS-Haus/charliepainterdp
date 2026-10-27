@@ -32,14 +32,22 @@
     });
   };
 
-  // click a side, or the switch itself to throw it the other way
+  // the red bar along the header's edge sits under whichever half comes first
+  const placeBar = () => {
+    const on = swButtons.find((b) => b.getAttribute("aria-checked") === "true");
+    sw.style.setProperty("--bar-w", `${on.offsetWidth}px`);
+    sw.style.setProperty("--bar-x", `${on.offsetLeft}px`);
+  };
   const choose = (group) => {
     swButtons.forEach((x) => x.setAttribute("aria-checked", String(x.dataset.first === group)));
     sw.dataset.first = group;
+    placeBar();
     putFirst(group);
   };
   swButtons.forEach((b) => b.addEventListener("click", () => choose(b.dataset.first)));
-  $(".switch-track", sw).addEventListener("click", () => choose(sw.dataset.first === "narrative" ? "commercial" : "narrative"));
+  placeBar();
+  document.fonts?.ready.then(placeBar);
+  window.addEventListener("resize", placeBar);
   sw.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]', sw).focus(); }
     if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]', sw).focus(); }

@@ -14,7 +14,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:wght@400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
@@ -22,16 +22,16 @@
   <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter</a>
-    <p class="top-role mono">Director of photography<span>London</span></p>
+    <p class="top-role label">Director of photography<span>London</span></p>
     <div class="switch-cell">
-      <div class="switch mono" role="radiogroup" aria-label="Show first" data-first="narrative">
+      <div class="switch label" role="radiogroup" aria-label="Show first" data-first="narrative">
         <button role="radio" aria-checked="true" data-first="narrative">Narrative</button>
-        <span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span>
         <button role="radio" aria-checked="false" data-first="commercial">Commercial</button>
+        <span class="switch-bar" aria-hidden="true"></span>
       </div>
     </div>
-    <nav class="nav mono" aria-label="Sections">
-      <a href="#work">Selected work</a>
+    <nav class="nav label" aria-label="Sections">
+      <a href="#work">Work</a>
       <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -42,97 +42,97 @@
     <div class="work" id="work">
       <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
-        <header class="group-head mono"><h2>Narrative</h2><span>9 films + showreel</span></header>
+        <header class="group-head label"><h2>Narrative</h2><span>9 films + showreel</span></header>
         <article class="tile tile-reel" data-slug="narrativeshowreel">
           <video muted playsinline loop preload="none" poster="/media/reel-narrative-v2-poster.jpg" data-src="/media/reel-narrative-v3.mp4"></video>
-          <div class="tile-cap"><p class="tile-kind mono"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/narrativeshowreel">Narrative showreel</a></h3><p class="tile-credit mono">Features &amp; shorts</p></div>
-          <span class="tile-watch mono" aria-hidden="true">Watch with sound ↗</span>
+          <div class="tile-cap"><p class="tile-kind label"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/narrativeshowreel">Narrative showreel</a></h3><p class="tile-credit credit">Features &amp; shorts</p></div>
+          <span class="tile-watch label" aria-hidden="true">Watch with sound ↗</span>
         </article>
         <div class="grid">
         <article class="tile" data-slug="iffilm">
           <div class="slides"><img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/iffilm-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/iffilm">If</a></h3><p class="tile-credit mono">Cyrus Mirzashafa / Thulsa Films</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/iffilm">If</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="vetala">
           <div class="slides"><img src="/media/stills/vetala-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/vetala-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-6.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-7.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-8.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-9.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/vetala">Vetala</a></h3><p class="tile-credit mono">Ajit Mann / M &amp; K</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 09</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/vetala">Vetala</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 09</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="operationdynamo">
           <div class="slides"><img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit mono">George Rowlands / CPC</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit credit">George Rowlands / CPC</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="accomplice">
           <div class="slides"><img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-6.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/accomplice">Accomplice</a></h3><p class="tile-credit mono">Dominic Fraser / CPC</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 06</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/accomplice">Accomplice</a></h3><p class="tile-credit credit">Dominic Fraser / CPC</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 06</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="flush">
           <div class="slides"><img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/flush">Flush!</a></h3><p class="tile-credit mono">Nico Bourgeais / Fusion Alpha</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/flush">Flush!</a></h3><p class="tile-credit credit">Nico Bourgeais / Fusion Alpha</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="invitrofelicitas">
           <div class="slides"><img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit mono">Cyrus Mirzashafa / Thulsa Films</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
           
         </article>
         <article class="tile" data-slug="confess">
           <div class="slides"><img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/confess">Confess</a></h3><p class="tile-credit mono">Ajit Mann / M &amp; K</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/confess">Confess</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="moal">
           <div class="slides"><img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/moal">Memories of a Life</a></h3><p class="tile-credit mono">Ellie Hague / Thulsa Films</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/moal">Memories of a Life</a></h3><p class="tile-credit credit">Ellie Hague / Thulsa Films</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="brownies-or-ice-cream">
           <div class="slides"><img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit mono">Stefan Poelman / Pink Momentum</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 03</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit credit">Stefan Poelman / Pink Momentum</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 03</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         </div>
       </section>
       <section class="group" data-group="commercial" aria-label="Commercial">
-        <header class="group-head mono"><h2>Commercial</h2><span>6 projects + showreel</span></header>
+        <header class="group-head label"><h2>Commercial</h2><span>6 projects + showreel</span></header>
         <article class="tile tile-reel" data-slug="commercial-showreel">
           <video muted playsinline loop preload="none" poster="/media/reel-commercial-v2-poster.jpg" data-src="/media/reel-commercial-v2.mp4"></video>
-          <div class="tile-cap"><p class="tile-kind mono"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/commercial-showreel">Commercial showreel</a></h3><p class="tile-credit mono">Commercials &amp; brand films</p></div>
-          <span class="tile-watch mono" aria-hidden="true">Watch with sound ↗</span>
+          <div class="tile-cap"><p class="tile-kind label"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/commercial-showreel">Commercial showreel</a></h3><p class="tile-credit credit">Commercials &amp; brand films</p></div>
+          <span class="tile-watch label" aria-hidden="true">Watch with sound ↗</span>
         </article>
         <div class="grid">
         <article class="tile" data-slug="66north">
           <div class="slides"><img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit mono">Dann Emmons / One Thousand Eyes</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="johnsmiths">
           <div class="slides"><img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit mono">Dann Emmons / One Thousand Eyes</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 04</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 04</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="aberfeldy">
           <div class="slides"><img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/aberfeldy">Aberfeldy</a></h3><p class="tile-credit mono">Jess Leuty / CPC</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/aberfeldy">Aberfeldy</a></h3><p class="tile-credit credit">Jess Leuty / CPC</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="vision-pro">
           <div class="slides"><img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/vision-pro">Vision Pro</a></h3><p class="tile-credit mono">Nico Bourgeais / CPC</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/vision-pro">Vision Pro</a></h3><p class="tile-credit credit">Nico Bourgeais / CPC</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="london-jazz-festival">
           <div class="slides"><img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit mono">Lauren Smith / Serious Music</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 06</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit credit">Lauren Smith / Serious Music</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 06</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="phox-water">
           <div class="slides"><img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/phox-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/phox-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/phox-water">Phox Water</a></h3><p class="tile-credit mono">Commercial</p></div>
-          <div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 03</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/phox-water">Phox Water</a></h3><p class="tile-credit credit">Commercial</p></div>
+          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 03</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         </div>
       </section>
@@ -141,16 +141,16 @@
 
     <!-- CV: the standard list, because it's what producers read -->
     <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="mono">Director / Prod Co.</p></header>
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">Director / Prod Co.</p></header>
       <div class="cv-block">
-        <h3 class="mono">Feature film</h3>
+        <h3 class="label">Feature film</h3>
         <ul class="cv-list">
           <li><span class="cv-t">Nice To See You Anyway</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
           <li><span class="cv-t">Cynthia</span><span class="cv-c">James Hood / Banshee</span></li>
         </ul>
       </div>
       <div class="cv-block">
-        <h3 class="mono">Short film</h3>
+        <h3 class="label">Short film</h3>
         <ul class="cv-list">
           <li><span class="cv-t">Carry With Both Hands</span><span class="cv-c">Tim Rogg / St Maur Pictures</span></li>
           <li><span class="cv-t">If (Starring Clive Russell)</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
@@ -168,7 +168,7 @@
         </ul>
       </div>
       <div class="cv-block">
-        <h3 class="mono">Commercial</h3>
+        <h3 class="label">Commercial</h3>
         <ul class="cv-list">
           <li><span class="cv-t">66°North</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
           <li><span class="cv-t">John Smith’s</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
@@ -184,23 +184,23 @@
         </ul>
       </div>
       <div class="cv-block">
-        <h3 class="mono">Awards</h3>
+        <h3 class="label">Awards</h3>
         <ul class="cv-list awards">
-          <li><span class="mono">Winner</span><span class="cv-t">Best Cinematography</span><span class="cv-c">SSIFF 2025</span></li>
-          <li><span class="mono">Nominee</span><span class="cv-t">Best Cinematography</span><span class="cv-c">YETI Film Fest</span></li>
-          <li><span class="mono">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">LakeCity</span></li>
-          <li><span class="mono">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">Cambridge Short Film Festival</span></li>
-          <li><span class="mono">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Cinematography</span><span class="cv-c">SSIFF 2025</span></li>
+          <li><span class="label">Nominee</span><span class="cv-t">Best Cinematography</span><span class="cv-c">YETI Film Fest</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">LakeCity</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">Cambridge Short Film Festival</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
         </ul>
       </div>
     </section>
 
     <!-- CONTACT -->
     <section class="contact" id="contact" aria-label="Contact">
-      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="mono">London, UK</p></header>
+      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
       <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
       <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-      <nav class="links mono" aria-label="Elsewhere">
+      <nav class="links label" aria-label="Elsewhere">
         <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
         <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
         <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
@@ -209,11 +209,11 @@
     </section>
   </main>
 
-  <footer class="foot mono"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+  <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
 
   <!-- PROJECT: slides up over the page — the film, its credits, then every still -->
   <div class="proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
-    <div class="proj-bar mono">
+    <div class="proj-bar label">
       <a class="proj-back" href="#work">← Selected work</a>
       <span class="proj-pos" id="proj-pos"></span>
       <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
@@ -222,10 +222,10 @@
       <div class="proj-player" id="proj-player"></div>
       <header class="proj-head">
         <h2 class="proj-title" id="proj-title"></h2>
-        <dl class="proj-credits mono" id="proj-credits"></dl>
+        <dl class="proj-credits label" id="proj-credits"></dl>
       </header>
       <div class="proj-stills" id="proj-stills"></div>
-      <a class="proj-follow" id="proj-follow" href="#"><span class="mono">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
+      <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
     </div>
   </div>
 

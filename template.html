@@ -14,7 +14,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:wght@400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
@@ -22,16 +22,16 @@
   <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections -->
   <header class="top" id="top">
     <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter</a>
-    <p class="top-role mono">Director of photography<span>London</span></p>
+    <p class="top-role label">Director of photography<span>London</span></p>
     <div class="switch-cell">
-      <div class="switch mono" role="radiogroup" aria-label="Show first" data-first="narrative">
+      <div class="switch label" role="radiogroup" aria-label="Show first" data-first="narrative">
         <button role="radio" aria-checked="true" data-first="narrative">Narrative</button>
-        <span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span>
         <button role="radio" aria-checked="false" data-first="commercial">Commercial</button>
+        <span class="switch-bar" aria-hidden="true"></span>
       </div>
     </div>
-    <nav class="nav mono" aria-label="Sections">
-      <a href="#work">Selected work</a>
+    <nav class="nav label" aria-label="Sections">
+      <a href="#work">Work</a>
       <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -47,10 +47,10 @@
 
     <!-- CV: the standard list, because it's what producers read -->
     <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="mono">Director / Prod Co.</p></header>
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">Director / Prod Co.</p></header>
 {{CV}}
       <div class="cv-block">
-        <h3 class="mono">Awards</h3>
+        <h3 class="label">Awards</h3>
         <ul class="cv-list awards">
 {{AWARDS}}
         </ul>
@@ -59,10 +59,10 @@
 
     <!-- CONTACT -->
     <section class="contact" id="contact" aria-label="Contact">
-      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="mono">London, UK</p></header>
+      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
       <p class="about">{{ABOUT}}</p>
       <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-      <nav class="links mono" aria-label="Elsewhere">
+      <nav class="links label" aria-label="Elsewhere">
         <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
         <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
         <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
@@ -71,11 +71,11 @@
     </section>
   </main>
 
-  <footer class="foot mono"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+  <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
 
   <!-- PROJECT: slides up over the page — the film, its credits, then every still -->
   <div class="proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
-    <div class="proj-bar mono">
+    <div class="proj-bar label">
       <a class="proj-back" href="#work">← Selected work</a>
       <span class="proj-pos" id="proj-pos"></span>
       <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
@@ -84,10 +84,10 @@
       <div class="proj-player" id="proj-player"></div>
       <header class="proj-head">
         <h2 class="proj-title" id="proj-title"></h2>
-        <dl class="proj-credits mono" id="proj-credits"></dl>
+        <dl class="proj-credits label" id="proj-credits"></dl>
       </header>
       <div class="proj-stills" id="proj-stills"></div>
-      <a class="proj-follow" id="proj-follow" href="#"><span class="mono">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
+      <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
     </div>
   </div>
 

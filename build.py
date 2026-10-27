@@ -49,8 +49,8 @@ def reel_tile(group):
     r = REELS[group]
     return f'''        <article class="tile tile-reel" data-slug="{r["slug"]}">
           <video muted playsinline loop preload="none" poster="{r["poster"]}" data-src="{r["src"]}"></video>
-          <div class="tile-cap"><p class="tile-kind mono"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/{r["slug"]}">{esc(r["title"])}</a></h3><p class="tile-credit mono">{esc(r["note"])}</p></div>
-          <span class="tile-watch mono" aria-hidden="true">Watch with sound ↗</span>
+          <div class="tile-cap"><p class="tile-kind label"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/{r["slug"]}">{esc(r["title"])}</a></h3><p class="tile-credit credit">{esc(r["note"])}</p></div>
+          <span class="tile-watch label" aria-hidden="true">Watch with sound ↗</span>
         </article>'''
 
 
@@ -61,12 +61,12 @@ def film_tile(f, eager):
         for i, s in enumerate(f["stills"])
     )
     # a small counter in the corner; the arrows either side of it only show on hover
-    count = (f'<div class="tile-count mono"><button class="tile-step tile-prev" aria-label="Previous still">←</button>'
+    count = (f'<div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button>'
              f'<span><b class="tile-n">01</b> / {n:02d}</span>'
              f'<button class="tile-step tile-next" aria-label="Next still">→</button></div>') if n > 1 else ""
     return f'''        <article class="tile" data-slug="{f["slug"]}">
           <div class="slides">{imgs}</div>
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit mono">{esc(credit_line(f) or f["kind"])}</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit credit">{esc(credit_line(f) or f["kind"])}</p></div>
           {count}
         </article>'''
 
@@ -76,7 +76,7 @@ def group_section(group, first):
     tiles = "\n".join(film_tile(f, first and i < 2) for i, f in enumerate(films))
     count = f'{len(films)} {"films" if group == "narrative" else "projects"}'
     return f'''      <section class="group" data-group="{group}" aria-label="{LABELS[group]}">
-        <header class="group-head mono"><h2>{LABELS[group]}</h2><span>{count} + showreel</span></header>
+        <header class="group-head label"><h2>{LABELS[group]}</h2><span>{count} + showreel</span></header>
 {reel_tile(group)}
         <div class="grid">
 {tiles}
@@ -95,7 +95,7 @@ def cv():
     blocks = []
     for key, label in (("feature", "Feature film"), ("short", "Short film"), ("commercial", "Commercial")):
         blocks.append(f'''      <div class="cv-block">
-        <h3 class="mono">{label}</h3>
+        <h3 class="label">{label}</h3>
         <ul class="cv-list">
 {cv_rows(content["cv"][key])}
         </ul>
@@ -105,7 +105,7 @@ def cv():
 
 def awards():
     return "\n".join(
-        f'          <li><span class="mono">{esc(r)}</span><span class="cv-t">{esc(a)}</span><span class="cv-c">{esc(f)}</span></li>'
+        f'          <li><span class="label">{esc(r)}</span><span class="cv-t">{esc(a)}</span><span class="cv-c">{esc(f)}</span></li>'
         for r, a, f in content["awards"]
     )
 
