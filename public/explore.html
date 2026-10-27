@@ -22,7 +22,7 @@
     .card { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #000 center / cover no-repeat; container-type: inline-size; }
     .card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, .6), rgba(0, 0, 0, 0) 45%), linear-gradient(0deg, rgba(0, 0, 0, .6), rgba(0, 0, 0, 0) 35%); }
     .word { position: absolute; top: 4cqw; left: 0; right: 0; padding: 0 4cqw; text-align: center; white-space: nowrap; line-height: .9; color: #fff; }
-    .word span { display: inline-block; }
+    .word span { display: inline-block; word-spacing: -.06em; }
     .meta { position: absolute; left: 16px; right: 16px; bottom: 12px; display: flex; justify-content: space-between; gap: 12px; color: rgba(255, 255, 255, .78); }
     .meta b { font-weight: 400; color: #fff; transition: color .2s; }
     .card:hover .meta b { color: var(--rec); }
@@ -32,7 +32,7 @@
 <body>
   <header class="label"><span>Charlie Painter — choosing the wordmark</span><a href="/">The site ↗</a></header>
   <div class="grid" id="types"></div>
-  <p class="note">Each one opens the site set in that face. STK Bureau is the trial cut, fine for looking but it needs a web licence before the site goes live. Thin and wide reads as instrument lettering, the engraving on a lens barrel or a camera body; thin serifs read as an opening title. Michroma is the free cousin of Microgramma, at the one weight it comes in.</p>
+  <p class="note">Each one opens the site set in that face. STK Bureau (the trial cut) only shows here when the site runs on this Mac; it needs a web licence before it can go online. Thin and wide reads as instrument lettering, the engraving on a lens barrel or a camera body; thin serifs read as an opening title. Michroma is the free cousin of Microgramma, at the one weight it comes in.</p>
 
   <script src="/types.js"></script>
   <script>

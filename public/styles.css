@@ -3,7 +3,7 @@
    commercial keys, the places to go — which waits along the bottom of the first screen, rides up with the work and
    stays at the top as the header. Each film slides up from the bottom as a sheet. Black, hairlines, one red light.
 
-   Type: the wordmark is STK Bureau Sans ExtraLight, edge to edge (any face in types.js can be tried with ?type=…);
+   Type: the wordmark is Inter Tight ExtraLight, edge to edge (any face in types.js can be tried with ?type=…);
    Libertinus Serif (Charlie's) is the voice of the work —
    film titles, headings, the about line, the email; PT Sans Caption does the instrument labels and the credits. */
 :root {
@@ -19,7 +19,7 @@
   --rec: #f2231b;
   --display: "Libertinus Serif", "Iowan Old Style", Georgia, serif;
   --text: "PT Sans Caption", "PT Sans", "Helvetica Neue", Arial, sans-serif;
-  --mark-font: "STK Bureau Sans", "Helvetica Neue", Arial, sans-serif;   /* types.js sets these for the chosen face */
+  --mark-font: "Inter Tight", "Helvetica Neue", Arial, sans-serif;   /* types.js sets these for the chosen face */
   --mark-weight: 200;
   --mark-small: 400;
   --mark-stretch: 100%;
@@ -60,7 +60,7 @@ i { font-style: normal; }
 /* the wordmark: thin, centred, set edge to edge (main.js sizes it to the width once the face has loaded) */
 .hero-name { position: absolute; top: calc(var(--pad) * .8); left: var(--pad); right: var(--pad); text-align: center; white-space: nowrap; color: #fff;
   font-family: var(--mark-font); font-weight: var(--mark-weight); font-stretch: var(--mark-stretch); font-style: var(--mark-style); letter-spacing: var(--mark-track);
-  font-size: 12.4vw; line-height: .9; }
+  font-size: 12.4vw; line-height: .9; word-spacing: -.06em; }   /* at this size a normal word space is a gulf */
 html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .js .hero-name:not(.is-fit) { visibility: hidden; }
 .hero-name-in { display: inline-block; margin-right: calc(var(--mark-track) * -1); }   /* no tracking after the last letter, so it centres */
