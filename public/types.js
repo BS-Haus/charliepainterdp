@@ -3,7 +3,7 @@
    word space (a mono space is a whole letter wide) */
 window.MARK_DEFAULT = "geist-mono";
 window.MARKS = {
-  "geist-mono": { name: "Geist Mono ExtraLight", note: "Mono · Swiss", family: "Geist+Mono:wght@200;400", stack: '"Geist Mono", ui-monospace, monospace', weight: 200, small: 400, track: "0", words: "-.3em", caps: 1 },
+  "geist-mono": { name: "Geist Mono ExtraLight", note: "Mono · Swiss", family: "Geist+Mono:wght@100..900", stack: '"Geist Mono", ui-monospace, monospace', weight: 200, small: 400, track: "0", words: "-.3em", caps: 1 },
   "inter-tight": { name: "Inter Tight ExtraLight", note: "Free · Helvetica-like", family: "Inter+Tight:wght@200;400", stack: '"Inter Tight", "Helvetica Neue", sans-serif', weight: 200, small: 400, track: "-.03em", caps: 0 },
   "geist": { name: "Geist ExtraLight", note: "Free · Swiss", family: "Geist:wght@200;400", stack: '"Geist", "Helvetica Neue", sans-serif', weight: 200, small: 400, track: "-.03em", caps: 0 },
   "hanken": { name: "Hanken Grotesk ExtraLight", note: "Free · grotesk", family: "Hanken+Grotesk:wght@200;400", stack: '"Hanken Grotesk", "Helvetica Neue", sans-serif', weight: 200, small: 400, track: "-.03em", caps: 0 },
@@ -21,12 +21,12 @@ window.MARKS = {
 };
 // Trial cuts can't go online: they're offered when the site runs on this Mac, and their files are never committed or
 // deployed. STK Bureau Sans is Smuss Type Kiosk's; Exposure is 205TF's, and its one axis is photographic exposure:
-// -100 under (the ink spreads), +100 over (the hairlines break up). vary sets the axis; expose develops the name in the
-// intro from fully overexposed
+// -100 under (the ink spreads), +100 over (the hairlines break up). vary sets the axis (+30 is the sharp cut); expose
+// has the intro step the name through the exposure, one stop at a time, from -100 until it's sharp
 if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
   Object.assign(window.MARKS, {
-    "exposure": { name: "Exposure", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: "-.01em", words: "-.04em", caps: 0, vary: '"EXPO" 50', varySmall: '"EXPO" 0', expose: 1 },
-    "exposure-caps": { name: "Exposure, capitals", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: ".02em", words: "-.06em", caps: 1, vary: '"EXPO" 50', varySmall: '"EXPO" 0', expose: 1 },
+    "exposure": { name: "Exposure", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: "-.01em", words: "-.04em", caps: 0, vary: '"EXPO" 30', varySmall: '"EXPO" 0', expose: 1 },
+    "exposure-caps": { name: "Exposure, capitals", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: ".02em", words: "-.06em", caps: 1, vary: '"EXPO" 30', varySmall: '"EXPO" 0', expose: 1 },
     "stk-bureau": { name: "STK Bureau Sans ExtraLight", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: "-.015em", caps: 0 },
     "stk-bureau-caps": { name: "STK Bureau Sans ExtraLight, capitals", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: ".01em", caps: 1 }
   });

@@ -19,7 +19,7 @@
     setTimeout(() => {
       document.documentElement.classList.remove("intro");
       try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
-    }, 3600);
+    }, 4300);
   }
 
   /* ---------- The name, edge to edge: sized to the width once its face has loaded ---------- */
