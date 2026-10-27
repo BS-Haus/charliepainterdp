@@ -203,19 +203,19 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .proj-follow .label { color: var(--dim); }
 .proj-follow:hover .proj-follow-title { color: var(--rec); }
 
-/* THE INTRO — once per visit, like an opening title. The name comes first, over black, stepping one stop at a time
-   through its exposure (or, in a face without that axis, down through its weights) until it's sharp; then the picture
-   opens behind it from a slit to a letterbox, holds, and opens to full bleed; what's playing and the bar come last */
+/* THE INTRO — once per visit, like an opening title. The name comes first, over black, the way a print comes up in the
+   tray: faint and overexposed, its strokes filling in to the sharp cut (a face without that axis thickens from its
+   thinnest weight). Then the picture opens behind it from a slit to a letterbox, holds, and opens to full bleed; what's
+   playing and the bar come last */
 @keyframes open-frame { 0% { clip-path: inset(50% 0 50% 0); } 38% { clip-path: inset(15% 0 15% 0); } 62% { clip-path: inset(15% 0 15% 0); } 100% { clip-path: inset(0 0 0 0); } }
 @keyframes appear { from { opacity: 0; } }
-@keyframes develop-weight { from { font-weight: 800; } }
-@keyframes develop-expo { from { font-variation-settings: "EXPO" -100; } }
+@keyframes develop-weight { from { font-weight: 100; } }
+@keyframes develop-expo { from { font-variation-settings: "EXPO" 100; } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes rise-edge { from { transform: translateY(100%); } }
 .intro .hero video { animation: open-frame 2.4s cubic-bezier(.65, 0, .25, 1) 1.7s both; }
-/* 800 down to the face's weight in stops of 100; an exposure face from -100 up to its exposure (+30) in stops of 10 */
-.intro .hero-name i { animation: develop-weight 1.4s steps(7, jump-none) both, appear .5s linear both; animation-delay: calc(.35s + var(--d) * 35ms); }
-html[data-expose].intro .hero-name i { animation-name: develop-expo, appear; animation-duration: 1.8s, .5s; animation-timing-function: steps(14, jump-none), linear; }
+.intro .hero-name i { animation: develop-weight 2.4s cubic-bezier(.25, .6, .3, 1) .35s both, appear 1.3s ease-out .35s both; }   /* every letter at once */
+html[data-expose].intro .hero-name i { animation-name: develop-expo, appear; }
 .intro .hero-tag, .intro .hero-watch { animation: fade-in .9s var(--ease) 3.2s both; }
 .intro .bar { animation: rise-edge .9s var(--ease) 3.3s both; }
 

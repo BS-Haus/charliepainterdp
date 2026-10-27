@@ -22,7 +22,7 @@ window.MARKS = {
 // Trial cuts can't go online: they're offered when the site runs on this Mac, and their files are never committed or
 // deployed. STK Bureau Sans is Smuss Type Kiosk's; Exposure is 205TF's, and its one axis is photographic exposure:
 // -100 under (the ink spreads), +100 over (the hairlines break up). vary sets the axis (+30 is the sharp cut); expose
-// has the intro step the name through the exposure, one stop at a time, from -100 until it's sharp
+// has the intro develop the name from fully overexposed to that cut
 if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
   Object.assign(window.MARKS, {
     "exposure": { name: "Exposure", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: "-.01em", words: "-.04em", caps: 0, vary: '"EXPO" 30', varySmall: '"EXPO" 0', expose: 1 },
