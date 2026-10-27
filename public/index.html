@@ -19,35 +19,36 @@
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-  <!-- HEADER: ruled cells — the name, the role, the narrative / commercial switch, the sections -->
+  <!-- HEADER: just the three places to go. Over the reel it's bare; once the work covers the reel, it gets a floor and the name -->
   <header class="top" id="top">
-    <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography">Charlie Painter</a>
-    <p class="top-role label">Director of photography<span>London</span></p>
-    <div class="switch-cell">
-      <div class="switch label" role="radiogroup" aria-label="Show first" data-first="narrative">
-        <button role="radio" aria-checked="true" data-first="narrative">Narrative</button>
-        <button role="radio" aria-checked="false" data-first="commercial">Commercial</button>
-        <span class="switch-bar" aria-hidden="true"></span>
-      </div>
-    </div>
+    <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography — back to the top">Charlie Painter</a>
     <nav class="nav label" aria-label="Sections">
       <a href="#work">Work</a>
-      <a href="#cv">CV</a>
-      <a href="#contact">Contact</a>
+      <a href="#/cv">CV</a>
+      <a href="#/contact">Contact</a>
     </nav>
   </header>
 
-  <main>
-    <!-- WORK: one page; the switch decides which half comes first -->
-    <div class="work" id="work">
-      <div class="groups" id="groups">
+  <!-- THE REEL: the first screen. Pinned; the work slides up over it -->
+  <section class="hero" aria-label="Showreel">
+    <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg" src="/media/reel-narrative-v3.mp4"
+      data-narrative="/media/reel-narrative-v3.mp4" data-commercial="/media/reel-commercial-v2.mp4" data-poster-narrative="/media/reel-narrative-v2-poster.jpg" data-poster-commercial="/media/reel-commercial-v2-poster.jpg"></video>
+    <span class="hero-shade" aria-hidden="true"></span>
+    <div class="hero-text">
+      <p class="hero-role label">Director of Photography<span>London</span></p>
+      <h1 class="hero-name">Charlie Painter</h1>
+      <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
+    </div>
+  </section>
+
+  <!-- THE WORK: a container whose top edge (the bar with the keys) waits along the bottom of the first screen -->
+  <main class="work" id="work">
+    <div class="work-bar">
+      <div class="keys label" role="radiogroup" aria-label="Show first"><button class="key" role="radio" aria-checked="true" data-first="narrative"><span>Narrative</span><i>09</i></button><button class="key" role="radio" aria-checked="false" data-first="commercial"><span>Commercial</span><i>06</i></button></div>
+    </div>
+    <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
-        <header class="group-head label"><h2>Narrative</h2><span>9 films + showreel</span></header>
-        <article class="tile tile-reel" data-slug="narrativeshowreel">
-          <video muted playsinline loop preload="none" poster="/media/reel-narrative-v2-poster.jpg" data-src="/media/reel-narrative-v3.mp4"></video>
-          <div class="tile-cap"><p class="tile-kind label"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/narrativeshowreel">Narrative showreel</a></h3><p class="tile-credit credit">Features &amp; shorts</p></div>
-          <span class="tile-watch label" aria-hidden="true">Watch with sound ↗</span>
-        </article>
+        <header class="group-head label"><h2>Narrative</h2><span>9 films</span></header>
         <div class="grid">
         <article class="tile" data-slug="iffilm">
           <div class="slides"><img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/iffilm-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
@@ -97,12 +98,7 @@
         </div>
       </section>
       <section class="group" data-group="commercial" aria-label="Commercial">
-        <header class="group-head label"><h2>Commercial</h2><span>6 projects + showreel</span></header>
-        <article class="tile tile-reel" data-slug="commercial-showreel">
-          <video muted playsinline loop preload="none" poster="/media/reel-commercial-v2-poster.jpg" data-src="/media/reel-commercial-v2.mp4"></video>
-          <div class="tile-cap"><p class="tile-kind label"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/commercial-showreel">Commercial showreel</a></h3><p class="tile-credit credit">Commercials &amp; brand films</p></div>
-          <span class="tile-watch label" aria-hidden="true">Watch with sound ↗</span>
-        </article>
+        <header class="group-head label"><h2>Commercial</h2><span>6 projects</span></header>
         <div class="grid">
         <article class="tile" data-slug="66north">
           <div class="slides"><img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
@@ -136,12 +132,16 @@
         </article>
         </div>
       </section>
-      </div>
     </div>
+    <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#/contact">Contact</a><a href="#top">Top ↑</a></footer>
+  </main>
 
-    <!-- CV: the standard list, because it's what producers read -->
-    <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">Director / Prod Co.</p></header>
+  <!-- SHEETS: CV, contact and each film slide up from the bottom over everything -->
+  <span class="scrim" id="scrim" aria-hidden="true"></span>
+
+  <div class="sheet" id="sheet-cv" role="dialog" aria-modal="true" aria-labelledby="cv-title" tabindex="-1" hidden>
+    <div class="sheet-bar label"><h2 class="sheet-title" id="cv-title">CV</h2><span class="sheet-note">Director / Prod Co.</span><a class="sheet-close" href="#work">Close ✕</a></div>
+    <div class="sheet-scroll">
       <div class="cv-block">
         <h3 class="label">Feature film</h3>
         <ul class="cv-list">
@@ -193,11 +193,12 @@
           <li><span class="label">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
         </ul>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <!-- CONTACT -->
-    <section class="contact" id="contact" aria-label="Contact">
-      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
+  <div class="sheet sheet-short" id="sheet-contact" role="dialog" aria-modal="true" aria-labelledby="contact-title" tabindex="-1" hidden>
+    <div class="sheet-bar label"><h2 class="sheet-title" id="contact-title">Contact</h2><span class="sheet-note">London, UK</span><a class="sheet-close" href="#work">Close ✕</a></div>
+    <div class="sheet-scroll">
       <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
       <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
       <nav class="links label" aria-label="Elsewhere">
@@ -206,19 +207,16 @@
         <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
         <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
       </nav>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
-
-  <!-- PROJECT: slides up over the page — the film, its credits, then every still -->
-  <div class="proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
-    <div class="proj-bar label">
-      <a class="proj-back" href="#work">← Selected work</a>
+  <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
+    <div class="sheet-bar label">
+      <a class="sheet-close proj-back" href="#work">← Work</a>
       <span class="proj-pos" id="proj-pos"></span>
       <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
     </div>
-    <div class="proj-scroll" id="proj-scroll">
+    <div class="sheet-scroll" id="proj-scroll">
       <div class="proj-player" id="proj-player"></div>
       <header class="proj-head">
         <h2 class="proj-title" id="proj-title"></h2>

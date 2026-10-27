@@ -45,15 +45,6 @@ def projects():
     return out
 
 
-def reel_tile(group):
-    r = REELS[group]
-    return f'''        <article class="tile tile-reel" data-slug="{r["slug"]}">
-          <video muted playsinline loop preload="none" poster="{r["poster"]}" data-src="{r["src"]}"></video>
-          <div class="tile-cap"><p class="tile-kind label"><span class="rec" aria-hidden="true"></span>Showreel</p><h3 class="tile-title"><a href="#/{r["slug"]}">{esc(r["title"])}</a></h3><p class="tile-credit credit">{esc(r["note"])}</p></div>
-          <span class="tile-watch label" aria-hidden="true">Watch with sound ↗</span>
-        </article>'''
-
-
 def film_tile(f, eager):
     n = len(f["stills"])
     imgs = "".join(
@@ -71,13 +62,16 @@ def film_tile(f, eager):
         </article>'''
 
 
+def count_of(group):
+    n = len(content[group])
+    return f'{n} {"films" if group == "narrative" else "projects"}'
+
+
 def group_section(group, first):
     films = content[group]
     tiles = "\n".join(film_tile(f, first and i < 2) for i, f in enumerate(films))
-    count = f'{len(films)} {"films" if group == "narrative" else "projects"}'
     return f'''      <section class="group" data-group="{group}" aria-label="{LABELS[group]}">
-        <header class="group-head label"><h2>{LABELS[group]}</h2><span>{count} + showreel</span></header>
-{reel_tile(group)}
+        <header class="group-head label"><h2>{LABELS[group]}</h2><span>{count_of(group)}</span></header>
         <div class="grid">
 {tiles}
         </div>
@@ -112,6 +106,14 @@ def awards():
 
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
+# the keys on the work bar: narrative / commercial, each with its count; the pressed one comes first
+keys = "".join(
+    f'<button class="key" role="radio" aria-checked="{"true" if g == "narrative" else "false"}" data-first="{g}"><span>{LABELS[g]}</span><i>{len(content[g]):02d}</i></button>'
+    for g in ("narrative", "commercial")
+)
+out = out.replace("{{KEYS}}", keys)
+for g, r in REELS.items():
+    out = out.replace(f"{{{{REEL_{g.upper()}}}}}", r["src"]).replace(f"{{{{POSTER_{g.upper()}}}}}", r["poster"])
 out = out.replace("{{CV}}", cv())
 out = out.replace("{{AWARDS}}", awards())
 out = out.replace("{{ABOUT}}", esc(content["about"]))
