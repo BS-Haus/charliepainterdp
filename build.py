@@ -104,7 +104,19 @@ def awards():
     )
 
 
+def name_mark(name="Charlie Painter"):
+    """The wordmark, letter by letter; --d is each letter's distance from the middle, for the intro."""
+    mid = (len(name) - 1) / 2
+    words, j = [], 0
+    for word in name.split(" "):
+        letters = "".join(f'<i style="--d:{abs(j + k - mid):g}">{esc(c)}</i>' for k, c in enumerate(word))
+        words.append(f'<span class="w">{letters}</span>')
+        j += len(word) + 1
+    return f'<span class="hero-name-in" aria-hidden="true">{" ".join(words)}</span>'
+
+
 out = (ROOT / "template.html").read_text()
+out = out.replace("{{NAME}}", name_mark())
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
 # the keys on the work bar: narrative / commercial; the pressed one comes first
 keys = "".join(

@@ -16,44 +16,54 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
+  <script src="/types.js"></script>
   <script>
-    document.documentElement.classList.add("js");
-    try { if (!sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("intro"); } catch (e) {}
+    (function () {
+      var html = document.documentElement;
+      html.classList.add("js");
+      try { if (!sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro"); } catch (e) {}
+      // the wordmark's face: types.js lists them; ?type=… tries another (see /explore.html)
+      var key = new URLSearchParams(location.search).get("type");
+      if (!window.MARKS[key]) key = window.MARK_DEFAULT;
+      var t = window.MARKS[key], st = html.style;
+      window.loadMark(key);
+      st.setProperty("--mark-font", t.stack);
+      st.setProperty("--mark-weight", t.weight);
+      st.setProperty("--mark-small", t.small);
+      st.setProperty("--mark-stretch", t.stretch || "100%");
+      st.setProperty("--mark-track", t.track || "0");
+      st.setProperty("--mark-style", t.italic ? "italic" : "normal");
+      html.dataset.markCase = t.caps ? "caps" : "as-set";
+    })();
   </script>
 </head>
 <body>
-  <!-- HEADER: the role top-left (the name joins it once the reel is covered), the keys dock in the middle once
-       you're into the work, and the three places to go on the right -->
-  <header class="top" id="top">
-    <div class="top-left">
-      <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
-      <p class="top-role label">Director of Photography<span>London</span></p>
-    </div>
-    <div class="dock keys label" role="radiogroup" aria-label="Show first" inert>{{KEYS}}</div>
-    <nav class="nav label" aria-label="Sections">
-      <a href="#work">Work</a>
-      <a href="#cv">CV</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <!-- THE REEL: the first screen. Pinned; the work slides up over it -->
-  <section class="hero" aria-label="Showreel">
+  <!-- THE REEL: the first screen. The name edge to edge across the top, and what's playing. Pinned; the page slides up over it -->
+  <section class="hero" id="top" aria-label="Showreel">
     <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="{{POSTER_NARRATIVE}}" src="{{REEL_NARRATIVE}}"
       data-narrative="{{REEL_NARRATIVE}}" data-commercial="{{REEL_COMMERCIAL}}" data-poster-narrative="{{POSTER_NARRATIVE}}" data-poster-commercial="{{POSTER_COMMERCIAL}}"></video>
     <span class="hero-shade" aria-hidden="true"></span>
-    <div class="hero-text">
-      <h1 class="hero-name"><span><i>Charlie</i></span> <span><i>Painter</i></span></h1>
-      <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
-    </div>
+    <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
+    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
   </section>
 
   <main class="page">
-    <!-- WORK: its top edge (the keys, centred) waits along the bottom of the first screen, then rides up and docks -->
-    <section class="work" id="work" aria-label="Work">
-      <div class="work-bar">
-        <div class="keys label" role="radiogroup" aria-label="Show first">{{KEYS}}</div>
+    <!-- THE BAR: the role, the narrative / commercial keys and the places to go. It waits along the bottom of the first
+         screen, rides up with the work, and stays at the top as the header -->
+    <header class="bar" id="bar">
+      <div class="bar-left">
+        <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
+        <p class="bar-role label">Director of Photography<span>London</span></p>
       </div>
+      <div class="keys label" role="radiogroup" aria-label="Show first">{{KEYS}}</div>
+      <nav class="nav label" aria-label="Sections">
+        <a href="#work">Work</a>
+        <a href="#cv">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="work" id="work" aria-label="Work">
       <div class="groups" id="groups">
 {{GROUPS}}
       </div>

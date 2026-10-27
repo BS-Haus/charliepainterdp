@@ -10,10 +10,8 @@
 
   $$(".year").forEach((y) => { y.textContent = new Date().getFullYear(); });
 
-  const top = $(".top");
   const hero = $(".hero"), heroReel = $("#hero-reel"), heroWatch = $("#hero-watch"), heroWatchTitle = $("#hero-watch-title");
-  const work = $("#work"), groupsEl = $("#groups"), bar = $(".work-bar"), barKeys = $(".keys", bar), dock = $(".dock");
-  const headH = () => top.offsetHeight;
+  const work = $("#work"), groupsEl = $("#groups"), bar = $("#bar");
   let openSheet = null;
 
   /* ---------- The intro plays once per visit (the page marks it before anything paints) ---------- */
@@ -24,28 +22,33 @@
     }, 3600);
   }
 
+  /* ---------- The name, edge to edge: sized to the width once its face has loaded ---------- */
+  const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName);
+  const fitName = () => {
+    heroName.style.fontSize = "100px";
+    heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
+    heroName.classList.add("is-fit");
+  };
+  document.fonts.ready.then(fitName);
+  document.fonts.addEventListener("loadingdone", fitName);
+  setTimeout(fitName, 2500);   // whatever happens with the fonts, show the name
+  window.addEventListener("resize", fitName);
+
   /* ======================================================================
-     THE REEL, THE WORK, THE DOCK — the page slides up over the pinned reel, which dims and then stops. Once the reel is
-     covered, the header gets its floor and the name; when the keys on the work's edge reach the header, they dock in it
+     THE REEL AND THE BAR — the page slides up over the pinned reel, which dims and then stops. The bar on the page's top
+     edge rides up with it; when it reaches the top it stays as the header and the small name joins it
      ====================================================================== */
   let covered = false;
   const onScroll = () => {
-    const span = hero.offsetHeight - bar.offsetHeight - headH();
+    const span = hero.offsetHeight - bar.offsetHeight;
     const c = clamp(window.scrollY / (span || 1), 0, 1);
     hero.style.setProperty("--cover", c.toFixed(3));
-    top.classList.toggle("is-solid", c >= 0.999);
+    bar.classList.toggle("is-top", bar.getBoundingClientRect().top <= 0.5);
     if ((c >= 0.999) !== covered) {
       covered = c >= 0.999;
       if (covered) heroReel.pause();
       else if (!reduceMotion && !openSheet) heroReel.play().catch(() => {});
     }
-    // dock when the bar's keys pass the middle of the header, and only while you're in the work
-    const k = barKeys.getBoundingClientRect(), w = work.getBoundingClientRect();
-    const docked = getComputedStyle(dock).display !== "none" && k.top + k.height / 2 <= headH() / 2 && w.bottom > headH() + 80;
-    top.classList.toggle("is-docked", docked);
-    document.body.classList.toggle("is-docked", docked);
-    dock.inert = !docked;
-    barKeys.inert = docked;
     lights();
   };
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -53,14 +56,14 @@
 
   /* ======================================================================
      THE KEYS — narrative or commercial first. Nothing is hidden: the halves swap places, and the reel behind the work
-     becomes that half's reel. The keys on the bar and the docked keys are the same switch
+     becomes that half's reel
      ====================================================================== */
   const keys = $$(".key");
   const putFirst = (group) => {
     const groups = $$(".group", groupsEl);
     if (groups[0].dataset.group === group) return;
     // if you're down in the work, come back to its top so you see the swap
-    const workTop = work.getBoundingClientRect().top + window.scrollY - headH();
+    const workTop = work.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
     if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
     const before = groups.map((g) => g.getBoundingClientRect().top);
     groupsEl.prepend(groups.find((g) => g.dataset.group === group));
@@ -90,10 +93,10 @@
     swapReel(group);
   };
   keys.forEach((k) => k.addEventListener("click", () => choose(k.dataset.first)));
-  $$(".keys").forEach((set) => set.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]', set).focus(); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]', set).focus(); }
-  }));
+  $(".keys").addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]').focus(); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]').focus(); }
+  });
 
   /* ======================================================================
      FRAMES — each film's frame holds all its stills: swipe (touch or trackpad), drag, or the arrows by the counter.
@@ -147,6 +150,26 @@
       location.hash = `#/${tile.dataset.slug}`;
     });
   });
+
+  /* ======================================================================
+     CV AND CONTACT — they come up like a focus pull: the rules draw across and the type comes into focus, top to bottom.
+     Whatever arrives together is staggered in reading order
+     ====================================================================== */
+  const reveals = [
+    ...$$(".cv .sec-head, .contact .sec-head, .cv-block").map((el) => [el, "rv-rule"]),
+    ...$$(".sec-title, .about, .mail").map((el) => [el, "rv-wipe"]),
+    ...$$(".sec-head .label, .cv-block h3, .cv-list li, .links a").map((el) => [el, "rv"]),
+  ];
+  const arrive = new IntersectionObserver((entries) => {
+    entries.filter((e) => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+      .forEach((e, i) => {
+        e.target.style.setProperty("--rv-delay", `${Math.min(i, 14) * 55}ms`);
+        e.target.classList.add("in");
+        arrive.unobserve(e.target);
+      });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  if (!reduceMotion) reveals.forEach(([el, kind]) => { el.classList.add(kind); arrive.observe(el); });
 
   /* ======================================================================
      THE FILM — slides up from the bottom. Each film has its own address (#/vetala), so the back button closes it and a
@@ -227,7 +250,7 @@
   };
   window.addEventListener("hashchange", route);
 
-  /* ---------- Header: which part of the page you're in ---------- */
+  /* ---------- The bar: which part of the page you're in ---------- */
   const navLinks = $$(".nav a");
   const sections = navLinks.map((a) => $(a.getAttribute("href")));
   function lights() {
