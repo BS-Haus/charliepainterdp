@@ -19,10 +19,14 @@ window.MARKS = {
   "libertinus": { name: "Libertinus Serif", note: "Charlie's serif", family: "", stack: '"Libertinus Serif", serif', weight: 400, small: 400, track: "-.01em", caps: 0 },
   "michroma": { name: "Michroma", note: "Microgramma's free cousin · one weight", family: "Michroma", stack: '"Michroma", sans-serif', weight: 400, small: 400, track: "0", caps: 1 }
 };
-// STK Bureau Sans (Smuss Type Kiosk) is only here as the trial cut, which can't go online: it's offered when the site
-// runs on this Mac, and its files are never committed or deployed
+// Trial cuts can't go online: they're offered when the site runs on this Mac, and their files are never committed or
+// deployed. STK Bureau Sans is Smuss Type Kiosk's; Exposure is 205TF's, and its one axis is photographic exposure:
+// -100 under (the ink spreads), +100 over (the hairlines break up). vary sets the axis; expose develops the name in the
+// intro from fully overexposed
 if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
   Object.assign(window.MARKS, {
+    "exposure": { name: "Exposure", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: "-.01em", words: "-.04em", caps: 0, vary: '"EXPO" 50', varySmall: '"EXPO" 0', expose: 1 },
+    "exposure-caps": { name: "Exposure, capitals", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: ".02em", words: "-.06em", caps: 1, vary: '"EXPO" 50', varySmall: '"EXPO" 0', expose: 1 },
     "stk-bureau": { name: "STK Bureau Sans ExtraLight", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: "-.015em", caps: 0 },
     "stk-bureau-caps": { name: "STK Bureau Sans ExtraLight, capitals", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: ".01em", caps: 1 }
   });
@@ -32,7 +36,7 @@ window.loadMark = function (key) {
   if (!t) return;
   if (t.faces) {
     var s = document.createElement("style");
-    s.textContent = t.faces.map(function (f) { return '@font-face{font-family:"' + t.local + '";src:url(/fonts/' + f[0] + ') format("opentype");font-weight:' + f[1] + ';font-display:block}'; }).join("");
+    s.textContent = t.faces.map(function (f) { return '@font-face{font-family:"' + t.local + '";src:url(/fonts/' + f[0] + ') format("' + (f[2] || "opentype") + '");font-weight:' + f[1] + ';font-display:block}'; }).join("");
     document.head.appendChild(s);
     return;
   }

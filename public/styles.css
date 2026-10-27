@@ -25,6 +25,8 @@
   --mark-stretch: 100%;
   --mark-track: 0;
   --mark-words: -.06em;
+  --mark-vary: normal;
+  --mark-vary-small: normal;
   --mark-style: normal;
   --pad: clamp(18px, 2.2vw, 36px);
   --bar: 66px;                /* the bar: at the bottom of the first screen, then the header */
@@ -49,7 +51,11 @@ i { font-style: normal; }
 .label { font-family: var(--text); font-size: 11.5px; letter-spacing: .12em; line-height: 1.6; text-transform: uppercase; }
 .credit { font-family: var(--text); font-size: 14px; letter-spacing: .01em; line-height: 1.45; }
 
-/* THE REEL — pinned for the first screen. What's playing sits top left; the name runs edge to edge along the bottom, on the bar */
+/* a light, used only for something that is on */
+.rec { display: inline-block; flex: none; width: 5px; height: 5px; margin-right: 12px; border-radius: 50%; background: var(--rec); vertical-align: middle; transform: translateY(-0.12em); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
+
+/* THE REEL — pinned for the first screen. What's playing (its light on) top left, watch it with sound top right; the name
+   runs edge to edge along the bottom, on the bar */
 .hero { position: sticky; top: 0; z-index: 0; height: 100vh; height: 100svh; overflow: hidden; background: #000; }
 .hero video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .5s; }
 .hero video.is-swapping { opacity: 0; }
@@ -59,12 +65,13 @@ i { font-style: normal; }
 /* the wordmark: thin, centred, set edge to edge (main.js sizes it to the width once the face has loaded) */
 .hero-name { position: absolute; bottom: calc(var(--bar) + var(--pad) * .55); left: var(--pad); right: var(--pad); text-align: center; white-space: nowrap; color: #fff;
   font-family: var(--mark-font); font-weight: var(--mark-weight); font-stretch: var(--mark-stretch); font-style: var(--mark-style); letter-spacing: var(--mark-track);
-  font-size: 7.6vw; line-height: .8; word-spacing: var(--mark-words); }   /* at this size a normal word space is a gulf */
+  font-variation-settings: var(--mark-vary); font-size: 7.6vw; line-height: .8; word-spacing: var(--mark-words); }   /* at this size a normal word space is a gulf */
 html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .js .hero-name:not(.is-fit) { visibility: hidden; }
 .hero-name-in { display: inline-block; margin-right: calc(var(--mark-track) * -1); }   /* no tracking after the last letter, so it centres */
 .hero-name .w, .hero-name i { display: inline-block; }
-.hero-watch { position: absolute; top: var(--pad); left: var(--pad); display: flex; align-items: center; white-space: nowrap; color: rgba(255, 255, 255, .86); transition: color .2s; }
+.hero-tag { position: absolute; top: var(--pad); left: var(--pad); display: flex; align-items: center; white-space: nowrap; color: rgba(255, 255, 255, .86); }
+.hero-watch { position: absolute; top: var(--pad); right: var(--pad); white-space: nowrap; color: rgba(255, 255, 255, .86); transition: color .2s; }
 .hero-watch:hover { color: #fff; }
 
 /* THE PAGE — slides up over the reel; the bar at its top edge becomes the header */
@@ -74,7 +81,7 @@ html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .bar-left { justify-self: start; display: flex; align-items: center; min-width: 0; }
 /* the small wordmark joins the role once the bar is the header */
 .mark { flex: none; max-width: 0; overflow: hidden; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
-  font-size: 17px; letter-spacing: 0; line-height: 1.1; opacity: 0;
+  font-variation-settings: var(--mark-vary-small); font-size: 17px; letter-spacing: 0; line-height: 1.1; opacity: 0;
   transition: max-width .55s var(--ease), margin .55s var(--ease), opacity .35s; pointer-events: none; }
 html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
 .bar.is-top .mark { max-width: 280px; margin-right: 22px; opacity: 1; pointer-events: auto; }
@@ -204,7 +211,10 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 @keyframes rise-edge { from { transform: translateY(100%); } }
 .intro .hero video { animation: open-frame 2.8s cubic-bezier(.65, 0, .25, 1) .2s both; }
 .intro .hero-name i { animation: pull-focus 1.5s var(--ease) both; animation-delay: calc(1.35s + var(--d) * 70ms); }
-.intro .hero-watch { animation: fade-in .9s var(--ease) 2.4s both; }
+/* a face with an exposure axis is developed instead: each letter starts blown out and settles to its exposure */
+@keyframes develop { from { opacity: 0; font-variation-settings: "EXPO" 100; text-shadow: 0 0 .25em rgba(255, 255, 255, .9); } 30% { opacity: 1; } }
+html[data-expose].intro .hero-name i { animation: develop 2s cubic-bezier(.3, .6, .2, 1) both; animation-delay: calc(1.35s + var(--d) * 70ms); }
+.intro .hero-tag, .intro .hero-watch { animation: fade-in .9s var(--ease) 2.4s both; }
 .intro .bar { animation: rise-edge .9s var(--ease) 2.5s both; }
 
 /* NARROWER */

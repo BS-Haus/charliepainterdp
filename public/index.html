@@ -33,19 +33,24 @@
       st.setProperty("--mark-stretch", t.stretch || "100%");
       st.setProperty("--mark-track", t.track || "0");
       st.setProperty("--mark-words", t.words || "-.06em");
+      st.setProperty("--mark-vary", t.vary || "normal");
+      st.setProperty("--mark-vary-small", t.varySmall || t.vary || "normal");
+      if (t.expose) html.dataset.expose = "";
       st.setProperty("--mark-style", t.italic ? "italic" : "normal");
       html.dataset.markCase = t.caps ? "caps" : "as-set";
     })();
   </script>
 </head>
 <body>
-  <!-- THE REEL: the first screen. What's playing, top left; the name edge to edge along the bottom. Pinned; the page slides up over it -->
+  <!-- THE REEL: the first screen. What's playing, top left, and watching it with sound, top right; the name edge to edge
+       along the bottom. Pinned; the page slides up over it -->
   <section class="hero" id="top" aria-label="Showreel">
     <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg" src="/media/reel-narrative-v3.mp4"
       data-narrative="/media/reel-narrative-v3.mp4" data-commercial="/media/reel-commercial-v2.mp4" data-poster-narrative="/media/reel-narrative-v2-poster.jpg" data-poster-commercial="/media/reel-commercial-v2-poster.jpg"></video>
     <span class="hero-shade" aria-hidden="true"></span>
     <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i style="--d:7">C</i><i style="--d:6">h</i><i style="--d:5">a</i><i style="--d:4">r</i><i style="--d:3">l</i><i style="--d:2">i</i><i style="--d:1">e</i></span> <span class="w"><i style="--d:1">P</i><i style="--d:2">a</i><i style="--d:3">i</i><i style="--d:4">n</i><i style="--d:5">t</i><i style="--d:6">e</i><i style="--d:7">r</i></span></span></h1>
-    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
+    <p class="hero-tag label"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span></p>
+    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel">Watch<span class="hero-watch-more"> with sound</span>&nbsp;↗</a>
   </section>
 
   <main class="page">
