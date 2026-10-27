@@ -104,16 +104,18 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .key[aria-checked="true"] { color: var(--fg); }
 .key[aria-checked="true"]::before { background: var(--rec); box-shadow: 0 0 6px rgba(242, 35, 27, .9); }
 
-/* GROUPS — a slim ruled label row, then the frames */
+/* GROUPS — the frames run straight on from the bar; the half that comes first needs no label (its key is pressed), the
+   second opens with a slim ruled one */
 .groups { display: grid; }
 .group-head { display: flex; justify-content: space-between; align-items: center; height: 54px; padding: 0 var(--pad); color: var(--dim); border-bottom: 1px solid var(--line); }
-.group + .group .group-head { border-top: 1px solid var(--line); margin-top: clamp(32px, 4vw, 56px); }
+.group:first-child .group-head { display: none; }
 .group-head h2 { color: var(--fg); }
 
 /* FRAMES — a frame shows its film; hover (or touch) and its stills slide by; click to open it */
 .tile { position: relative; overflow: hidden; background: var(--tile); cursor: pointer; isolation: isolate; }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border-bottom: 1px solid var(--line); }
 .grid .tile { aspect-ratio: 2.2 / 1; }
+.grid:has(> .tile:last-child:nth-child(odd))::after { content: ""; background: var(--bg); }   /* an odd last row ends in black */
 .slides { display: flex; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .slides::-webkit-scrollbar { display: none; }
 .slides.is-dragging { scroll-snap-type: none; cursor: grabbing; }
@@ -123,7 +125,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .tile-title { font-family: var(--display); font-size: clamp(26px, 2.3vw, 38px); line-height: 1.02; letter-spacing: -0.01em; color: #fff; }
 .tile-title a { pointer-events: auto; }
 .tile-credit { color: rgba(255, 255, 255, .8); }
-/* the still counter: small, white, bottom-right. With a mouse, the arrows either side of it appear on hover */
+/* the still counter: small, white, bottom-right. With a mouse it appears, with its arrows, on hover */
 .tile-count { position: absolute; right: calc(var(--pad) - 8px); bottom: 18px; z-index: 3; display: flex; align-items: center; color: rgba(255, 255, 255, .72); font-variant-numeric: tabular-nums; text-shadow: 0 0 10px rgba(0, 0, 0, .5); }
 .tile-count b { font-weight: 400; color: #fff; }
 .tile-step { padding: 6px 8px; color: rgba(255, 255, 255, .72); opacity: 0; transition: opacity .25s, color .15s; }
@@ -131,6 +133,8 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 @media (hover: hover) and (pointer: fine) {
   .grid .tile-cap { opacity: 0; transform: translateY(8px); }
   .grid .tile:hover .tile-cap, .grid .tile:focus-within .tile-cap { opacity: 1; transform: none; }
+  .grid .tile-count { opacity: 0; transition: opacity .35s var(--ease); }
+  .grid .tile:hover .tile-count, .grid .tile:focus-within .tile-count { opacity: 1; }
   .grid .tile:hover .tile-step, .grid .tile:focus-within .tile-step { opacity: 1; }
   .grid .tile:hover .slides img { transform: scale(1.025); }
 }
@@ -139,7 +143,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .js .tile.in { opacity: 1; }
 
 /* CV + CONTACT — the rest of the page: the plain list producers expect, then how to reach him */
-.cv, .contact { margin-top: clamp(64px, 9vw, 140px); border-top: 1px solid var(--line); }
+.contact { margin-top: clamp(64px, 9vw, 140px); border-top: 1px solid var(--line); }   /* the CV runs straight on from the work */
 .sec-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; height: 84px; padding: 0 var(--pad); border-bottom: 1px solid var(--line); color: var(--dim); }
 .sec-title { font-family: var(--display); font-size: clamp(32px, 3vw, 46px); line-height: 1; letter-spacing: -0.01em; color: var(--fg); }
 .cv-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); border-bottom: 1px solid var(--line); }
@@ -240,6 +244,7 @@ html[data-expose].intro .hero-name i { animation-name: develop-expo, appear; }
   .key { flex: 1; height: 38px; }
   .hero-watch-more { display: none; }
   .grid { grid-template-columns: minmax(0, 1fr); }
+  .grid::after { display: none; }
   .grid .tile { aspect-ratio: 1.6 / 1; }
   .tile-cap { padding: 40px 16px 16px; }
   .tile-title { font-size: 27px; }

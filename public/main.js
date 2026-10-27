@@ -65,8 +65,10 @@
     // if you're down in the work, come back to its top so you see the swap
     const workTop = work.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
     if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
-    const before = groups.map((g) => g.getBoundingClientRect().top);
+    const y = window.scrollY, before = groups.map((g) => g.getBoundingClientRect().top);
     groupsEl.prepend(groups.find((g) => g.dataset.group === group));
+    // the browser would keep the frame you were looking at in view (scroll anchoring); stay at the top of the work
+    if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
     if (reduceMotion) return;
     groups.forEach((g, i) => {
       const dy = before[i] - g.getBoundingClientRect().top;
