@@ -31,6 +31,10 @@
   --pad: clamp(18px, 2.2vw, 36px);
   --bar: 66px;                /* the bar: at the bottom of the first screen, then the header */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* the opening frame: a scope letterbox, this share of the screen wide, centred; the intro opens it out to full bleed */
+  --lb-s: .8;
+  --lb-ratio: 2.39;
+  --lb-half: calc(var(--lb-s) * 50vw / var(--lb-ratio));   /* half its height */
   color-scheme: dark;
 }
 
@@ -213,21 +217,40 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .proj-follow .label { color: var(--dim); }
 .proj-follow:hover .proj-follow-title { color: var(--rec); }
 
-/* THE INTRO — once per visit, like an opening title. The name comes first, over black, the way a print comes up in the
-   tray: faint and overexposed, its strokes filling in to the sharp cut (a face without that axis thickens from its
-   thinnest weight). Then the picture opens behind it from a slit to a letterbox, holds, and opens to full bleed; what's
-   playing and the bar come last */
-@keyframes open-frame { 0% { clip-path: inset(50% 0 50% 0); } 38% { clip-path: inset(15% 0 15% 0); } 62% { clip-path: inset(15% 0 15% 0); } 100% { clip-path: inset(0 0 0 0); } }
+/* THE INTRO — once per visit, like an opening title, all inside the opening frame (the scope letterbox above). The name
+   comes up first over black, sitting where the frame's bottom edge will be, the way a print comes up in the tray: faint
+   and overexposed, filling in to the sharp cut (a face without that axis thickens from its thinnest weight). The picture
+   opens behind it from a slit into the letterbox, and what's playing comes up in the frame's corner. Then the frame opens
+   out to full bleed and carries them with it: the name stretches to the full width and settles on the bar, what's
+   playing goes to its corner, and the bar rises with the rest.
+   The frame, the name and what's playing share one 4s clock: picture opens 1.1–2.2s, holds, opens out 2.8–4s */
+@keyframes frame-picture {
+  0%, 27.5% { clip-path: inset(50% calc((1 - var(--lb-s)) * 50%)); animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+  55%, 70% { clip-path: inset(calc(50% - var(--lb-half)) calc((1 - var(--lb-s)) * 50%)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+  100% { clip-path: inset(0 0); }
+}
+@keyframes frame-name {
+  0%, 70% { transform: translateY(calc(var(--lb-half) - 50svh + var(--bar) + var(--pad) * .55 * (1 - var(--lb-s)))) scale(var(--lb-s)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+  100% { transform: none; }
+}
+@keyframes frame-tag {
+  0%, 45% { opacity: 0; transform: translate(calc((1 - var(--lb-s)) * 50vw - var(--pad) * (1 - var(--lb-s))), calc(50svh - var(--lb-half) - var(--pad) * (1 - var(--lb-s)))); }
+  60% { opacity: 1; }
+  70% { transform: translate(calc((1 - var(--lb-s)) * 50vw - var(--pad) * (1 - var(--lb-s))), calc(50svh - var(--lb-half) - var(--pad) * (1 - var(--lb-s)))); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+  100% { opacity: 1; transform: none; }
+}
 @keyframes appear { from { opacity: 0; } }
 @keyframes develop-weight { from { font-weight: 100; } }
 @keyframes develop-expo { from { font-variation-settings: "EXPO" 100; } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes rise-edge { from { transform: translateY(100%); } }
-.intro .hero video { animation: open-frame 2.4s cubic-bezier(.65, 0, .25, 1) 1.7s both; }
-.intro .hero-name i { animation: develop-weight 2.4s cubic-bezier(.25, .6, .3, 1) .35s both, appear 1.3s ease-out .35s both; }   /* every letter at once */
+.intro .hero video { animation: frame-picture 4s linear both; }
+.intro .hero-name { transform-origin: 50% 100%; animation: frame-name 4s linear both; }
+.intro .hero-name i { animation: develop-weight 2.2s cubic-bezier(.25, .6, .3, 1) .3s both, appear 1.2s ease-out .3s both; }   /* every letter at once */
 html[data-expose].intro .hero-name i { animation-name: develop-expo, appear; }
-.intro .hero-tag, .intro .hero-watch { animation: fade-in .9s var(--ease) 3.2s both; }
-.intro .bar { animation: rise-edge .9s var(--ease) 3.3s both; }
+.intro .hero-tag { animation: frame-tag 4s linear both; }
+.intro .hero-watch { animation: fade-in .7s var(--ease) 3.6s both; }
+.intro .bar { animation: rise-edge .8s var(--ease) 3.2s both; }
 
 /* NARROWER */
 @media (max-width: 960px) {
@@ -239,7 +262,7 @@ html[data-expose].intro .hero-name i { animation-name: develop-expo, appear; }
 
 /* PHONES — the bar has two rows: the role (then the name) with the places to go, and the keys */
 @media (max-width: 760px) {
-  :root { --bar: 104px; }
+  :root { --bar: 104px; --lb-s: .9; --lb-ratio: 1.85; }
   .bar { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 50px 54px; padding: 0; }
   .bar-left { padding-left: var(--pad); }
   .bar-role { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 10px; letter-spacing: .08em; }

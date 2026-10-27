@@ -30,6 +30,7 @@ if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
     "stk-bureau": { name: "STK Bureau Sans ExtraLight", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: "-.015em", caps: 0 },
     "stk-bureau-caps": { name: "STK Bureau Sans ExtraLight, capitals", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: ".01em", caps: 1 }
   });
+  window.MARK_DEFAULT = "exposure";   // the chosen wordmark; online too once its web licence is bought
 }
 window.loadMark = function (key) {
   var t = window.MARKS[key];
