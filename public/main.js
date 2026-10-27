@@ -12,16 +12,25 @@
 
   const top = $(".top");
   const hero = $(".hero"), heroReel = $("#hero-reel"), heroWatch = $("#hero-watch"), heroWatchTitle = $("#hero-watch-title");
-  const work = $("#work"), groupsEl = $("#groups");
+  const work = $("#work"), groupsEl = $("#groups"), bar = $(".work-bar"), barKeys = $(".keys", bar), dock = $(".dock");
   const headH = () => top.offsetHeight;
+  let openSheet = null;
+
+  /* ---------- The intro plays once per visit (the page marks it before anything paints) ---------- */
+  if (document.documentElement.classList.contains("intro")) {
+    setTimeout(() => {
+      document.documentElement.classList.remove("intro");
+      try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
+    }, 3600);
+  }
 
   /* ======================================================================
-     THE REEL AND THE WORK — the work slides up over the pinned reel. As it does, the reel dims; once it's
-     covered, the header gets its floor and the name, and the reel stops
+     THE REEL, THE WORK, THE DOCK — the page slides up over the pinned reel, which dims and then stops. Once the reel is
+     covered, the header gets its floor and the name; when the keys on the work's edge reach the header, they dock in it
      ====================================================================== */
   let covered = false;
   const onScroll = () => {
-    const span = hero.offsetHeight - work.querySelector(".work-bar").offsetHeight - headH();
+    const span = hero.offsetHeight - bar.offsetHeight - headH();
     const c = clamp(window.scrollY / (span || 1), 0, 1);
     hero.style.setProperty("--cover", c.toFixed(3));
     top.classList.toggle("is-solid", c >= 0.999);
@@ -30,22 +39,29 @@
       if (covered) heroReel.pause();
       else if (!reduceMotion && !openSheet) heroReel.play().catch(() => {});
     }
+    // dock when the bar's keys pass the middle of the header, and only while you're in the work
+    const k = barKeys.getBoundingClientRect(), w = work.getBoundingClientRect();
+    const docked = getComputedStyle(dock).display !== "none" && k.top + k.height / 2 <= headH() / 2 && w.bottom > headH() + 80;
+    top.classList.toggle("is-docked", docked);
+    document.body.classList.toggle("is-docked", docked);
+    dock.inert = !docked;
+    barKeys.inert = docked;
     lights();
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
 
   /* ======================================================================
-     THE KEYS — narrative or commercial first. Nothing is hidden: the halves swap places, and the reel
-     behind the work becomes that half's reel
+     THE KEYS — narrative or commercial first. Nothing is hidden: the halves swap places, and the reel behind the work
+     becomes that half's reel. The keys on the bar and the docked keys are the same switch
      ====================================================================== */
   const keys = $$(".key");
   const putFirst = (group) => {
     const groups = $$(".group", groupsEl);
     if (groups[0].dataset.group === group) return;
     // if you're down in the work, come back to its top so you see the swap
-    const workTop = work.offsetTop - headH();
-    if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "auto" });
+    const workTop = work.getBoundingClientRect().top + window.scrollY - headH();
+    if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
     const before = groups.map((g) => g.getBoundingClientRect().top);
     groupsEl.prepend(groups.find((g) => g.dataset.group === group));
     if (reduceMotion) return;
@@ -74,10 +90,10 @@
     swapReel(group);
   };
   keys.forEach((k) => k.addEventListener("click", () => choose(k.dataset.first)));
-  $(".keys").addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]').focus(); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]').focus(); }
-  });
+  $$(".keys").forEach((set) => set.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]', set).focus(); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]', set).focus(); }
+  }));
 
   /* ======================================================================
      FRAMES — each film's frame holds all its stills: swipe (touch or trackpad), drag, or the arrows by the counter.
@@ -133,62 +149,15 @@
   });
 
   /* ======================================================================
-     SHEETS — CV, contact and each film slide up from the bottom. Each has an address (#/cv, #/contact, #/vetala),
-     so the back button closes them and a film can be sent on its own
+     THE FILM — slides up from the bottom. Each film has its own address (#/vetala), so the back button closes it and a
+     film can be sent on its own
      ====================================================================== */
-  const scrim = $("#scrim");
-  const sheets = { cv: $("#sheet-cv"), contact: $("#sheet-contact") };
-  const proj = $("#proj");
-  let openSheet = null, lastFocus = null;
-
-  const show = (el) => {
-    if (openSheet === el) return;
-    if (openSheet) hide(openSheet, true);
-    if (!openSheet) lastFocus = document.activeElement;
-    openSheet = el;
-    clearTimeout(el._t);
-    el.hidden = false;
-    scrim.classList.add("is-on");
-    document.body.classList.add("is-locked");
-    heroReel.pause();
-    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("is-open")));
-    el.focus({ preventScroll: true });
-    lights();
-  };
-  const hide = (el, swapping) => {
-    el.classList.remove("is-open");
-    el._t = setTimeout(() => {
-      el.hidden = true;
-      if (el === proj) { $("#proj-player").innerHTML = ""; $("#proj-stills").innerHTML = ""; }
-    }, reduceMotion ? 0 : 650);
-    if (swapping) return;
-    openSheet = null;
-    scrim.classList.remove("is-on");
-    document.body.classList.remove("is-locked");
-    document.title = "Charlie Painter — Director of Photography, London";
-    if (!reduceMotion && !covered) heroReel.play().catch(() => {});
-    lastFocus?.focus?.({ preventScroll: true });
-    lights();
-  };
-  const closeAll = () => { if (openSheet) hide(openSheet); };
-  // closing drops the address without moving the page
-  const dismiss = (e) => { e?.preventDefault(); history.pushState(null, "", location.pathname + location.search); closeAll(); };
-  $$(".sheet-close").forEach((a) => a.addEventListener("click", dismiss));
-  scrim.addEventListener("click", dismiss);
-  document.addEventListener("keydown", (e) => {
-    if (!openSheet) return;
-    if (e.key === "Escape") dismiss(e);
-    if (openSheet === proj && !e.target.closest("iframe")) {
-      if (e.key === "ArrowRight") location.hash = $("#proj-next").getAttribute("href");
-      if (e.key === "ArrowLeft") location.hash = $("#proj-prev").getAttribute("href");
-    }
-  });
-
-  /* ---------- The film sheet ---------- */
+  const scrim = $("#scrim"), proj = $("#proj");
+  let lastFocus = null, closeTimer = 0;
   const order = () => $$("#groups .tile").map((t) => t.dataset.slug);   // follows the keys
   const embed = ({ provider, id, hash }) => provider === "youtube"
     ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`
-    : `https://player.vimeo.com/video/${id}?${hash ? `h=${hash}&` : ""}autoplay=1&title=0&byline=0&portrait=0&dnt=1`;
+    : `https://player.vimeo.com/video/${id}?${hash ? `h=${hash}&` : ""}autoplay=1&title=0&byline=0&portrait=0&dnt=1&transparent=0`;
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   const renderFilm = (p) => {
@@ -215,24 +184,57 @@
     document.title = `${p.title} — Charlie Painter`;
   };
 
+  const open = (p) => {
+    renderFilm(p);
+    clearTimeout(closeTimer);
+    if (!openSheet) lastFocus = document.activeElement;
+    openSheet = proj;
+    proj.hidden = false;
+    scrim.classList.add("is-on");
+    document.body.classList.add("is-locked");
+    heroReel.pause();
+    requestAnimationFrame(() => requestAnimationFrame(() => proj.classList.add("is-open")));
+    proj.focus({ preventScroll: true });
+  };
+  const close = () => {
+    if (!openSheet) return;
+    openSheet = null;
+    proj.classList.remove("is-open");
+    scrim.classList.remove("is-on");
+    document.body.classList.remove("is-locked");
+    document.title = "Charlie Painter — Director of Photography, London";
+    closeTimer = setTimeout(() => { proj.hidden = true; $("#proj-player").innerHTML = ""; $("#proj-stills").innerHTML = ""; }, reduceMotion ? 0 : 650);
+    if (!reduceMotion && !covered) heroReel.play().catch(() => {});
+    lastFocus?.focus?.({ preventScroll: true });
+  };
+  // closing drops the film's address without moving the page
+  const dismiss = (e) => { e?.preventDefault(); history.pushState(null, "", location.pathname + location.search); close(); };
+  $(".proj-back").addEventListener("click", dismiss);
+  scrim.addEventListener("click", dismiss);
+  document.addEventListener("keydown", (e) => {
+    if (!openSheet) return;
+    if (e.key === "Escape") dismiss(e);
+    if (e.target.closest("iframe")) return;
+    if (e.key === "ArrowRight") location.hash = $("#proj-next").getAttribute("href");
+    if (e.key === "ArrowLeft") location.hash = $("#proj-prev").getAttribute("href");
+  });
+
   const route = () => {
     const m = location.hash.match(/^#\/(.+)$/);
-    if (!m) return closeAll();
-    const key = decodeURIComponent(m[1]);
-    if (sheets[key]) return show(sheets[key]);
-    const p = bySlug.get(key);
-    if (!p) return closeAll();
-    renderFilm(p);
-    show(proj);
+    const p = m && bySlug.get(decodeURIComponent(m[1]));
+    if (p) open(p);
+    else close();
   };
   window.addEventListener("hashchange", route);
 
-  /* ---------- Header: which place you're in ---------- */
+  /* ---------- Header: which part of the page you're in ---------- */
   const navLinks = $$(".nav a");
+  const sections = navLinks.map((a) => $(a.getAttribute("href")));
   function lights() {
-    const at = openSheet === sheets.cv ? "#/cv" : openSheet === sheets.contact ? "#/contact"
-      : work.getBoundingClientRect().top <= headH() + 2 ? "#work" : null;
-    navLinks.forEach((a) => a.classList.toggle("is-on", a.getAttribute("href") === at));
+    let on = -1;
+    sections.forEach((el, i) => { if (el && el.getBoundingClientRect().top <= innerHeight * 0.5) on = i; });
+    if (window.scrollY + innerHeight >= document.documentElement.scrollHeight - 2) on = sections.length - 1;
+    navLinks.forEach((a, i) => a.classList.toggle("is-on", i === on));
   }
 
   onScroll();

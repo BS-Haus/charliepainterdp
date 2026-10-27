@@ -16,16 +16,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
-  <script>document.documentElement.classList.add("js");</script>
+  <script>
+    document.documentElement.classList.add("js");
+    try { if (!sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("intro"); } catch (e) {}
+  </script>
 </head>
 <body>
-  <!-- HEADER: just the three places to go. Over the reel it's bare; once the work covers the reel, it gets a floor and the name -->
+  <!-- HEADER: the role top-left (the name joins it once the reel is covered), the keys dock in the middle once
+       you're into the work, and the three places to go on the right -->
   <header class="top" id="top">
-    <a class="mark" href="#top" aria-label="Charlie Painter, Director of Photography — back to the top">Charlie Painter</a>
+    <div class="top-left">
+      <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
+      <p class="top-role label">Director of Photography<span>London</span></p>
+    </div>
+    <div class="dock keys label" role="radiogroup" aria-label="Show first" inert><button class="key" role="radio" aria-checked="true" data-first="narrative"><span>Narrative</span><i>09</i></button><button class="key" role="radio" aria-checked="false" data-first="commercial"><span>Commercial</span><i>06</i></button></div>
     <nav class="nav label" aria-label="Sections">
       <a href="#work">Work</a>
-      <a href="#/cv">CV</a>
-      <a href="#/contact">Contact</a>
+      <a href="#cv">CV</a>
+      <a href="#contact">Contact</a>
     </nav>
   </header>
 
@@ -35,18 +43,18 @@
       data-narrative="/media/reel-narrative-v3.mp4" data-commercial="/media/reel-commercial-v2.mp4" data-poster-narrative="/media/reel-narrative-v2-poster.jpg" data-poster-commercial="/media/reel-commercial-v2-poster.jpg"></video>
     <span class="hero-shade" aria-hidden="true"></span>
     <div class="hero-text">
-      <p class="hero-role label">Director of Photography<span>London</span></p>
-      <h1 class="hero-name">Charlie Painter</h1>
+      <h1 class="hero-name"><span><i>Charlie</i></span> <span><i>Painter</i></span></h1>
       <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
     </div>
   </section>
 
-  <!-- THE WORK: a container whose top edge (the bar with the keys) waits along the bottom of the first screen -->
-  <main class="work" id="work">
-    <div class="work-bar">
-      <div class="keys label" role="radiogroup" aria-label="Show first"><button class="key" role="radio" aria-checked="true" data-first="narrative"><span>Narrative</span><i>09</i></button><button class="key" role="radio" aria-checked="false" data-first="commercial"><span>Commercial</span><i>06</i></button></div>
-    </div>
-    <div class="groups" id="groups">
+  <main class="page">
+    <!-- WORK: its top edge (the keys, centred) waits along the bottom of the first screen, then rides up and docks -->
+    <section class="work" id="work" aria-label="Work">
+      <div class="work-bar">
+        <div class="keys label" role="radiogroup" aria-label="Show first"><button class="key" role="radio" aria-checked="true" data-first="narrative"><span>Narrative</span><i>09</i></button><button class="key" role="radio" aria-checked="false" data-first="commercial"><span>Commercial</span><i>06</i></button></div>
+      </div>
+      <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
         <header class="group-head label"><h2>Narrative</h2><span>9 films</span></header>
         <div class="grid">
@@ -132,16 +140,12 @@
         </article>
         </div>
       </section>
-    </div>
-    <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#/contact">Contact</a><a href="#top">Top ↑</a></footer>
-  </main>
+      </div>
+    </section>
 
-  <!-- SHEETS: CV, contact and each film slide up from the bottom over everything -->
-  <span class="scrim" id="scrim" aria-hidden="true"></span>
-
-  <div class="sheet" id="sheet-cv" role="dialog" aria-modal="true" aria-labelledby="cv-title" tabindex="-1" hidden>
-    <div class="sheet-bar label"><h2 class="sheet-title" id="cv-title">CV</h2><span class="sheet-note">Director / Prod Co.</span><a class="sheet-close" href="#work">Close ✕</a></div>
-    <div class="sheet-scroll">
+    <!-- CV: the plain list producers expect -->
+    <section class="cv" id="cv" aria-label="CV">
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">Director / Prod Co.</p></header>
       <div class="cv-block">
         <h3 class="label">Feature film</h3>
         <ul class="cv-list">
@@ -193,12 +197,11 @@
           <li><span class="label">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
         </ul>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="sheet sheet-short" id="sheet-contact" role="dialog" aria-modal="true" aria-labelledby="contact-title" tabindex="-1" hidden>
-    <div class="sheet-bar label"><h2 class="sheet-title" id="contact-title">Contact</h2><span class="sheet-note">London, UK</span><a class="sheet-close" href="#work">Close ✕</a></div>
-    <div class="sheet-scroll">
+    <!-- CONTACT -->
+    <section class="contact" id="contact" aria-label="Contact">
+      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
       <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
       <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
       <nav class="links label" aria-label="Elsewhere">
@@ -207,8 +210,13 @@
         <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
         <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
       </nav>
-    </div>
-  </div>
+    </section>
+
+    <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+  </main>
+
+  <!-- THE FILM: slides up from the bottom over everything -->
+  <span class="scrim" id="scrim" aria-hidden="true"></span>
 
   <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
     <div class="sheet-bar label">
