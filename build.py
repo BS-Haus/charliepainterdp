@@ -106,9 +106,9 @@ def awards():
 
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
-# the keys on the work bar: narrative / commercial, each with its count; the pressed one comes first
+# the keys on the work bar: narrative / commercial; the pressed one comes first
 keys = "".join(
-    f'<button class="key" role="radio" aria-checked="{"true" if g == "narrative" else "false"}" data-first="{g}"><span>{LABELS[g]}</span><i>{len(content[g]):02d}</i></button>'
+    f'<button class="key" role="radio" aria-checked="{"true" if g == "narrative" else "false"}" data-first="{g}"><span>{LABELS[g]}</span></button>'
     for g in ("narrative", "commercial")
 )
 out = out.replace("{{KEYS}}", keys)
