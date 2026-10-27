@@ -32,19 +32,20 @@
       st.setProperty("--mark-small", t.small);
       st.setProperty("--mark-stretch", t.stretch || "100%");
       st.setProperty("--mark-track", t.track || "0");
+      st.setProperty("--mark-words", t.words || "-.06em");
       st.setProperty("--mark-style", t.italic ? "italic" : "normal");
       html.dataset.markCase = t.caps ? "caps" : "as-set";
     })();
   </script>
 </head>
 <body>
-  <!-- THE REEL: the first screen. The name edge to edge across the top, and what's playing. Pinned; the page slides up over it -->
+  <!-- THE REEL: the first screen. What's playing, top left; the name edge to edge along the bottom. Pinned; the page slides up over it -->
   <section class="hero" id="top" aria-label="Showreel">
     <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="{{POSTER_NARRATIVE}}" src="{{REEL_NARRATIVE}}"
       data-narrative="{{REEL_NARRATIVE}}" data-commercial="{{REEL_COMMERCIAL}}" data-poster-narrative="{{POSTER_NARRATIVE}}" data-poster-commercial="{{POSTER_COMMERCIAL}}"></video>
     <span class="hero-shade" aria-hidden="true"></span>
     <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
-    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
+    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel"><span id="hero-watch-title">Narrative showreel</span><span class="hero-watch-more">&nbsp;— watch with sound</span>&nbsp;↗</a>
   </section>
 
   <main class="page">

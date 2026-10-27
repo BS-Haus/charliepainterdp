@@ -3,7 +3,7 @@
    commercial keys, the places to go — which waits along the bottom of the first screen, rides up with the work and
    stays at the top as the header. Each film slides up from the bottom as a sheet. Black, hairlines, one red light.
 
-   Type: the wordmark is Inter Tight ExtraLight, edge to edge (any face in types.js can be tried with ?type=…);
+   Type: the wordmark is Geist Mono ExtraLight in capitals, edge to edge (any face in types.js can be tried with ?type=…);
    Libertinus Serif (Charlie's) is the voice of the work —
    film titles, headings, the about line, the email; PT Sans Caption does the instrument labels and the credits. */
 :root {
@@ -19,11 +19,12 @@
   --rec: #f2231b;
   --display: "Libertinus Serif", "Iowan Old Style", Georgia, serif;
   --text: "PT Sans Caption", "PT Sans", "Helvetica Neue", Arial, sans-serif;
-  --mark-font: "Inter Tight", "Helvetica Neue", Arial, sans-serif;   /* types.js sets these for the chosen face */
+  --mark-font: "Geist Mono", ui-monospace, Menlo, monospace;   /* types.js sets these for the chosen face */
   --mark-weight: 200;
   --mark-small: 400;
   --mark-stretch: 100%;
   --mark-track: 0;
+  --mark-words: -.06em;
   --mark-style: normal;
   --pad: clamp(18px, 2.2vw, 36px);
   --bar: 66px;                /* the bar: at the bottom of the first screen, then the header */
@@ -47,25 +48,23 @@ i { font-style: normal; }
 /* the instrument parts: small tracked capitals */
 .label { font-family: var(--text); font-size: 11.5px; letter-spacing: .12em; line-height: 1.6; text-transform: uppercase; }
 .credit { font-family: var(--text); font-size: 14px; letter-spacing: .01em; line-height: 1.45; }
-/* a light, used only for something that is on */
-.rec { display: inline-block; flex: none; width: 5px; height: 5px; margin-right: 12px; border-radius: 50%; background: var(--rec); vertical-align: middle; transform: translateY(-0.12em); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
 
-/* THE REEL — pinned for the first screen. The name edge to edge across the top; what's playing sits just above the keys */
+/* THE REEL — pinned for the first screen. What's playing sits top left; the name runs edge to edge along the bottom, on the bar */
 .hero { position: sticky; top: 0; z-index: 0; height: 100vh; height: 100svh; overflow: hidden; background: #000; }
 .hero video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .5s; }
 .hero video.is-swapping { opacity: 0; }
 .hero-shade { position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0) 38%), linear-gradient(0deg, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, 0) 30%),
+  background: linear-gradient(180deg, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, 0) 22%), linear-gradient(0deg, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0) 40%),
               rgba(0, 0, 0, calc(var(--cover, 0) * .85)); }
 /* the wordmark: thin, centred, set edge to edge (main.js sizes it to the width once the face has loaded) */
-.hero-name { position: absolute; top: calc(var(--pad) * .8); left: var(--pad); right: var(--pad); text-align: center; white-space: nowrap; color: #fff;
+.hero-name { position: absolute; bottom: calc(var(--bar) + var(--pad) * .55); left: var(--pad); right: var(--pad); text-align: center; white-space: nowrap; color: #fff;
   font-family: var(--mark-font); font-weight: var(--mark-weight); font-stretch: var(--mark-stretch); font-style: var(--mark-style); letter-spacing: var(--mark-track);
-  font-size: 12.4vw; line-height: .9; word-spacing: -.06em; }   /* at this size a normal word space is a gulf */
+  font-size: 7.6vw; line-height: .8; word-spacing: var(--mark-words); }   /* at this size a normal word space is a gulf */
 html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .js .hero-name:not(.is-fit) { visibility: hidden; }
 .hero-name-in { display: inline-block; margin-right: calc(var(--mark-track) * -1); }   /* no tracking after the last letter, so it centres */
 .hero-name .w, .hero-name i { display: inline-block; }
-.hero-watch { position: absolute; left: 50%; bottom: calc(var(--bar) + 22px); transform: translateX(-50%); display: flex; align-items: center; white-space: nowrap; color: rgba(255, 255, 255, .86); transition: color .2s; }
+.hero-watch { position: absolute; top: var(--pad); left: var(--pad); display: flex; align-items: center; white-space: nowrap; color: rgba(255, 255, 255, .86); transition: color .2s; }
 .hero-watch:hover { color: #fff; }
 
 /* THE PAGE — slides up over the reel; the bar at its top edge becomes the header */
