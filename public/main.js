@@ -23,10 +23,14 @@
   }
 
   /* ---------- The name, edge to edge: sized to the width once its face has loaded ---------- */
-  const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName);
+  const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName), letters = [...heroName.querySelectorAll("i")];
   const fitName = () => {
     heroName.style.fontSize = "100px";
-    heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
+    const size = (100 * heroName.clientWidth) / nameIn.offsetWidth;
+    heroName.style.fontSize = `${size}px`;
+    // how far each letter sits from the middle, in ems, for the intro's tracking out (layout positions, so mid-animation is fine)
+    const mid = nameIn.offsetLeft + nameIn.offsetWidth / 2;
+    letters.forEach((l) => l.style.setProperty("--x", ((l.offsetLeft + l.offsetWidth / 2 - mid) / size).toFixed(3)));
     heroName.classList.add("is-fit");
   };
   document.fonts.ready.then(fitName);
