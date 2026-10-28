@@ -43,13 +43,13 @@
 </head>
 <body>
   <!-- THE REEL: the first screen. What's playing, top left, and watching it with sound, top right. Pinned; the page
-       slides up over it -->
+       slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Showreel">
     <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="{{POSTER_NARRATIVE}}" src="{{REEL_NARRATIVE}}"
       data-narrative="{{REEL_NARRATIVE}}" data-commercial="{{REEL_COMMERCIAL}}" data-poster-narrative="{{POSTER_NARRATIVE}}" data-poster-commercial="{{POSTER_COMMERCIAL}}"></video>
     <span class="hero-shade" aria-hidden="true"></span>
     <p class="hero-tag label"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span></p>
-    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel">Watch<span class="hero-watch-more"> with sound</span>&nbsp;↗</a>
+    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel">Watch<span class="hero-watch-more"> with sound</span>&nbsp;↗&#xFE0E;</a>
   </section>
 
   <main class="page">
@@ -95,10 +95,10 @@
       <p class="about">{{ABOUT}}</p>
       <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
       <nav class="links label" aria-label="Elsewhere">
-        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗</a>
-        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗</a>
-        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗</a>
-        <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗</a>
+        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗&#xFE0E;</a>
+        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗&#xFE0E;</a>
+        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗&#xFE0E;</a>
+        <a href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗&#xFE0E;</a>
       </nav>
     </section>
 
