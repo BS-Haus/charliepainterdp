@@ -31,15 +31,10 @@
   --pad: clamp(18px, 2.2vw, 36px);
   --bar: 66px;                /* the bar: at the bottom of the first screen, then the header */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  /* the opening frame: a scope letterbox, this share of the screen wide (all of it: bars above and below only), centred;
-     the intro opens it out to full bleed */
-  --lb-s: 1;
+  /* the opening frame: a scope letterbox, the full width with bars above and below; the intro opens it out to full bleed */
   --lb-ratio: 2.39;
-  --lb-half: calc(var(--lb-s) * 50vw / var(--lb-ratio));   /* half its height */
-  --lb-in: calc(var(--lb-s) * var(--pad));                 /* what sits in it is inset this far from its edges */
-  --lb-n: var(--lb-s);                                     /* the name in it, as a share of its full size: edge to edge */
-  --lb-x: calc((1 - var(--lb-s)) * 50vw + var(--lb-in) - var(--pad));   /* from a screen corner to the frame's */
-  --lb-y: calc(50svh - var(--lb-half) + var(--lb-in) - var(--pad));
+  --lb-half: calc(50vw / var(--lb-ratio));   /* half its height */
+  --lb-top: calc(50svh - var(--lb-half));    /* how far its top edge sits below the screen's */
   color-scheme: dark;
 }
 
@@ -222,36 +217,43 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .proj-follow .label { color: var(--dim); }
 .proj-follow:hover .proj-follow-title { color: var(--rec); }
 
-/* THE INTRO — once per visit, like an opening title, played inside the opening frame (the scope letterbox above). The
-   reel fades up already in the letterbox, and the name comes up on it as its title, edge to edge along the foot of the
-   frame just as it will sit on the bar, its letters slowly tracking out from the middle (main.js measures how far each one sits from it). What's playing comes
-   up in one top corner of the frame, watching it with sound in the other. Then the frame opens out to full bleed and
-   everything in it goes with it on the same curve: the name rides the frame's foot down and lands on the bar, the
-   corners go to the screen's, and the bar rises beneath.
-   One 4s clock: the reel up 0.15–1.3s, the name up 0.7–2s, holds, opens out 2.8–4s */
+/* THE INTRO — once per visit, like the start of a film. Black; then the masking opens from a line across the middle to
+   the scope letterbox, and what it uncovers is the frame as it will be: the reel, and the name along the frame's foot,
+   edge to edge, inset from its edge as what's playing and watching it are from its top corners. The name is inside the
+   frame (clipped to the same opening as the picture), so the opening reveals it with the picture; its letters slowly
+   track out from the middle (main.js measures how far each one sits from it). Then the frame opens out to full bleed and
+   everything in it goes with it on the same curve: the name rides the frame's foot down to the bar, the corners go to
+   the screen's, and the bar rises beneath.
+   One 4s clock: black to 0.3s, the letterbox opens 0.3–1.6s, holds, opens out 2.8–4s */
 @keyframes frame-picture {
-  0%, 70% { clip-path: inset(calc(50% - var(--lb-half)) calc((1 - var(--lb-s)) * 50%)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+  0%, 7.5% { clip-path: inset(50% 0); animation-timing-function: cubic-bezier(.6, 0, .2, 1); }
+  40%, 70% { clip-path: inset(var(--lb-top) 0); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
   100% { clip-path: inset(0 0); }
 }
-@keyframes frame-name {   /* at the foot of the frame, as far above its edge as it will sit above the bar */
-  0%, 70% { transform: translateY(calc(var(--lb-half) - 50svh + var(--bar) + (var(--pad) - var(--lb-in)) * .55)) scale(var(--lb-n)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+@keyframes frame-name {   /* at the foot of the frame, a pad above its edge */
+  0%, 70% { transform: translateY(calc(var(--bar) + var(--pad) * .55 - var(--pad) - var(--lb-top))); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
   100% { transform: none; }
 }
-@keyframes frame-corner {   /* in the frame's top corner, its inset in from each edge; --side mirrors it for the right */
-  0%, 20% { opacity: 0; transform: translate(calc(var(--lb-x) * var(--side, 1)), var(--lb-y)); }
-  35% { opacity: 1; }
-  70% { transform: translate(calc(var(--lb-x) * var(--side, 1)), var(--lb-y)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+/* the same opening as the picture's, in the name's own terms (100% is its foot, which sits a pad above the frame's) */
+@keyframes frame-name-mask {
+  0%, 7.5% { clip-path: polygon(-50vw calc(100% + var(--pad) - var(--lb-half)), 150vw calc(100% + var(--pad) - var(--lb-half)),
+                                150vw calc(100% + var(--pad) - var(--lb-half)), -50vw calc(100% + var(--pad) - var(--lb-half)));
+             animation-timing-function: cubic-bezier(.6, 0, .2, 1); }
+  40%, 100% { clip-path: polygon(-50vw calc(100% + var(--pad) - 2 * var(--lb-half)), 150vw calc(100% + var(--pad) - 2 * var(--lb-half)),
+                                 150vw calc(100% + var(--pad)), -50vw calc(100% + var(--pad))); }
+}
+@keyframes frame-corner {   /* in the frame's top corners, inset from its edges as they are from the screen's */
+  0%, 40% { opacity: 0; transform: translateY(var(--lb-top)); }
+  55% { opacity: 1; }
+  70% { transform: translateY(var(--lb-top)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
   100% { opacity: 1; transform: none; }
 }
-@keyframes appear { from { opacity: 0; } }
 @keyframes track-out { from { transform: translateX(calc(var(--x, 0) * -.08em)); } }   /* each letter starts 8% nearer the middle */
 @keyframes rise-edge { from { transform: translateY(100%); } }
-.intro .hero video { animation: frame-picture 4s linear both, appear 1.15s cubic-bezier(.45, 0, .55, 1) .15s both; }
-.intro .hero-name { transform-origin: 50% 100%; animation: frame-name 4s linear both; }
-.intro .hero-name-in { animation: appear 1.3s cubic-bezier(.45, 0, .55, 1) .7s both; }
-.intro .hero-name i { animation: track-out 3.3s cubic-bezier(.3, .25, .2, 1) .7s both; }
+.intro .hero video { animation: frame-picture 4s linear both; }
+.intro .hero-name { animation: frame-name 4s linear both, frame-name-mask 4s linear both; }
+.intro .hero-name i { animation: track-out 3.7s cubic-bezier(.3, .25, .2, 1) .3s both; }
 .intro .hero-tag, .intro .hero-watch { animation: frame-corner 4s linear both; }
-.hero-watch { --side: -1; }
 .intro .bar { animation: rise-edge .8s var(--ease) 3.2s both; }
 
 /* NARROWER */
