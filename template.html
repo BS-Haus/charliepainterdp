@@ -21,7 +21,8 @@
     (function () {
       var html = document.documentElement;
       html.classList.add("js");
-      try { if (!sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro"); } catch (e) {}
+      try { if (!sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro", "is-waiting"); } catch (e) {}
+      setTimeout(function () { html.classList.remove("is-waiting"); }, 1500);   // main.js starts it sooner, once the reel has a picture
       // the wordmark's face: types.js lists them; ?type=… tries another (see /explore.html)
       var key = new URLSearchParams(location.search).get("type");
       if (!window.MARKS[key]) key = window.MARK_DEFAULT;

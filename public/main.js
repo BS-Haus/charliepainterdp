@@ -14,23 +14,33 @@
   const work = $("#work"), groupsEl = $("#groups"), bar = $("#bar");
   let openSheet = null;
 
-  /* ---------- The intro plays once per visit (the page marks it before anything paints) ---------- */
-  if (document.documentElement.classList.contains("intro")) {
-    setTimeout(() => {
-      document.documentElement.classList.remove("intro");
-      try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
-    }, 4600);
+  /* ---------- The intro plays once per visit (the page marks it before anything paints). It holds on black until the
+     reel has a picture for the frame to open onto, its still or its first frame (the page lets it go after 1.5s anyway) */
+  const html = document.documentElement;
+  if (html.classList.contains("intro")) {
+    let rolling = false;
+    const roll = () => {
+      if (rolling) return;
+      rolling = true;
+      html.classList.remove("is-waiting");
+      setTimeout(() => {
+        html.classList.remove("intro");
+        try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
+      }, 4600);
+    };
+    const still = new Image();
+    still.onload = still.onerror = roll;
+    still.src = heroReel.poster;
+    if (heroReel.readyState >= 2) roll();
+    else heroReel.addEventListener("loadeddata", roll, { once: true });
+    setTimeout(roll, 1500);
   }
 
   /* ---------- The name, edge to edge: sized to the width once its face has loaded ---------- */
-  const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName), letters = [...heroName.querySelectorAll("i")];
+  const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName);
   const fitName = () => {
     heroName.style.fontSize = "100px";
-    const size = (100 * heroName.clientWidth) / nameIn.offsetWidth;
-    heroName.style.fontSize = `${size}px`;
-    // how far each letter sits from the middle, in ems, for the intro's tracking out (layout positions, so mid-animation is fine)
-    const mid = nameIn.offsetLeft + nameIn.offsetWidth / 2;
-    letters.forEach((l) => l.style.setProperty("--x", ((l.offsetLeft + l.offsetWidth / 2 - mid) / size).toFixed(3)));
+    heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
     heroName.classList.add("is-fit");
   };
   document.fonts.ready.then(fitName);
