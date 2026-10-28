@@ -105,8 +105,9 @@ def awards():
 
 
 def name_mark(name="Charlie Painter"):
-    """The wordmark, letter by letter (the intro develops the letters together)."""
-    words = ("".join(f"<i>{esc(c)}</i>" for c in word) for word in name.split(" "))
+    """The wordmark, letter by letter, each numbered so the intro can bring them up one after another."""
+    n = iter(range(len(name)))
+    words = ("".join(f'<i style="--i:{next(n)}">{esc(c)}</i>' for c in word) for word in name.split(" "))
     return '<span class="hero-name-in" aria-hidden="true">' + " ".join(f'<span class="w">{w}</span>' for w in words) + "</span>"
 
 

@@ -3,9 +3,9 @@
    commercial keys, the places to go — which waits along the bottom of the first screen, rides up with the work and
    stays at the top as the header. Each film slides up from the bottom as a sheet. Black, hairlines, one red light.
 
-   Type: the wordmark is Geist Mono ExtraLight in capitals, edge to edge (any face in types.js can be tried with ?type=…);
-   Libertinus Serif (Charlie's) is the voice of the work —
-   film titles, headings, the about line, the email; PT Sans Caption does the instrument labels and the credits. */
+   Type: Libertinus Serif (Charlie's) sets the wordmark, edge to edge (any face in types.js can be tried with ?type=…), and
+   is the voice of the work — film titles, headings, the about line, the email; PT Sans Caption does the instrument labels
+   and the credits. */
 :root {
   --bg: #050505;
   --body: #0c0c0c;
@@ -19,11 +19,11 @@
   --rec: #f2231b;
   --display: "Libertinus Serif", "Iowan Old Style", Georgia, serif;
   --text: "PT Sans Caption", "PT Sans", "Helvetica Neue", Arial, sans-serif;
-  --mark-font: "Geist Mono", ui-monospace, Menlo, monospace;   /* types.js sets these for the chosen face */
-  --mark-weight: 200;
+  --mark-font: var(--display);   /* types.js sets these for the chosen face */
+  --mark-weight: 400;
   --mark-small: 400;
   --mark-stretch: 100%;
-  --mark-track: 0;
+  --mark-track: -.01em;
   --mark-words: -.06em;
   --mark-vary: normal;
   --mark-vary-small: normal;
@@ -66,7 +66,7 @@ i { font-style: normal; }
 .hero-shade { position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, 0) 22%), linear-gradient(0deg, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0) 40%),
               rgba(0, 0, 0, calc(var(--cover, 0) * .85)); }
-/* the wordmark: thin, centred, set edge to edge (main.js sizes it to the width once the face has loaded). It belongs
+/* the wordmark: centred, set edge to edge (main.js sizes it to the width once the face has loaded). It belongs
    to the page, sitting on the bar, so the bar carries it up and off the top as you scroll */
 .hero-name { position: absolute; bottom: calc(100% + var(--pad) * .55); left: var(--pad); right: var(--pad); text-align: center; white-space: nowrap; color: #fff;
   font-family: var(--mark-font); font-weight: var(--mark-weight); font-stretch: var(--mark-stretch); font-style: var(--mark-style); letter-spacing: var(--mark-track);
@@ -218,9 +218,9 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .proj-follow:hover .proj-follow-title { color: var(--rec); }
 
 /* THE INTRO — once per visit, like an opening title, all inside the opening frame (the scope letterbox above). The name
-   comes up first over black, sitting where the frame's bottom edge will be, the way a print comes up in the tray: faint
-   and overexposed, filling in to the sharp cut (a face without that axis thickens from its thinnest weight). The picture
-   opens behind it from a slit into the letterbox, and what's playing comes up in the frame's corner. Then the frame opens
+   comes up first over black, sitting where the frame's bottom edge will be: its letters rise into place from that line,
+   one just after another, left to right. The picture opens behind it from a slit into the letterbox, and what's playing
+   comes up in the frame's corner. Then the frame opens
    out to full bleed and carries them with it: the name stretches to the full width and settles on the bar, what's
    playing goes to its corner, and the bar rises with the rest.
    The frame, the name and what's playing share one 4s clock: picture opens 1.1–2.2s, holds, opens out 2.8–4s */
@@ -240,14 +240,14 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
   100% { opacity: 1; transform: none; }
 }
 @keyframes appear { from { opacity: 0; } }
-@keyframes develop-weight { from { font-weight: 100; } }
-@keyframes develop-expo { from { font-variation-settings: "EXPO" 100; } }
+@keyframes rise-letter { from { transform: translateY(1em); } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes rise-edge { from { transform: translateY(100%); } }
 .intro .hero video { animation: frame-picture 4s linear both; }
 .intro .hero-name { transform-origin: 50% 100%; animation: frame-name 4s linear both; }
-.intro .hero-name i { animation: develop-weight 2.2s cubic-bezier(.25, .6, .3, 1) .3s both, appear 1.2s ease-out .3s both; }   /* every letter at once */
-html[data-expose].intro .hero-name i { animation-name: develop-expo, appear; }
+.intro .hero-name .w { clip-path: inset(-.5em -.2em 0); }   /* the line the letters rise from: each word's foot */
+.intro .hero-name i { --at: calc(.35s + var(--i) * 45ms);
+  animation: rise-letter 1.4s cubic-bezier(.16, 1, .3, 1) var(--at) both, appear .8s ease-out var(--at) both; }
 .intro .hero-tag { animation: frame-tag 4s linear both; }
 .intro .hero-watch { animation: fade-in .7s var(--ease) 3.6s both; }
 .intro .bar { animation: rise-edge .8s var(--ease) 3.2s both; }

@@ -1,7 +1,7 @@
 /* The wordmark faces to choose between (see /explore.html). The site sets the name in MARK_DEFAULT unless ?type=…
    names another. weight is the big name along the bottom of the reel; small is the name in the bar; words closes up the
    word space (a mono space is a whole letter wide) */
-window.MARK_DEFAULT = "geist-mono";
+window.MARK_DEFAULT = "libertinus";   // Charlie's serif
 window.MARKS = {
   "geist-mono": { name: "Geist Mono ExtraLight", note: "Mono · Swiss", family: "Geist+Mono:wght@100..900", stack: '"Geist Mono", ui-monospace, monospace', weight: 200, small: 400, track: "0", words: "-.3em", caps: 1 },
   "inter-tight": { name: "Inter Tight ExtraLight", note: "Free · Helvetica-like", family: "Inter+Tight:wght@200;400", stack: '"Inter Tight", "Helvetica Neue", sans-serif', weight: 200, small: 400, track: "-.03em", caps: 0 },
@@ -21,16 +21,14 @@ window.MARKS = {
 };
 // Trial cuts can't go online: they're offered when the site runs on this Mac, and their files are never committed or
 // deployed. STK Bureau Sans is Smuss Type Kiosk's; Exposure is 205TF's, and its one axis is photographic exposure:
-// -100 under (the ink spreads), +100 over (the hairlines break up). vary sets the axis (+30 is the sharp cut); expose
-// has the intro develop the name from fully overexposed to that cut
+// -100 under (the ink spreads), +100 over (the hairlines break up). vary sets the axis (+30 is the sharp cut)
 if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
   Object.assign(window.MARKS, {
-    "exposure": { name: "Exposure", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: "-.01em", words: "-.04em", caps: 0, vary: '"EXPO" 30', varySmall: '"EXPO" 0', expose: 1 },
-    "exposure-caps": { name: "Exposure, capitals", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: ".02em", words: "-.06em", caps: 1, vary: '"EXPO" 30', varySmall: '"EXPO" 0', expose: 1 },
+    "exposure": { name: "Exposure", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: "-.01em", words: "-.04em", caps: 0, vary: '"EXPO" 30', varySmall: '"EXPO" 0' },
+    "exposure-caps": { name: "Exposure, capitals", note: "205TF · trial", local: "Exposure", faces: [["ExposureTrialVAR.ttf", 400, "truetype"]], stack: '"Exposure", serif', weight: 400, small: 400, track: ".02em", words: "-.06em", caps: 1, vary: '"EXPO" 30', varySmall: '"EXPO" 0' },
     "stk-bureau": { name: "STK Bureau Sans ExtraLight", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: "-.015em", caps: 0 },
     "stk-bureau-caps": { name: "STK Bureau Sans ExtraLight, capitals", note: "Smuss Type Kiosk · trial", local: "STK Bureau Sans", faces: [["STKBureauSans-ExtraLight-Trial.otf", 200], ["STKBureauSans-Regular-Trial.otf", 400]], stack: '"STK Bureau Sans", sans-serif', weight: 200, small: 400, track: ".01em", caps: 1 }
   });
-  window.MARK_DEFAULT = "exposure";   // the chosen wordmark; online too once its web licence is bought
 }
 window.loadMark = function (key) {
   var t = window.MARKS[key];

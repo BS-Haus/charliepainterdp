@@ -35,7 +35,6 @@
       st.setProperty("--mark-words", t.words || "-.06em");
       st.setProperty("--mark-vary", t.vary || "normal");
       st.setProperty("--mark-vary-small", t.varySmall || t.vary || "normal");
-      if (t.expose) html.dataset.expose = "";
       st.setProperty("--mark-style", t.italic ? "italic" : "normal");
       html.dataset.markCase = t.caps ? "caps" : "as-set";
     })();

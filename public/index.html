@@ -35,7 +35,6 @@
       st.setProperty("--mark-words", t.words || "-.06em");
       st.setProperty("--mark-vary", t.vary || "normal");
       st.setProperty("--mark-vary-small", t.varySmall || t.vary || "normal");
-      if (t.expose) html.dataset.expose = "";
       st.setProperty("--mark-style", t.italic ? "italic" : "normal");
       html.dataset.markCase = t.caps ? "caps" : "as-set";
     })();
@@ -54,7 +53,7 @@
 
   <main class="page">
     <!-- THE NAME: edge to edge, sitting on the bar; as you scroll the bar pushes it up and off the top -->
-    <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
+    <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i style="--i:0">C</i><i style="--i:1">h</i><i style="--i:2">a</i><i style="--i:3">r</i><i style="--i:4">l</i><i style="--i:5">i</i><i style="--i:6">e</i></span> <span class="w"><i style="--i:7">P</i><i style="--i:8">a</i><i style="--i:9">i</i><i style="--i:10">n</i><i style="--i:11">t</i><i style="--i:12">e</i><i style="--i:13">r</i></span></span></h1>
 
     <!-- THE BAR: the role, the narrative / commercial keys and the places to go. It waits along the bottom of the first
          screen, rides up with the work, and stays at the top as the header, where the small name takes over -->
