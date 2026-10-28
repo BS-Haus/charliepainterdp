@@ -184,7 +184,8 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .js .rv-rule { position: relative; border-bottom-color: transparent; }
 .js .rv-rule::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--line); transform: scaleX(0); transform-origin: left; transition: transform 1.4s var(--ease); transition-delay: var(--rv-delay, 0ms); }
 .js .rv-rule.in::after { transform: none; }
-.foot { display: flex; justify-content: space-between; gap: 24px; margin-top: clamp(64px, 9vw, 140px); padding: 18px var(--pad) 22px; border-top: 1px solid var(--line); color: var(--dim); }
+.foot { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px 24px; margin-top: clamp(64px, 9vw, 140px); padding: 18px var(--pad) 22px; border-top: 1px solid var(--line); color: var(--dim); }
+.foot > :last-child { justify-self: end; }   /* the name left, Painter.Studio in the middle, back to the top right */
 .foot a:hover { color: var(--fg); }
 
 /* THE FILM — a sheet that slides up from the bottom over everything: the film on black, its credits, every still */
@@ -285,7 +286,9 @@ html.is-waiting :is(.hero video, .hero-name, .hero-name-in, .hero-tag, .hero-wat
   .cv-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }
   .awards li { grid-template-columns: minmax(0, 1fr) auto; }
   .awards li .cv-t { grid-column: 1 / -1; order: -1; }
-  .links a { flex: 1 1 50%; }
+  .links a { flex: 1 1 auto; }   /* all three across */
+  .foot { grid-template-columns: minmax(0, 1fr) auto; }
+  .foot-studio { grid-row: 2; }   /* under the name */
   .sheet-bar { grid-template-columns: minmax(0, 1fr) auto; }
   .proj-pos { display: none; }
   .proj-credits { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
