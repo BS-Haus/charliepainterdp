@@ -35,6 +35,10 @@
   --lb-s: .8;
   --lb-ratio: 2.39;
   --lb-half: calc(var(--lb-s) * 50vw / var(--lb-ratio));   /* half its height */
+  --lb-in: calc(var(--lb-s) * var(--pad));                 /* what sits in it is inset this far from its edges */
+  --lb-n: .5;                                              /* the name in it, as a share of its full size */
+  --lb-x: calc((1 - var(--lb-s)) * 50vw + var(--lb-in) - var(--pad));   /* from a screen corner to the frame's */
+  --lb-y: calc(50svh - var(--lb-half) + var(--lb-in) - var(--pad));
   color-scheme: dark;
 }
 
@@ -217,39 +221,36 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .proj-follow .label { color: var(--dim); }
 .proj-follow:hover .proj-follow-title { color: var(--rec); }
 
-/* THE INTRO — once per visit, like an opening title, all inside the opening frame (the scope letterbox above). The name
-   comes up first, alone on black, sitting where the frame's bottom edge will be, like an opening credit: it fades up
-   while its letters slowly track out from the middle (main.js measures how far each one sits from it), and keeps
-   drifting until it lands. Only once it's up does the picture open behind it from a slit into the letterbox, and what's
-   playing comes up in the frame's corner. Then the frame opens
-   out to full bleed and carries them with it: the name stretches to the full width and settles on the bar, what's
-   playing goes to its corner, and the bar rises with the rest.
-   The frame, the name and what's playing share one 4s clock: name up by 1.6s, picture opens 1.6–2.4s, holds, opens out 2.8–4s */
+/* THE INTRO — once per visit, like an opening title, played inside the opening frame (the scope letterbox above). The
+   reel fades up already in the letterbox, and the name comes up on it as its title: smaller, at the foot of the frame,
+   its letters slowly tracking out from the middle (main.js measures how far each one sits from it). What's playing comes
+   up in one top corner of the frame, watching it with sound in the other. Then the frame opens out to full bleed and
+   everything in it goes with it on the same curve: the name grows to the full width and lands on the bar, the corners go
+   to the screen's, and the bar rises beneath.
+   One 4s clock: the reel up 0.15–1.3s, the name up 0.7–2s, holds, opens out 2.8–4s */
 @keyframes frame-picture {
-  0%, 40% { clip-path: inset(50% calc((1 - var(--lb-s)) * 50%)); animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
-  60%, 70% { clip-path: inset(calc(50% - var(--lb-half)) calc((1 - var(--lb-s)) * 50%)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+  0%, 70% { clip-path: inset(calc(50% - var(--lb-half)) calc((1 - var(--lb-s)) * 50%)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
   100% { clip-path: inset(0 0); }
 }
-@keyframes frame-name {
-  0%, 70% { transform: translateY(calc(var(--lb-half) - 50svh + var(--bar) + var(--pad) * .55 * (1 - var(--lb-s)))) scale(var(--lb-s)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+@keyframes frame-name {   /* at the foot of the frame, its inset above the edge */
+  0%, 70% { transform: translateY(calc(var(--lb-half) - 50svh + var(--bar) + var(--pad) * .55 - var(--lb-in))) scale(var(--lb-n)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
   100% { transform: none; }
 }
-@keyframes frame-tag {
-  0%, 55% { opacity: 0; transform: translate(calc((1 - var(--lb-s)) * 50vw - var(--pad) * (1 - var(--lb-s))), calc(50svh - var(--lb-half) - var(--pad) * (1 - var(--lb-s)))); }
-  65% { opacity: 1; }
-  70% { transform: translate(calc((1 - var(--lb-s)) * 50vw - var(--pad) * (1 - var(--lb-s))), calc(50svh - var(--lb-half) - var(--pad) * (1 - var(--lb-s)))); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+@keyframes frame-corner {   /* in the frame's top corner, its inset in from each edge; --side mirrors it for the right */
+  0%, 20% { opacity: 0; transform: translate(calc(var(--lb-x) * var(--side, 1)), var(--lb-y)); }
+  35% { opacity: 1; }
+  70% { transform: translate(calc(var(--lb-x) * var(--side, 1)), var(--lb-y)); animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
   100% { opacity: 1; transform: none; }
 }
 @keyframes appear { from { opacity: 0; } }
 @keyframes track-out { from { transform: translateX(calc(var(--x, 0) * -.08em)); } }   /* each letter starts 8% nearer the middle */
-@keyframes fade-in { from { opacity: 0; } }
 @keyframes rise-edge { from { transform: translateY(100%); } }
-.intro .hero video { animation: frame-picture 4s linear both; }
+.intro .hero video { animation: frame-picture 4s linear both, appear 1.15s cubic-bezier(.45, 0, .55, 1) .15s both; }
 .intro .hero-name { transform-origin: 50% 100%; animation: frame-name 4s linear both; }
-.intro .hero-name-in { animation: appear 1.4s cubic-bezier(.45, 0, .55, 1) .2s both; }
-.intro .hero-name i { animation: track-out 3.8s cubic-bezier(.3, .25, .2, 1) .2s both; }
-.intro .hero-tag { animation: frame-tag 4s linear both; }
-.intro .hero-watch { animation: fade-in .7s var(--ease) 3.6s both; }
+.intro .hero-name-in { animation: appear 1.3s cubic-bezier(.45, 0, .55, 1) .7s both; }
+.intro .hero-name i { animation: track-out 3.3s cubic-bezier(.3, .25, .2, 1) .7s both; }
+.intro .hero-tag, .intro .hero-watch { animation: frame-corner 4s linear both; }
+.hero-watch { --side: -1; }
 .intro .bar { animation: rise-edge .8s var(--ease) 3.2s both; }
 
 /* NARROWER */
@@ -262,7 +263,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 
 /* PHONES — the bar has two rows: the role (then the name) with the places to go, and the keys */
 @media (max-width: 760px) {
-  :root { --bar: 104px; --lb-s: .9; --lb-ratio: 1.85; }
+  :root { --bar: 104px; --lb-s: .9; --lb-ratio: 1.85; --lb-n: .64; }
   .bar { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 50px 54px; padding: 0; }
   .bar-left { padding-left: var(--pad); }
   .bar-role { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 10px; letter-spacing: .08em; }
