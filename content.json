@@ -518,5 +518,55 @@
       "Arena 51 Film Festival"
     ]
   ],
-  "about": "Charlie Painter is a narrative features & shorts cinematographer, based in London, and a British Society of Cinematographers mentee."
+  "about": "Charlie Painter is a narrative features & shorts cinematographer, based in London, and a British Society of Cinematographers mentee.",
+  "showcase": [
+    {
+      "slug": "vetala",
+      "stills": [
+        "vetala-9",
+        "vetala-3",
+        "vetala-4"
+      ]
+    },
+    {
+      "slug": "operationdynamo",
+      "stills": [
+        "operationdynamo-1",
+        "operationdynamo-5",
+        "operationdynamo-2"
+      ]
+    },
+    {
+      "slug": "iffilm",
+      "stills": [
+        "iffilm-4",
+        "iffilm-3",
+        "iffilm-5"
+      ]
+    },
+    {
+      "slug": "66north",
+      "stills": [
+        "66north-2",
+        "66north-r2",
+        "66north-r1"
+      ]
+    },
+    {
+      "slug": "johnsmiths",
+      "stills": [
+        "johnsmiths-1",
+        "johnsmiths-r2",
+        "johnsmiths-r3"
+      ]
+    }
+  ],
+  "press": [
+    {
+      "outlet": "British Cinematographer",
+      "title": "A Complex Operation",
+      "standfirst": "Charlie Painter runs through his approach to lensing Second World War film Operation Dynamo",
+      "url": "https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/"
+    }
+  ]
 }

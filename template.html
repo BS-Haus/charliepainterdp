@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#050505" />
   <meta property="og:title" content="Charlie Painter — Director of Photography" />
   <meta property="og:description" content="Narrative features, shorts and commercials. London." />
-  <meta property="og:image" content="/media/reel-narrative-v2-poster.jpg" />
+  <meta property="og:image" content="/media/stills/operationdynamo-1.jpg" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -42,28 +42,37 @@
   </script>
 </head>
 <body>
-  <!-- THE REEL: the first screen. What's playing, top left, and watching it with sound, top right. Pinned; the page
+  <!-- THE FIRST SCREEN: a scope screen in the dark, playing stills from the best of the work, three from each film, with
+       a bar beneath it telling you which film you're looking at. Click the screen and that film opens. Pinned; the page
        slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
-  <section class="hero" id="top" aria-label="Showreel">
-    <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="{{POSTER_NARRATIVE}}" src="{{REEL_NARRATIVE}}"
-      data-narrative="{{REEL_NARRATIVE}}" data-commercial="{{REEL_COMMERCIAL}}" data-poster-narrative="{{POSTER_NARRATIVE}}" data-poster-commercial="{{POSTER_COMMERCIAL}}"></video>
+  <section class="hero" id="top" aria-label="Selected stills">
+    <div class="stage">
+      <div class="reel" id="reel">
+        <a class="screen" id="screen" href="#/{{FIRST_SLUG}}" aria-label="Open {{FIRST_TITLE}}">
+        {{SCREEN}}
+          <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
+        </a>
+        <div class="ticker label" id="ticker">
+          <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">{{FIRST_TITLE}}</span><span class="ticker-kind" id="ticker-kind">{{FIRST_KIND}}</span></p>
+          <ol class="ticker-list" aria-label="Films">{{TICKER}}</ol>
+        </div>
+      </div>
+    </div>
     <span class="hero-shade" aria-hidden="true"></span>
-    <p class="hero-tag label"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span></p>
-    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel">Watch<span class="hero-watch-more"> with sound</span>&nbsp;↗&#xFE0E;</a>
   </section>
 
   <main class="page">
     <!-- THE NAME: edge to edge, sitting on the bar; as you scroll the bar pushes it up and off the top -->
     <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
 
-    <!-- THE BAR: the role, the narrative / commercial keys and the places to go. It waits along the bottom of the first
+    <!-- THE BAR: the role, the narrative / commercial switch and the places to go. It waits along the bottom of the first
          screen, rides up with the work, and stays at the top as the header, where the small name takes over -->
     <header class="bar" id="bar">
       <div class="bar-left">
         <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
         <p class="bar-role label"><span class="role-full">Director of Photography</span><abbr class="role-short" title="Director of Photography">DP</abbr></p>
       </div>
-      <div class="keys label" role="radiogroup" aria-label="Show first">{{KEYS}}</div>
+      <div class="toggle label" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span>{{TOGGLE}}</div>
       <nav class="nav label" aria-label="Sections">
         <a href="#work">Work</a>
         <a href="#cv">CV</a>
@@ -89,27 +98,42 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT: who he is, how to reach him, him at work -->
     <section class="contact" id="contact" aria-label="Contact">
       <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
-      <p class="about">{{ABOUT}}</p>
-      <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-      <nav class="links label" aria-label="Elsewhere">
-        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗&#xFE0E;</a>
-        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗&#xFE0E;</a>
-        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗&#xFE0E;</a>
+      <div class="contact-body">
+        <div class="contact-text">
+          <p class="about">{{ABOUT}}</p>
+          <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+        </div>
+        <figure class="portrait"><img src="/media/portrait.jpg" alt="Charlie Painter at the camera" loading="lazy" decoding="async" /></figure>
+      </div>
+      <nav class="links" aria-label="Elsewhere">
+        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
+        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
+        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
       </nav>
     </section>
 
-    <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a class="foot-studio" href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗&#xFE0E;</a><a href="#top">Top ↑</a></footer>
+    <!-- FEATURED: the press, set like the CV -->
+    <section class="press" id="press" aria-label="Featured">
+      <header class="sec-head"><h2 class="sec-title">Featured</h2><p class="label">Press</p></header>
+{{PRESS}}
+    </section>
+
+    <!-- THE LAST FRAME: one of his photographs, edge to edge, with the way back to the top -->
+    <figure class="closing">
+      <img src="/media/closing-garage.jpg" alt="A figure alone in an underground car park" loading="lazy" decoding="async" />
+      <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+    </figure>
   </main>
 
-  <!-- THE FILM: slides up from the bottom over everything -->
+  <!-- THE FILM: a layer over the site, which blurs behind it -->
   <span class="scrim" id="scrim" aria-hidden="true"></span>
 
   <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
     <div class="sheet-bar label">
-      <a class="sheet-close proj-back" href="#work">← Work</a>
+      <a class="sheet-close proj-back" href="#work">Close</a>
       <span class="proj-pos" id="proj-pos"></span>
       <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
     </div>
@@ -124,7 +148,7 @@
     </div>
   </div>
 
-  <script>window.PROJECTS = {{PROJECTS}};</script>
+  <script>window.PROJECTS = {{PROJECTS}}; window.KINDS = {{KINDS}};</script>
   <script src="/main.js" defer></script>
 </body>
 </html>

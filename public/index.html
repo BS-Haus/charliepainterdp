@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#050505" />
   <meta property="og:title" content="Charlie Painter — Director of Photography" />
   <meta property="og:description" content="Narrative features, shorts and commercials. London." />
-  <meta property="og:image" content="/media/reel-narrative-v2-poster.jpg" />
+  <meta property="og:image" content="/media/stills/operationdynamo-1.jpg" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -42,28 +42,51 @@
   </script>
 </head>
 <body>
-  <!-- THE REEL: the first screen. What's playing, top left, and watching it with sound, top right. Pinned; the page
+  <!-- THE FIRST SCREEN: a scope screen in the dark, playing stills from the best of the work, three from each film, with
+       a bar beneath it telling you which film you're looking at. Click the screen and that film opens. Pinned; the page
        slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
-  <section class="hero" id="top" aria-label="Showreel">
-    <video id="hero-reel" muted playsinline loop autoplay preload="auto" poster="/media/reel-narrative-v2-poster.jpg" src="/media/reel-narrative-v3.mp4"
-      data-narrative="/media/reel-narrative-v3.mp4" data-commercial="/media/reel-commercial-v2.mp4" data-poster-narrative="/media/reel-narrative-v2-poster.jpg" data-poster-commercial="/media/reel-commercial-v2-poster.jpg"></video>
+  <section class="hero" id="top" aria-label="Selected stills">
+    <div class="stage">
+      <div class="reel" id="reel">
+        <a class="screen" id="screen" href="#/vetala" aria-label="Open Vetala">
+        <img src="/media/stills/vetala-9.jpg" alt="" data-slug="vetala" loading="eager" decoding="async" draggable="false" class="is-on" />
+        <img src="/media/stills/vetala-3.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/vetala-4.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/operationdynamo-1.jpg" alt="" data-slug="operationdynamo" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/operationdynamo-5.jpg" alt="" data-slug="operationdynamo" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/operationdynamo-2.jpg" alt="" data-slug="operationdynamo" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/iffilm-4.jpg" alt="" data-slug="iffilm" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/iffilm-3.jpg" alt="" data-slug="iffilm" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/iffilm-5.jpg" alt="" data-slug="iffilm" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/66north-2.jpg" alt="" data-slug="66north" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/66north-r2.jpg" alt="" data-slug="66north" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/66north-r1.jpg" alt="" data-slug="66north" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/johnsmiths-1.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/johnsmiths-r2.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/johnsmiths-r3.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
+          <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
+        </a>
+        <div class="ticker label" id="ticker">
+          <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
+          <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="66north"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li><button class="tick" data-slug="johnsmiths"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li></ol>
+        </div>
+      </div>
+    </div>
     <span class="hero-shade" aria-hidden="true"></span>
-    <p class="hero-tag label"><span class="rec" aria-hidden="true"></span><span id="hero-watch-title">Narrative showreel</span></p>
-    <a class="hero-watch label" id="hero-watch" href="#/narrativeshowreel">Watch<span class="hero-watch-more"> with sound</span>&nbsp;↗&#xFE0E;</a>
   </section>
 
   <main class="page">
     <!-- THE NAME: edge to edge, sitting on the bar; as you scroll the bar pushes it up and off the top -->
     <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
 
-    <!-- THE BAR: the role, the narrative / commercial keys and the places to go. It waits along the bottom of the first
+    <!-- THE BAR: the role, the narrative / commercial switch and the places to go. It waits along the bottom of the first
          screen, rides up with the work, and stays at the top as the header, where the small name takes over -->
     <header class="bar" id="bar">
       <div class="bar-left">
         <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
         <p class="bar-role label"><span class="role-full">Director of Photography</span><abbr class="role-short" title="Director of Photography">DP</abbr></p>
       </div>
-      <div class="keys label" role="radiogroup" aria-label="Show first"><button class="key" role="radio" aria-checked="true" data-first="narrative"><span>Narrative</span></button><button class="key" role="radio" aria-checked="false" data-first="commercial"><span>Commercial</span></button></div>
+      <div class="toggle label" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span><button class="opt" role="radio" aria-checked="true" data-group="narrative">Narrative</button><button class="opt" role="radio" aria-checked="false" data-group="commercial">Commercial</button></div>
       <nav class="nav label" aria-label="Sections">
         <a href="#work">Work</a>
         <a href="#cv">CV</a>
@@ -74,87 +97,70 @@
     <section class="work" id="work" aria-label="Work">
       <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
-        <header class="group-head label"><h2>Narrative</h2><span>9 films</span></header>
         <div class="grid">
         <article class="tile" data-slug="iffilm">
-          <div class="slides"><img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/iffilm-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/iffilm-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/iffilm">If</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="vetala">
-          <div class="slides"><img src="/media/stills/vetala-1.jpg" alt="" loading="eager" decoding="async" draggable="false" /><img src="/media/stills/vetala-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-6.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-7.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-8.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vetala-9.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/vetala-1.jpg" alt="" loading="eager" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/vetala">Vetala</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 09</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="operationdynamo">
-          <div class="slides"><img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/operationdynamo-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit credit">George Rowlands / CPC</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="accomplice">
-          <div class="slides"><img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/accomplice-6.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/accomplice">Accomplice</a></h3><p class="tile-credit credit">Dominic Fraser / CPC</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 06</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="flush">
-          <div class="slides"><img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/flush-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/flush">Flush!</a></h3><p class="tile-credit credit">Nico Bourgeais / Fusion Alpha</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="invitrofelicitas">
-          <div class="slides"><img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
-          
         </article>
         <article class="tile" data-slug="confess">
-          <div class="slides"><img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/confess-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/confess">Confess</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="moal">
-          <div class="slides"><img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/moal-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/moal">Memories of a Life</a></h3><p class="tile-credit credit">Ellie Hague / Thulsa Films</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="brownies-or-ice-cream">
-          <div class="slides"><img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/brownies-or-ice-cream-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/brownies-or-ice-cream-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit credit">Stefan Poelman / Pink Momentum</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 03</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         </div>
       </section>
-      <section class="group" data-group="commercial" aria-label="Commercial">
-        <header class="group-head label"><h2>Commercial</h2><span>6 projects</span></header>
+      <section class="group" data-group="commercial" aria-label="Commercial" hidden>
         <div class="grid">
         <article class="tile" data-slug="66north">
-          <div class="slides"><img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/66north-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="johnsmiths">
-          <div class="slides"><img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/johnsmiths-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 04</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="aberfeldy">
-          <div class="slides"><img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/aberfeldy-r4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/aberfeldy">Aberfeldy</a></h3><p class="tile-credit credit">Jess Leuty / CPC</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="vision-pro">
-          <div class="slides"><img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-4.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/vision-pro-5.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/vision-pro">Vision Pro</a></h3><p class="tile-credit credit">Nico Bourgeais / CPC</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 05</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="london-jazz-festival">
-          <div class="slides"><img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/london-jazz-festival-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit credit">Lauren Smith / Serious Music</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 06</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         <article class="tile" data-slug="phox-water">
-          <div class="slides"><img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/phox-r2.jpg" alt="" loading="lazy" decoding="async" draggable="false" /><img src="/media/stills/phox-r3.jpg" alt="" loading="lazy" decoding="async" draggable="false" /></div>
+          <img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/phox-water">Phox Water</a></h3><p class="tile-credit credit">Commercial</p></div>
-          <div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button><span><b class="tile-n">01</b> / 03</span><button class="tile-step tile-next" aria-label="Next still">→</button></div>
         </article>
         </div>
       </section>
@@ -217,27 +223,46 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT: who he is, how to reach him, him at work -->
     <section class="contact" id="contact" aria-label="Contact">
       <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
-      <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
-      <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-      <nav class="links label" aria-label="Elsewhere">
-        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener">Instagram ↗&#xFE0E;</a>
-        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener">Vimeo ↗&#xFE0E;</a>
-        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener">IMDb ↗&#xFE0E;</a>
+      <div class="contact-body">
+        <div class="contact-text">
+          <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
+          <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+        </div>
+        <figure class="portrait"><img src="/media/portrait.jpg" alt="Charlie Painter at the camera" loading="lazy" decoding="async" /></figure>
+      </div>
+      <nav class="links" aria-label="Elsewhere">
+        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
+        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
+        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
       </nav>
     </section>
 
-    <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a class="foot-studio" href="https://painterstudio.vercel.app" target="_blank" rel="noopener">Painter.Studio ↗&#xFE0E;</a><a href="#top">Top ↑</a></footer>
+    <!-- FEATURED: the press, set like the CV -->
+    <section class="press" id="press" aria-label="Featured">
+      <header class="sec-head"><h2 class="sec-title">Featured</h2><p class="label">Press</p></header>
+      <a class="press-item" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
+        <span class="press-title">A Complex Operation</span>
+        <span class="press-stand credit">Charlie Painter runs through his approach to lensing Second World War film Operation Dynamo</span>
+        <span class="press-read label">Read in British Cinematographer ↗&#xFE0E;</span>
+      </a>
+    </section>
+
+    <!-- THE LAST FRAME: one of his photographs, edge to edge, with the way back to the top -->
+    <figure class="closing">
+      <img src="/media/closing-garage.jpg" alt="A figure alone in an underground car park" loading="lazy" decoding="async" />
+      <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+    </figure>
   </main>
 
-  <!-- THE FILM: slides up from the bottom over everything -->
+  <!-- THE FILM: a layer over the site, which blurs behind it -->
   <span class="scrim" id="scrim" aria-hidden="true"></span>
 
   <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
     <div class="sheet-bar label">
-      <a class="sheet-close proj-back" href="#work">← Work</a>
+      <a class="sheet-close proj-back" href="#work">Close</a>
       <span class="proj-pos" id="proj-pos"></span>
       <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
     </div>
@@ -252,7 +277,7 @@
     </div>
   </div>
 
-  <script>window.PROJECTS = [{"slug": "narrativeshowreel", "group": "narrative", "title": "Narrative showreel", "kind": "Showreel", "note": "Features & shorts", "director": "", "production": "", "video": {"provider": "vimeo", "id": "1149629056"}, "stills": ["reel-narrative-1", "reel-narrative-2", "reel-narrative-3", "reel-narrative-4", "reel-narrative-5", "reel-narrative-6", "reel-narrative-7", "reel-narrative-8"]}, {"slug": "iffilm", "group": "narrative", "title": "If", "kind": "Short", "note": "Starring Clive Russell", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": {"provider": "vimeo", "id": "1088718265"}, "stills": ["iffilm-1", "iffilm-2", "iffilm-3", "iffilm-4", "iffilm-5"]}, {"slug": "vetala", "group": "narrative", "title": "Vetala", "kind": "Short", "note": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["vetala-1", "vetala-2", "vetala-3", "vetala-4", "vetala-5", "vetala-6", "vetala-7", "vetala-8", "vetala-9"]}, {"slug": "operationdynamo", "group": "narrative", "title": "Operation Dynamo", "kind": "Short", "note": "", "director": "George Rowlands", "production": "CPC", "video": {"provider": "vimeo", "id": "1126894625", "hash": "97279ba9a1"}, "stills": ["operationdynamo-1", "operationdynamo-2", "operationdynamo-3", "operationdynamo-4", "operationdynamo-5"]}, {"slug": "accomplice", "group": "narrative", "title": "Accomplice", "kind": "Short", "note": "", "director": "Dominic Fraser", "production": "CPC", "video": null, "stills": ["accomplice-1", "accomplice-2", "accomplice-3", "accomplice-4", "accomplice-5", "accomplice-6"]}, {"slug": "flush", "group": "narrative", "title": "Flush!", "kind": "Short", "note": "", "director": "Nico Bourgeais", "production": "Fusion Alpha", "video": {"provider": "vimeo", "id": "1133511001", "hash": "98df98088f"}, "stills": ["flush-1", "flush-2", "flush-3", "flush-4", "flush-5"]}, {"slug": "invitrofelicitas", "group": "narrative", "title": "In Vitro Felicitas", "kind": "Short", "note": "", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": null, "stills": ["invitrofelicitas-1"]}, {"slug": "confess", "group": "narrative", "title": "Confess", "kind": "Short", "note": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["confess-1", "confess-2", "confess-3", "confess-4", "confess-5"]}, {"slug": "moal", "group": "narrative", "title": "Memories of a Life", "kind": "Short", "note": "", "director": "Ellie Hague", "production": "Thulsa Films", "video": null, "stills": ["moal-1", "moal-2", "moal-3", "moal-4", "moal-5"]}, {"slug": "brownies-or-ice-cream", "group": "narrative", "title": "Brownies or Ice Cream?", "kind": "Short", "note": "", "director": "Stefan Poelman", "production": "Pink Momentum", "video": null, "stills": ["brownies-or-ice-cream-1", "brownies-or-ice-cream-2", "brownies-or-ice-cream-3"]}, {"slug": "commercial-showreel", "group": "commercial", "title": "Commercial showreel", "kind": "Showreel", "note": "Commercials & brand films", "director": "", "production": "", "video": {"provider": "vimeo", "id": "1188991301"}, "stills": ["reel-commercial-1", "reel-commercial-2", "reel-commercial-3", "reel-commercial-4", "reel-commercial-5", "reel-commercial-6", "reel-commercial-7", "reel-commercial-8"]}, {"slug": "66north", "group": "commercial", "title": "66°North ‘Calming the Storm’", "kind": "Commercial", "note": "Talent Oli Cook", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1213570673", "hash": "ef3a99b161"}, "stills": ["66north-2", "66north-1", "66north-r1", "66north-r2", "66north-r3"]}, {"slug": "johnsmiths", "group": "commercial", "title": "John Smith’s ‘Traditions’", "kind": "Commercial", "note": "", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1189764769"}, "stills": ["johnsmiths-1", "johnsmiths-r1", "johnsmiths-r2", "johnsmiths-r3"]}, {"slug": "aberfeldy", "group": "commercial", "title": "Aberfeldy", "kind": "Brand film", "note": "", "director": "Jess Leuty", "production": "CPC", "video": {"provider": "vimeo", "id": "1176200194"}, "stills": ["aberfeldy-2", "aberfeldy-r1", "aberfeldy-r2", "aberfeldy-r3", "aberfeldy-r4"]}, {"slug": "vision-pro", "group": "commercial", "title": "Vision Pro", "kind": "Commercial", "note": "", "director": "Nico Bourgeais", "production": "CPC", "video": {"provider": "vimeo", "id": "926185147"}, "stills": ["vision-pro-1", "vision-pro-2", "vision-pro-3", "vision-pro-4", "vision-pro-5"]}, {"slug": "london-jazz-festival", "group": "commercial", "title": "London Jazz Festival", "kind": "Brand film", "note": "", "director": "Lauren Smith", "production": "Serious Music", "video": {"provider": "youtube", "id": "ugaZUGlBulc"}, "stills": ["london-jazz-festival-1", "london-jazz-festival-2", "london-jazz-festival-3", "london-jazz-festival-r1", "london-jazz-festival-r2", "london-jazz-festival-r3"]}, {"slug": "phox-water", "group": "commercial", "title": "Phox Water", "kind": "Commercial", "note": "", "director": "", "production": "", "video": null, "stills": ["phox-r1", "phox-r2", "phox-r3"]}];</script>
+  <script>window.PROJECTS = [{"slug": "iffilm", "group": "narrative", "title": "If", "name": "If", "kind": "Short", "note": "Starring Clive Russell", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": {"provider": "vimeo", "id": "1088718265"}, "stills": ["iffilm-1", "iffilm-2", "iffilm-3", "iffilm-4", "iffilm-5"]}, {"slug": "vetala", "group": "narrative", "title": "Vetala", "name": "Vetala", "kind": "Short", "note": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["vetala-1", "vetala-2", "vetala-3", "vetala-4", "vetala-5", "vetala-6", "vetala-7", "vetala-8", "vetala-9"]}, {"slug": "operationdynamo", "group": "narrative", "title": "Operation Dynamo", "name": "Operation Dynamo", "kind": "Short", "note": "", "director": "George Rowlands", "production": "CPC", "video": {"provider": "vimeo", "id": "1126894625", "hash": "97279ba9a1"}, "stills": ["operationdynamo-1", "operationdynamo-2", "operationdynamo-3", "operationdynamo-4", "operationdynamo-5"]}, {"slug": "accomplice", "group": "narrative", "title": "Accomplice", "name": "Accomplice", "kind": "Short", "note": "", "director": "Dominic Fraser", "production": "CPC", "video": null, "stills": ["accomplice-1", "accomplice-2", "accomplice-3", "accomplice-4", "accomplice-5", "accomplice-6"]}, {"slug": "flush", "group": "narrative", "title": "Flush!", "name": "Flush!", "kind": "Short", "note": "", "director": "Nico Bourgeais", "production": "Fusion Alpha", "video": {"provider": "vimeo", "id": "1133511001", "hash": "98df98088f"}, "stills": ["flush-1", "flush-2", "flush-3", "flush-4", "flush-5"]}, {"slug": "invitrofelicitas", "group": "narrative", "title": "In Vitro Felicitas", "name": "In Vitro Felicitas", "kind": "Short", "note": "", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": null, "stills": ["invitrofelicitas-1"]}, {"slug": "confess", "group": "narrative", "title": "Confess", "name": "Confess", "kind": "Short", "note": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["confess-1", "confess-2", "confess-3", "confess-4", "confess-5"]}, {"slug": "moal", "group": "narrative", "title": "Memories of a Life", "name": "Memories of a Life", "kind": "Short", "note": "", "director": "Ellie Hague", "production": "Thulsa Films", "video": null, "stills": ["moal-1", "moal-2", "moal-3", "moal-4", "moal-5"]}, {"slug": "brownies-or-ice-cream", "group": "narrative", "title": "Brownies or Ice Cream?", "name": "Brownies or Ice Cream?", "kind": "Short", "note": "", "director": "Stefan Poelman", "production": "Pink Momentum", "video": null, "stills": ["brownies-or-ice-cream-1", "brownies-or-ice-cream-2", "brownies-or-ice-cream-3"]}, {"slug": "66north", "group": "commercial", "title": "66°North ‘Calming the Storm’", "name": "66°North", "kind": "Commercial", "note": "Talent Oli Cook", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1213570673", "hash": "ef3a99b161"}, "stills": ["66north-2", "66north-1", "66north-r1", "66north-r2", "66north-r3"]}, {"slug": "johnsmiths", "group": "commercial", "title": "John Smith’s ‘Traditions’", "name": "John Smith’s", "kind": "Commercial", "note": "", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1189764769"}, "stills": ["johnsmiths-1", "johnsmiths-r1", "johnsmiths-r2", "johnsmiths-r3"]}, {"slug": "aberfeldy", "group": "commercial", "title": "Aberfeldy", "name": "Aberfeldy", "kind": "Brand film", "note": "", "director": "Jess Leuty", "production": "CPC", "video": {"provider": "vimeo", "id": "1176200194"}, "stills": ["aberfeldy-2", "aberfeldy-r1", "aberfeldy-r2", "aberfeldy-r3", "aberfeldy-r4"]}, {"slug": "vision-pro", "group": "commercial", "title": "Vision Pro", "name": "Vision Pro", "kind": "Commercial", "note": "", "director": "Nico Bourgeais", "production": "CPC", "video": {"provider": "vimeo", "id": "926185147"}, "stills": ["vision-pro-1", "vision-pro-2", "vision-pro-3", "vision-pro-4", "vision-pro-5"]}, {"slug": "london-jazz-festival", "group": "commercial", "title": "London Jazz Festival", "name": "London Jazz Festival", "kind": "Brand film", "note": "", "director": "Lauren Smith", "production": "Serious Music", "video": {"provider": "youtube", "id": "ugaZUGlBulc"}, "stills": ["london-jazz-festival-1", "london-jazz-festival-2", "london-jazz-festival-3", "london-jazz-festival-r1", "london-jazz-festival-r2", "london-jazz-festival-r3"]}, {"slug": "phox-water", "group": "commercial", "title": "Phox Water", "name": "Phox Water", "kind": "Commercial", "note": "", "director": "", "production": "", "video": null, "stills": ["phox-r1", "phox-r2", "phox-r3"]}]; window.KINDS = {"Short": "Short film", "Feature": "Feature film"};</script>
   <script src="/main.js" defer></script>
 </body>
 </html>

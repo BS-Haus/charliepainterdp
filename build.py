@@ -11,16 +11,9 @@ ROOT = Path(__file__).parent
 content = json.loads((ROOT / "content.json").read_text())
 esc = html.escape
 
-# Each half of the work opens with its showreel; a reel's "stills" are frames pulled from it
-REELS = {
-    "narrative": {"slug": "narrativeshowreel", "title": "Narrative showreel", "kind": "Showreel", "note": "Features & shorts",
-                  "src": "/media/reel-narrative-v3.mp4", "poster": "/media/reel-narrative-v2-poster.jpg",
-                  "video": {"provider": "vimeo", "id": "1149629056"}, "stills": [f"reel-narrative-{i}" for i in range(1, 9)]},
-    "commercial": {"slug": "commercial-showreel", "title": "Commercial showreel", "kind": "Showreel", "note": "Commercials & brand films",
-                   "src": "/media/reel-commercial-v2.mp4", "poster": "/media/reel-commercial-v2-poster.jpg",
-                   "video": {"provider": "vimeo", "id": "1188991301"}, "stills": [f"reel-commercial-{i}" for i in range(1, 9)]},
-}
 LABELS = {"narrative": "Narrative", "commercial": "Commercial"}
+KINDS = {"Short": "Short film", "Feature": "Feature film"}
+FILMS = {f["slug"]: f for g in ("narrative", "commercial") for f in content[g]}
 
 
 def title_of(f):
@@ -33,49 +26,61 @@ def credit_line(f):
 
 def projects():
     """Every project in page order (narrative first) — the data the project view is built from."""
-    out = []
-    for group in ("narrative", "commercial"):
-        r = REELS[group]
-        out.append({"slug": r["slug"], "group": group, "title": r["title"], "kind": r["kind"], "note": r["note"],
-                    "director": "", "production": "", "video": r["video"], "stills": r["stills"]})
-        for f in content[group]:
-            out.append({"slug": f["slug"], "group": group, "title": title_of(f), "kind": f["kind"], "note": f.get("note", ""),
-                        "director": f.get("director", ""), "production": f.get("production", ""),
-                        "video": f.get("video"), "stills": f["stills"]})
-    return out
+    return [{"slug": f["slug"], "group": group, "title": title_of(f), "name": f["title"], "kind": f["kind"], "note": f.get("note", ""),
+             "director": f.get("director", ""), "production": f.get("production", ""),
+             "video": f.get("video"), "stills": f["stills"]}
+            for group in ("narrative", "commercial") for f in content[group]]
 
 
 def film_tile(f, eager):
-    n = len(f["stills"])
-    imgs = "".join(
-        f'<img src="/media/stills/{s}.jpg" alt="" loading="{"eager" if eager and i == 0 else "lazy"}" decoding="async" draggable="false" />'
-        for i, s in enumerate(f["stills"])
-    )
-    # a small counter in the corner; the arrows either side of it only show on hover
-    count = (f'<div class="tile-count label"><button class="tile-step tile-prev" aria-label="Previous still">←</button>'
-             f'<span><b class="tile-n">01</b> / {n:02d}</span>'
-             f'<button class="tile-step tile-next" aria-label="Next still">→</button></div>') if n > 1 else ""
+    """A frame per film: its one best still. Click it and the film opens."""
     return f'''        <article class="tile" data-slug="{f["slug"]}">
-          <div class="slides">{imgs}</div>
+          <img src="/media/stills/{f["stills"][0]}.jpg" alt="" loading="{"eager" if eager else "lazy"}" decoding="async" draggable="false" />
           <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit credit">{esc(credit_line(f) or f["kind"])}</p></div>
-          {count}
         </article>'''
-
-
-def count_of(group):
-    n = len(content[group])
-    return f'{n} {"films" if group == "narrative" else "projects"}'
 
 
 def group_section(group, first):
     films = content[group]
     tiles = "\n".join(film_tile(f, first and i < 2) for i, f in enumerate(films))
-    return f'''      <section class="group" data-group="{group}" aria-label="{LABELS[group]}">
-        <header class="group-head label"><h2>{LABELS[group]}</h2><span>{count_of(group)}</span></header>
+    return f'''      <section class="group" data-group="{group}" aria-label="{LABELS[group]}"{"" if first else " hidden"}>
         <div class="grid">
 {tiles}
         </div>
       </section>'''
+
+
+def screen():
+    """The first screen's stills, three from each of the best films, one after another."""
+    shots = []
+    for show in content["showcase"]:
+        for s in show["stills"]:
+            first = not shots
+            on = ' class="is-on"' if first else ""
+            shots.append(f'<img src="/media/stills/{s}.jpg" alt="" data-slug="{show["slug"]}" loading="{"eager" if first else "lazy"}" '
+                         f'decoding="async" draggable="false"{on} />')
+    return "\n        ".join(shots)
+
+
+def ticker():
+    """Which film you're looking at: a segment for each that fills while its stills play, its name beneath."""
+    current = ' aria-current="true"'
+    return "".join(
+        f'<li><button class="tick" data-slug="{show["slug"]}"{current if i == 0 else ""}>'
+        f'<span class="seg"><i></i></span><span class="tick-name">{esc(FILMS[show["slug"]]["title"])}</span></button></li>'
+        for i, show in enumerate(content["showcase"])
+    )
+
+
+def press():
+    return "\n".join(
+        f'''      <a class="press-item" href="{esc(a["url"])}" target="_blank" rel="noopener">
+        <span class="press-title">{esc(a["title"])}</span>
+        <span class="press-stand credit">{esc(a["standfirst"])}</span>
+        <span class="press-read label">Read in {esc(a["outlet"])} ↗&#xFE0E;</span>
+      </a>'''
+        for a in content["press"]
+    )
 
 
 def cv_rows(rows):
@@ -110,20 +115,25 @@ def name_mark(name="Charlie Painter"):
     return '<span class="hero-name-in" aria-hidden="true">' + " ".join(f'<span class="w">{w}</span>' for w in words) + "</span>"
 
 
+first = FILMS[content["showcase"][0]["slug"]]
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{NAME}}", name_mark())
+out = out.replace("{{SCREEN}}", screen())
+out = out.replace("{{TICKER}}", ticker())
+out = out.replace("{{FIRST_SLUG}}", first["slug"]).replace("{{FIRST_TITLE}}", esc(first["title"]))
+out = out.replace("{{FIRST_KIND}}", esc(KINDS.get(first["kind"], first["kind"])))
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
-# the keys on the work bar: narrative / commercial; the pressed one comes first
-keys = "".join(
-    f'<button class="key" role="radio" aria-checked="{"true" if g == "narrative" else "false"}" data-first="{g}"><span>{LABELS[g]}</span></button>'
+# the switch on the bar: narrative or commercial work
+toggle = "".join(
+    f'<button class="opt" role="radio" aria-checked="{"true" if g == "narrative" else "false"}" data-group="{g}">{LABELS[g]}</button>'
     for g in ("narrative", "commercial")
 )
-out = out.replace("{{KEYS}}", keys)
-for g, r in REELS.items():
-    out = out.replace(f"{{{{REEL_{g.upper()}}}}}", r["src"]).replace(f"{{{{POSTER_{g.upper()}}}}}", r["poster"])
+out = out.replace("{{TOGGLE}}", toggle)
 out = out.replace("{{CV}}", cv())
 out = out.replace("{{AWARDS}}", awards())
 out = out.replace("{{ABOUT}}", esc(content["about"]))
+out = out.replace("{{PRESS}}", press())
+out = out.replace("{{KINDS}}", json.dumps(KINDS))
 out = out.replace("{{PROJECTS}}", json.dumps(projects(), ensure_ascii=False).replace("</", "<\\/"))
 (ROOT / "public" / "index.html").write_text(out)
 print("Built public/index.html")

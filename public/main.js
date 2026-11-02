@@ -5,19 +5,21 @@
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const PROJECTS = window.PROJECTS || [];
+  const KINDS = window.KINDS || {};
   const bySlug = new Map(PROJECTS.map((p) => [p.slug, p]));
-  const REEL_OF = { narrative: "narrativeshowreel", commercial: "commercial-showreel" };
 
   $$(".year").forEach((y) => { y.textContent = new Date().getFullYear(); });
 
-  const hero = $(".hero"), heroReel = $("#hero-reel"), heroWatch = $("#hero-watch"), heroWatchTitle = $("#hero-watch-title");
+  const html = document.documentElement;
+  const hero = $(".hero"), screen = $("#screen"), shots = $$("img", screen);
   const work = $("#work"), groupsEl = $("#groups"), bar = $("#bar");
   let openSheet = null;
 
   /* ---------- The intro plays once per visit (the page marks it before anything paints). It holds on black until the
-     reel has a picture for the frame to open onto, its still or its first frame (the page lets it go after 1.5s anyway) */
-  const html = document.documentElement;
-  if (html.classList.contains("intro")) {
+     screen has its first still to open onto (the page lets it go after 1.5s anyway); the stills start once it's done */
+  const intro = html.classList.contains("intro");
+  let introDone = !intro;
+  if (intro) {
     let rolling = false;
     const roll = () => {
       if (rolling) return;
@@ -26,21 +28,23 @@
       setTimeout(() => {
         html.classList.remove("intro");
         try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
-      }, 4600);
+        introDone = true;
+        wake();
+      }, 3000);
     };
-    const still = new Image();
-    still.onload = still.onerror = roll;
-    still.src = heroReel.poster;
-    if (heroReel.readyState >= 2) roll();
-    else heroReel.addEventListener("loadeddata", roll, { once: true });
+    if (shots[0].complete) roll();
+    else shots[0].addEventListener("load", roll, { once: true });
+    shots[0].addEventListener("error", roll, { once: true });
     setTimeout(roll, 1500);
   }
 
-  /* ---------- The name, edge to edge: sized to the width once its face has loaded ---------- */
+  /* ---------- The name, edge to edge: sized to the width once its face has loaded. The screen above takes whatever
+     height it leaves ---------- */
   const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName);
   const fitName = () => {
     heroName.style.fontSize = "100px";
     heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
+    html.style.setProperty("--name-h", `${heroName.offsetHeight}px`);
     heroName.classList.add("is-fit");
   };
   document.fonts.ready.then(fitName);
@@ -49,20 +53,76 @@
   window.addEventListener("resize", fitName);
 
   /* ======================================================================
-     THE REEL AND THE BAR — the page slides up over the pinned reel, which dims and then stops. The bar on the page's top
-     edge rides up with it; when it reaches the top it stays as the header and the small name joins it
+     THE SCREEN — three stills from each of the best films, one dissolving into the next. The bar beneath has a segment
+     for each film that fills while its stills are up; click one to go to that film, click the screen to open it.
+     It rests while it's covered, while a film is open, and while the page is hidden
      ====================================================================== */
-  let covered = false;
+  const SHOT = 2400;   // how long each still is up
+  const ticks = $$(".tick"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
+  const runs = ticks.map((t) => shots.filter((s) => s.dataset.slug === t.dataset.slug));   // each film's stills
+  let at = 0, t = 0, last = 0, frame = 0, covered = false;
+
+  const film = () => ticks.findIndex((tk) => tk.dataset.slug === shots[at].dataset.slug);
+  const fill = () => {
+    const f = film(), run = runs[f], k = run.indexOf(shots[at]);
+    ticks.forEach((tk, i) => tk.style.setProperty("--p", i < f ? 1 : i > f ? 0 : ((k + t / SHOT) / run.length).toFixed(4)));
+  };
+  const show = (i) => {
+    const prev = shots[at];
+    at = (i + shots.length) % shots.length;
+    const shot = shots[at];
+    t = 0;
+    if (prev !== shot) {
+      shots.forEach((s) => s.classList.remove("was-on"));
+      prev.classList.replace("is-on", "was-on");
+      shot.classList.add("is-on");
+      // the one underneath goes once the new one has covered it
+      setTimeout(() => { if (!prev.classList.contains("is-on")) prev.classList.remove("was-on"); }, reduceMotion ? 0 : 1000);
+    }
+    // the next stills start loading before they're needed
+    [1, 2].forEach((d) => { shots[(at + d) % shots.length].loading = "eager"; });
+    const f = film(), p = bySlug.get(shot.dataset.slug);
+    ticks.forEach((tk, j) => (j === f ? tk.setAttribute("aria-current", "true") : tk.removeAttribute("aria-current")));
+    if (p) {
+      screen.href = `#/${p.slug}`;
+      screen.setAttribute("aria-label", `Open ${p.title}`);
+      if (tickTitle.textContent !== p.name) {
+        tickTitle.textContent = p.name;
+        tickKind.textContent = KINDS[p.kind] || p.kind;
+      }
+    }
+    fill();
+  };
+  const step = (now) => {
+    t += Math.min(now - last, 100);   // a dropped frame doesn't skip a still
+    last = now;
+    if (t >= SHOT) show(at + 1);
+    else fill();
+    frame = requestAnimationFrame(step);
+  };
+  const playing = () => introDone && !reduceMotion && !covered && !openSheet && !document.hidden;   // with less motion, it holds on the first
+  function wake() {
+    cancelAnimationFrame(frame);
+    if (!playing()) return;
+    last = performance.now();
+    frame = requestAnimationFrame(step);
+  }
+  ticks.forEach((tk, i) => tk.addEventListener("click", () => { show(shots.indexOf(runs[i][0])); wake(); }));
+  document.addEventListener("visibilitychange", wake);
+  show(0);
+
+  /* ======================================================================
+     THE BAR — the page slides up over the pinned screen, which dims and then rests. The bar on the page's top edge
+     rides up with it; when it reaches the top it stays as the header and the small name joins it
+     ====================================================================== */
   const onScroll = () => {
     const span = hero.offsetHeight - bar.offsetHeight;
     const c = clamp(window.scrollY / (span || 1), 0, 1);
     hero.style.setProperty("--cover", c.toFixed(3));
-    hero.classList.toggle("is-past", c > 0.35);   // what's playing has faded by now
     bar.classList.toggle("is-top", bar.getBoundingClientRect().top <= 0.5);
     if ((c >= 0.999) !== covered) {
       covered = c >= 0.999;
-      if (covered) heroReel.pause();
-      else if (!reduceMotion && !openSheet) heroReel.play().catch(() => {});
+      wake();
     }
     lights();
   };
@@ -70,54 +130,47 @@
   window.addEventListener("resize", onScroll);
 
   /* ======================================================================
-     THE KEYS — narrative or commercial first. Nothing is hidden: the halves swap places, and the reel behind the work
-     becomes that half's reel
+     THE SWITCH — narrative or commercial work. The light pill slides under the one that's on, and the frames change
+     over to that half
      ====================================================================== */
-  const keys = $$(".key");
-  const putFirst = (group) => {
-    const groups = $$(".group", groupsEl);
-    if (groups[0].dataset.group === group) return;
-    // if you're down in the work, come back to its top so you see the swap
-    const workTop = work.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
-    if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
-    const y = window.scrollY, before = groups.map((g) => g.getBoundingClientRect().top);
-    groupsEl.prepend(groups.find((g) => g.dataset.group === group));
-    // the browser would keep the frame you were looking at in view (scroll anchoring); stay at the top of the work
-    if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
-    if (reduceMotion) return;
-    groups.forEach((g, i) => {
-      const dy = before[i] - g.getBoundingClientRect().top;
-      if (dy) g.animate([{ transform: `translateY(${dy}px)`, opacity: 0.5 }, { transform: "none", opacity: 1 }], { duration: 750, easing: "cubic-bezier(.2,.8,.2,1)" });
-    });
-  };
-  const swapReel = (group) => {
-    const src = heroReel.dataset[group], poster = heroReel.dataset[`poster${group[0].toUpperCase()}${group.slice(1)}`];
-    if (heroReel.getAttribute("src") === src) return;
-    const p = bySlug.get(REEL_OF[group]);
-    heroWatch.href = `#/${p.slug}`;
-    heroWatchTitle.textContent = p.title;
-    heroReel.classList.add("is-swapping");
-    setTimeout(() => {
-      heroReel.poster = poster;
-      heroReel.src = src;
-      if (!reduceMotion && !covered) heroReel.play().catch(() => {});
-      heroReel.classList.remove("is-swapping");
-    }, reduceMotion ? 0 : 450);
+  const toggle = $("#toggle"), opts = $$(".opt", toggle), thumb = $(".thumb", toggle);
+  const groups = $$(".group", groupsEl);
+  const place = () => {
+    const on = opts.find((o) => o.getAttribute("aria-checked") === "true");
+    thumb.style.setProperty("--tw", `${on.offsetWidth}px`);
+    thumb.style.setProperty("--tx", `${on.offsetLeft}px`);
   };
   const choose = (group) => {
-    keys.forEach((k) => k.setAttribute("aria-checked", String(k.dataset.first === group)));
-    putFirst(group);
-    swapReel(group);
+    const was = groups.find((g) => !g.hidden), next = groups.find((g) => g.dataset.group === group);
+    opts.forEach((o) => o.setAttribute("aria-checked", String(o.dataset.group === group)));
+    place();
+    if (was === next) return;
+    // if you're down in the work, come back to its top so you see the change
+    const workTop = work.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
+    if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
+    const y = window.scrollY;
+    was.hidden = true;
+    next.hidden = false;
+    // the browser would keep a frame from the half that's gone in view (scroll anchoring); stay where you were
+    if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
+    $$(".tile", next).forEach((tile) => tile.classList.add("in"));
+    if (!reduceMotion) next.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 600, easing: "cubic-bezier(.2,.8,.2,1)" });
   };
-  keys.forEach((k) => k.addEventListener("click", () => choose(k.dataset.first)));
-  $(".keys").addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") { e.preventDefault(); choose("commercial"); $('[data-first="commercial"]').focus(); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); choose("narrative"); $('[data-first="narrative"]').focus(); }
+  opts.forEach((o) => o.addEventListener("click", () => choose(o.dataset.group)));
+  toggle.addEventListener("keydown", (e) => {
+    const to = { ArrowRight: "commercial", ArrowLeft: "narrative" }[e.key];
+    if (!to) return;
+    e.preventDefault();
+    choose(to);
+    $(`.opt[data-group="${to}"]`, toggle).focus();
   });
+  place();
+  document.fonts.ready.then(place);
+  window.addEventListener("resize", place);
+  requestAnimationFrame(() => toggle.classList.add("is-set"));   // from here on the pill slides
 
   /* ======================================================================
-     FRAMES — each film's frame holds all its stills: swipe (touch or trackpad), drag, or the arrows by the counter.
-     A plain click opens the film
+     FRAMES — they come up as you reach them; click one and its film opens
      ====================================================================== */
   const reveal = new IntersectionObserver((entries) => entries.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add("in"); reveal.unobserve(e.target); }
@@ -126,56 +179,20 @@
   $$(".tile").forEach((tile) => {
     if (tile.getBoundingClientRect().top < innerHeight) tile.classList.add("in");
     else reveal.observe(tile);
-    let dragged = false;
-    const slides = $(".slides", tile);
-    if (slides) {
-      const n = $(".tile-n", tile);
-      const at = () => Math.round(slides.scrollLeft / slides.clientWidth);
-      const go = (i) => slides.scrollTo({ left: clamp(i, 0, slides.children.length - 1) * slides.clientWidth, behavior: reduceMotion ? "auto" : "smooth" });
-      slides.addEventListener("scroll", () => { if (n) n.textContent = pad(at() + 1); }, { passive: true });
-      $(".tile-prev", tile)?.addEventListener("click", (e) => { e.stopPropagation(); go(at() - 1); });
-      $(".tile-next", tile)?.addEventListener("click", (e) => { e.stopPropagation(); go(at() + 1); });
-      // drag with a mouse (touch already swipes natively)
-      let drag = null;
-      slides.addEventListener("pointerdown", (e) => {
-        if (e.pointerType !== "mouse" || e.button !== 0) return;
-        drag = { x: e.clientX, left: slides.scrollLeft, moved: false };
-        dragged = false;
-      });
-      window.addEventListener("pointermove", (e) => {
-        if (!drag) return;
-        const dx = e.clientX - drag.x;
-        if (!drag.moved && Math.abs(dx) > 5) { drag.moved = true; slides.classList.add("is-dragging"); }
-        if (drag.moved) slides.scrollLeft = drag.left - dx;
-      });
-      window.addEventListener("pointerup", () => {
-        if (!drag) return;
-        if (drag.moved) {
-          dragged = true;
-          const dir = slides.scrollLeft - drag.left;
-          const i = Math.abs(dir) > slides.clientWidth * 0.15 ? (dir > 0 ? Math.ceil : Math.floor)(slides.scrollLeft / slides.clientWidth) : at();
-          slides.classList.remove("is-dragging");
-          go(i);
-        }
-        drag = null;
-      });
-    }
     tile.addEventListener("click", (e) => {
-      if (dragged) { dragged = false; return; }
-      if (e.target.closest(".tile-step")) return;
       e.preventDefault();
       location.hash = `#/${tile.dataset.slug}`;
     });
   });
 
   /* ======================================================================
-     CV AND CONTACT — they come up like a focus pull: the rules draw across and the type comes into focus, top to bottom.
-     Whatever arrives together is staggered in reading order
+     CV, CONTACT AND FEATURED — they come up like a focus pull: the rules draw across and the type comes into focus,
+     top to bottom. Whatever arrives together is staggered in reading order
      ====================================================================== */
   const reveals = [
-    ...$$(".cv .sec-head, .contact .sec-head, .cv-block").map((el) => [el, "rv-rule"]),
-    ...$$(".sec-title, .about, .mail").map((el) => [el, "rv-wipe"]),
-    ...$$(".sec-head .label, .cv-block h3, .cv-list li, .links a").map((el) => [el, "rv"]),
+    ...$$(".cv .sec-head, .contact .sec-head, .press .sec-head, .cv-block, .press-item").map((el) => [el, "rv-rule"]),
+    ...$$(".sec-title, .about, .mail, .press-title").map((el) => [el, "rv-wipe"]),
+    ...$$(".sec-head .label, .cv-block h3, .cv-list li, .links a, .portrait, .press-stand, .press-read").map((el) => [el, "rv"]),
   ];
   const arrive = new IntersectionObserver((entries) => {
     entries.filter((e) => e.isIntersecting)
@@ -189,12 +206,13 @@
   if (!reduceMotion) reveals.forEach(([el, kind]) => { el.classList.add(kind); arrive.observe(el); });
 
   /* ======================================================================
-     THE FILM — slides up from the bottom. Each film has its own address (#/vetala), so the back button closes it and a
+     THE FILM — a layer over the site. Each film has its own address (#/vetala), so the back button closes it and a
      film can be sent on its own
      ====================================================================== */
   const scrim = $("#scrim"), proj = $("#proj");
   let lastFocus = null, closeTimer = 0;
-  const order = () => $$("#groups .tile").map((t) => t.dataset.slug);   // follows the keys
+  // the half that's switched on first, then the other: a film from the screen always has a place in the run
+  const order = () => [...groups.filter((g) => !g.hidden), ...groups.filter((g) => g.hidden)].flatMap((g) => $$(".tile", g).map((t) => t.dataset.slug));
   const embed = ({ provider, id, hash }) => provider === "youtube"
     ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`
     : `https://player.vimeo.com/video/${id}?${hash ? `h=${hash}&` : ""}autoplay=1&title=0&byline=0&portrait=0&dnt=1&transparent=0`;
@@ -202,19 +220,18 @@
 
   const renderFilm = (p) => {
     const list = order(), i = list.indexOf(p.slug);
-    // a showreel isn't in the grid: it leads into the first film
-    const prev = bySlug.get(list[i < 0 ? list.length - 1 : (i - 1 + list.length) % list.length]);
-    const next = bySlug.get(list[i < 0 ? 0 : (i + 1) % list.length]);
+    const prev = bySlug.get(list[(i - 1 + list.length) % list.length]);
+    const next = bySlug.get(list[(i + 1) % list.length]);
     $("#proj-player").innerHTML = p.video
       ? `<div class="film"><iframe src="${embed(p.video)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${esc(p.title)}"></iframe></div>`
       : `<img src="/media/stills/${p.stills[0]}.jpg" alt="${esc(p.title)}" />`;
     $("#proj-player iframe")?.addEventListener("load", (e) => e.target.classList.add("is-ready"), { once: true });
     $("#proj-title").textContent = p.title;
-    const rows = [["Director", p.director], ["Production", p.production], [p.kind === "Showreel" ? "Showreel" : "Type", p.kind === "Showreel" ? p.note : p.kind]];
-    if (p.note && p.kind !== "Showreel") rows.push(["With", p.note.replace(/^(Starring|Talent)\s+/i, "")]);
+    const rows = [["Director", p.director], ["Production", p.production], ["Type", KINDS[p.kind] || p.kind]];
+    if (p.note) rows.push(["With", p.note.replace(/^(Starring|Talent)\s+/i, "")]);
     $("#proj-credits").innerHTML = rows.filter((r) => r[1]).slice(0, 3).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("");
     $("#proj-stills").innerHTML = p.stills.map((s, j) => `<img src="/media/stills/${s}.jpg" alt="${esc(p.title)} — still ${j + 1}" loading="${j < 2 ? "eager" : "lazy"}" decoding="async" />`).join("");
-    $("#proj-pos").textContent = i < 0 ? "Showreel" : `${pad(i + 1)} / ${pad(list.length)}`;
+    $("#proj-pos").textContent = `${pad(i + 1)} / ${pad(list.length)}`;
     $("#proj-prev").href = `#/${prev.slug}`;
     $("#proj-next").href = `#/${next.slug}`;
     const follow = $("#proj-follow");
@@ -232,7 +249,7 @@
     proj.hidden = false;
     scrim.classList.add("is-on");
     document.body.classList.add("is-locked");
-    heroReel.pause();
+    wake();
     requestAnimationFrame(() => requestAnimationFrame(() => proj.classList.add("is-open")));
     proj.focus({ preventScroll: true });
   };
@@ -243,8 +260,8 @@
     scrim.classList.remove("is-on");
     document.body.classList.remove("is-locked");
     document.title = "Charlie Painter — Director of Photography, London";
-    closeTimer = setTimeout(() => { proj.hidden = true; $("#proj-player").innerHTML = ""; $("#proj-stills").innerHTML = ""; }, reduceMotion ? 0 : 650);
-    if (!reduceMotion && !covered) heroReel.play().catch(() => {});
+    closeTimer = setTimeout(() => { proj.hidden = true; $("#proj-player").innerHTML = ""; $("#proj-stills").innerHTML = ""; }, reduceMotion ? 0 : 600);
+    wake();
     lastFocus?.focus?.({ preventScroll: true });
   };
   // closing drops the film's address without moving the page
@@ -279,4 +296,5 @@
 
   onScroll();
   route();
+  wake();
 })();
