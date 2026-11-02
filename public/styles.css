@@ -1,5 +1,6 @@
 /* Charlie Painter — Stills. One page: a screen of stills with his name, then the work, the CV, contact and the press.
-   The first screen is a scope screen in the dark playing stills from the best of the work, with the name beneath.
+   The first screen is a scope screen in the dark playing stills from the best of the work, which film it is along the
+   top, the name beneath.
    Everything else lives on one bar — the role, the narrative / commercial switch, the places to go — which waits along
    the bottom of the first screen, rides up with the work and stays at the top as the header. Each film opens as a layer
    over the site. Black, hairlines, one red light.
@@ -33,7 +34,6 @@
   --bar: 66px;                /* the bar: at the bottom of the first screen, then the header */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --screen-ratio: 2.39;       /* the first screen's screen: scope */
-  --ticker-h: 52px;           /* the bar beneath it */
   color-scheme: dark;
 }
 
@@ -57,13 +57,12 @@ i { font-style: normal; }
 /* a light, used only for something that is on */
 .rec { display: inline-block; flex: none; width: 5px; height: 5px; margin-right: 12px; border-radius: 50%; background: var(--rec); vertical-align: middle; transform: translateY(-0.12em); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
 
-/* THE FIRST SCREEN — pinned. A scope screen in the dark, as big as fits above the name, with a bar beneath it saying
-   which film it's showing. The stills dissolve one into the next, each drifting in a little while it's up */
-.hero { position: sticky; top: 0; z-index: 0; display: flex; height: 100vh; height: 100svh; overflow: hidden; background: #000;
+/* THE FIRST SCREEN — pinned. Along the top, which film it's showing; beneath, a scope screen in the dark, as big as fits
+   above the name. The stills dissolve one into the next, each drifting in a little while it's up */
+.hero { position: sticky; top: 0; z-index: 0; display: flex; flex-direction: column; height: 100vh; height: 100svh; overflow: hidden; background: #000;
   padding: var(--pad) var(--pad) calc(var(--bar) + var(--name-h, 13vw) + var(--pad) * 1.6); }
-.stage { flex: 1; min-height: 0; display: grid; place-items: center; container-type: size; }
-.reel { width: min(100cqw, (100cqh - var(--ticker-h)) * var(--screen-ratio)); }
-.screen { position: relative; display: block; aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); }
+.stage { flex: 1; min-height: 0; display: grid; place-items: center; margin-top: var(--pad); container-type: size; }
+.screen { position: relative; display: block; width: min(100cqw, 100cqh * var(--screen-ratio)); aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); }
 .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s var(--ease); user-select: none; -webkit-user-drag: none; }
 /* the next still dissolves in over the last, which stays put underneath until it's covered */
 .screen img.is-on { z-index: 2; opacity: 1; }
@@ -72,8 +71,8 @@ i { font-style: normal; }
 @keyframes drift { from { transform: scale(1); } to { transform: scale(1.045); } }
 .screen-open { position: absolute; right: 16px; bottom: 12px; z-index: 3; color: #fff; text-shadow: 0 0 12px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .4s var(--ease); }
 .screen:hover .screen-open, .screen:focus-visible .screen-open { opacity: 1; transform: none; }
-/* the bar beneath: a segment for each film, filling while its stills are up, its name under it */
-.ticker { height: var(--ticker-h); padding-top: 10px; }
+/* the bar along the top: a segment for each film, filling while its stills are up, its name under it */
+.ticker { flex: none; }
 .ticker-now { display: none; }
 .ticker-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 12px; }
 .tick { display: grid; gap: 10px; width: 100%; padding: 4px 0 8px; text-align: left; color: var(--dim); transition: color .25s; }
@@ -261,10 +260,10 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
   .proj-credits { border-left: 0; border-top: 1px solid var(--hair); }
 }
 
-/* PHONES — the bar has two rows: the role (then the name) with the places to go, and the switch. Under the screen, just
-   the segments (wide enough to tap) and the film that's up */
+/* PHONES — the bar has two rows: the role (then the name) with the places to go, and the switch. Along the top, just
+   the segments (tall enough to tap) and, under them, the film that's up */
 @media (max-width: 760px) {
-  :root { --bar: 104px; --ticker-h: 86px; }
+  :root { --bar: 104px; }
   .bar { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 50px 54px; padding: 0; }
   .bar-left { padding-left: var(--pad); }
   .bar-role { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 10px; letter-spacing: .08em; }
@@ -272,7 +271,7 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
   .nav { gap: 14px; padding-right: var(--pad); font-size: 11px; letter-spacing: .1em; }
   .toggle { grid-column: 1 / -1; grid-row: 2; display: flex; margin: 0 var(--pad) 10px; }
   .opt { flex: 1; height: 36px; }
-  .ticker { padding-top: 12px; }
+  .hero { padding-top: max(4px, env(safe-area-inset-top)); }
   .ticker-now { display: flex; align-items: center; gap: 12px; height: 22px; white-space: nowrap; }
   .ticker-now .rec { margin-right: -2px; }
   .ticker-kind { color: var(--dim); }

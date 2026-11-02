@@ -42,13 +42,16 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN: a scope screen in the dark, playing stills from the best of the work, three from each film, with
-       a bar beneath it telling you which film you're looking at. Click the screen and that film opens. Pinned; the page
-       slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
+  <!-- THE FIRST SCREEN: along the top, which film you're looking at; beneath, a scope screen in the dark playing stills
+       from the best of the work, three from each film. Click the screen and that film opens. Pinned; the page slides up
+       over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
+    <div class="ticker label" id="ticker">
+      <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="66north"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li><button class="tick" data-slug="johnsmiths"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li></ol>
+      <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
+    </div>
     <div class="stage">
-      <div class="reel" id="reel">
-        <a class="screen" id="screen" href="#/vetala" aria-label="Open Vetala">
+      <a class="screen" id="screen" href="#/vetala" aria-label="Open Vetala">
         <img src="/media/stills/vetala-9.jpg" alt="" data-slug="vetala" loading="eager" decoding="async" draggable="false" class="is-on" />
         <img src="/media/stills/vetala-3.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
         <img src="/media/stills/vetala-4.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
@@ -64,13 +67,8 @@
         <img src="/media/stills/johnsmiths-1.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
         <img src="/media/stills/johnsmiths-r2.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
         <img src="/media/stills/johnsmiths-r3.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
-          <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
-        </a>
-        <div class="ticker label" id="ticker">
-          <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
-          <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="66north"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li><button class="tick" data-slug="johnsmiths"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li></ol>
-        </div>
-      </div>
+        <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
+      </a>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
   </section>

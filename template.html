@@ -42,21 +42,19 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN: a scope screen in the dark, playing stills from the best of the work, three from each film, with
-       a bar beneath it telling you which film you're looking at. Click the screen and that film opens. Pinned; the page
-       slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
+  <!-- THE FIRST SCREEN: along the top, which film you're looking at; beneath, a scope screen in the dark playing stills
+       from the best of the work, three from each film. Click the screen and that film opens. Pinned; the page slides up
+       over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
+    <div class="ticker label" id="ticker">
+      <ol class="ticker-list" aria-label="Films">{{TICKER}}</ol>
+      <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">{{FIRST_TITLE}}</span><span class="ticker-kind" id="ticker-kind">{{FIRST_KIND}}</span></p>
+    </div>
     <div class="stage">
-      <div class="reel" id="reel">
-        <a class="screen" id="screen" href="#/{{FIRST_SLUG}}" aria-label="Open {{FIRST_TITLE}}">
+      <a class="screen" id="screen" href="#/{{FIRST_SLUG}}" aria-label="Open {{FIRST_TITLE}}">
         {{SCREEN}}
-          <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
-        </a>
-        <div class="ticker label" id="ticker">
-          <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">{{FIRST_TITLE}}</span><span class="ticker-kind" id="ticker-kind">{{FIRST_KIND}}</span></p>
-          <ol class="ticker-list" aria-label="Films">{{TICKER}}</ol>
-        </div>
-      </div>
+        <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
+      </a>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
   </section>
