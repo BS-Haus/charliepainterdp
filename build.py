@@ -27,16 +27,17 @@ def credit_line(f):
 def projects():
     """Every project in page order (narrative first) — the data the project view is built from."""
     return [{"slug": f["slug"], "group": group, "title": title_of(f), "name": f["title"], "kind": f["kind"], "note": f.get("note", ""),
-             "director": f.get("director", ""), "production": f.get("production", ""),
+             "accolade": f.get("accolade", ""), "director": f.get("director", ""), "production": f.get("production", ""),
              "video": f.get("video"), "stills": f["stills"]}
             for group in ("narrative", "commercial") for f in content[group]]
 
 
 def film_tile(f, eager):
-    """A frame per film: its one best still. Click it and the film opens."""
+    """A frame per film: its one best still, its title, and beneath it what it won, or failing that who made it."""
+    under = f.get("accolade") or credit_line(f) or f["kind"]
     return f'''        <article class="tile" data-slug="{f["slug"]}">
           <img src="/media/stills/{f["stills"][0]}.jpg" alt="" loading="{"eager" if eager else "lazy"}" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit credit">{esc(credit_line(f) or f["kind"])}</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit credit">{esc(under)}</p></div>
         </article>'''
 
 

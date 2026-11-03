@@ -278,11 +278,14 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
   .ticker-list { gap: 6px; }
   .tick { padding: 21px 0; }   /* a thumb's height to tap */
   .tick-name, .screen-open { display: none; }
-  .grid { grid-template-columns: minmax(0, 1fr); }
+  /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }
   .grid::after { display: none; }
-  .grid .tile { aspect-ratio: 1.6 / 1; }
-  .tile-cap { padding: 40px 16px 16px; }
-  .tile-title { font-size: 27px; }
+  .grid .tile { overflow: visible; background: none; }
+  .grid .tile > img { height: auto; aspect-ratio: 1.6 / 1; background: var(--tile); }
+  .tile-cap { position: static; gap: 1px; padding: 14px 0 0; background: none; }
+  .tile-title { font-family: var(--text); font-size: 13px; line-height: 1.5; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
+  .tile-credit { font-size: 15.5px; color: var(--fg); }
   .cv-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }
   .awards li { grid-template-columns: minmax(0, 1fr) auto; }
   .awards li .cv-t { grid-column: 1 / -1; order: -1; }

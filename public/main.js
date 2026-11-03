@@ -227,7 +227,8 @@
       : `<img src="/media/stills/${p.stills[0]}.jpg" alt="${esc(p.title)}" />`;
     $("#proj-player iframe")?.addEventListener("load", (e) => e.target.classList.add("is-ready"), { once: true });
     $("#proj-title").textContent = p.title;
-    const rows = [["Director", p.director], ["Production", p.production], ["Type", KINDS[p.kind] || p.kind]];
+    // what it won, where it has something, says more than what kind of film it is
+    const rows = [["Director", p.director], ["Production", p.production], p.accolade ? ["Award", p.accolade] : ["Type", KINDS[p.kind] || p.kind]];
     if (p.note) rows.push(["With", p.note.replace(/^(Starring|Talent)\s+/i, "")]);
     $("#proj-credits").innerHTML = rows.filter((r) => r[1]).slice(0, 3).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("");
     $("#proj-stills").innerHTML = p.stills.map((s, j) => `<img src="/media/stills/${s}.jpg" alt="${esc(p.title)} — still ${j + 1}" loading="${j < 2 ? "eager" : "lazy"}" decoding="async" />`).join("");
