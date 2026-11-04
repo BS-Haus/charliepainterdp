@@ -24,11 +24,23 @@ def credit_line(f):
     return " / ".join(x for x in (f.get("director"), f.get("production")) if x)
 
 
+def jpeg_size(name):
+    """A still's width and height, from its JPEG frame header — so the page can hold its space before it loads."""
+    data = (ROOT / "public" / "media" / "stills" / f"{name}.jpg").read_bytes()
+    i = 2
+    while i + 9 < len(data):
+        marker, size = data[i + 1], int.from_bytes(data[i + 2:i + 4], "big")
+        if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+            return [int.from_bytes(data[i + 7:i + 9], "big"), int.from_bytes(data[i + 5:i + 7], "big")]
+        i += 2 + size
+    raise ValueError(f"no frame header in {name}.jpg")
+
+
 def projects():
     """Every project in page order (narrative first) — the data the project view is built from."""
     return [{"slug": f["slug"], "group": group, "title": title_of(f), "name": f["title"], "kind": f["kind"], "note": f.get("note", ""),
              "accolade": f.get("accolade", ""), "director": f.get("director", ""), "production": f.get("production", ""),
-             "video": f.get("video"), "stills": f["stills"]}
+             "video": f.get("video"), "stills": f["stills"], "dims": [jpeg_size(s) for s in f["stills"]]}
             for group in ("narrative", "commercial") for f in content[group]]
 
 

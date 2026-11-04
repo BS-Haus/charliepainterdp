@@ -86,7 +86,7 @@
 
     <!-- CV: the plain list producers expect -->
     <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">Director / Prod Co.</p></header>
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label"><span>Director / Prod Co.</span></p></header>
 {{CV}}
       <div class="cv-block">
         <h3 class="label">Awards</h3>
@@ -96,21 +96,23 @@
       </div>
     </section>
 
-    <!-- CONTACT: who he is, how to reach him, him at work -->
+    <!-- CONTACT: who he is at the top; how to reach him at the foot, level with the foot of his portrait -->
     <section class="contact" id="contact" aria-label="Contact">
       <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
       <div class="contact-body">
         <div class="contact-text">
           <p class="about">{{ABOUT}}</p>
-          <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+          <div class="reach">
+            <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+            <nav class="links" aria-label="Elsewhere">
+              <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
+              <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
+              <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
+            </nav>
+          </div>
         </div>
         <figure class="portrait"><img src="/media/portrait.jpg" alt="Charlie Painter at the camera" loading="lazy" decoding="async" /></figure>
       </div>
-      <nav class="links" aria-label="Elsewhere">
-        <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
-        <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
-        <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
-      </nav>
     </section>
 
     <!-- FEATURED: the press, set like the CV -->
@@ -126,23 +128,27 @@
     </figure>
   </main>
 
-  <!-- THE FILM: a layer over the site, which blurs behind it -->
+  <!-- THE FILM: a panel laid over the site, which blurs behind it. The layer scrolls as one, panel and all; the line
+       along the foot of the panel's bar fills as you go down it -->
   <span class="scrim" id="scrim" aria-hidden="true"></span>
 
-  <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1" hidden>
-    <div class="sheet-bar label">
-      <a class="sheet-close proj-back" href="#work">Close</a>
-      <span class="proj-pos" id="proj-pos"></span>
-      <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
-    </div>
-    <div class="sheet-scroll" id="proj-scroll">
-      <div class="proj-player" id="proj-player"></div>
-      <header class="proj-head">
-        <h2 class="proj-title" id="proj-title"></h2>
-        <dl class="proj-credits label" id="proj-credits"></dl>
-      </header>
-      <div class="proj-stills" id="proj-stills"></div>
-      <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
+  <div class="layer" id="layer" hidden>
+    <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1">
+      <div class="sheet-bar label">
+        <a class="sheet-close proj-back" href="#work">Close</a>
+        <span class="proj-pos" id="proj-pos"></span>
+        <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
+        <span class="sheet-progress" id="sheet-progress" aria-hidden="true"><i></i></span>
+      </div>
+      <div class="sheet-body" id="proj-body">
+        <div class="proj-player" id="proj-player"></div>
+        <header class="proj-head">
+          <h2 class="proj-title" id="proj-title"></h2>
+          <dl class="proj-credits label" id="proj-credits"></dl>
+        </header>
+        <div class="proj-stills" id="proj-stills"></div>
+        <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </div>
 

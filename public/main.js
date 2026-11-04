@@ -4,6 +4,8 @@
   const pad = (n) => String(n).padStart(2, "0");
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const EXPO = "cubic-bezier(.16, 1, .3, 1)";    // arriving: away at once, then a long settle
+  const AWAY = "cubic-bezier(.4, 0, 1, 1)";      // leaving: gathers speed as it goes
   const PROJECTS = window.PROJECTS || [];
   const KINDS = window.KINDS || {};
   const bySlug = new Map(PROJECTS.map((p) => [p.slug, p]));
@@ -135,26 +137,34 @@
      ====================================================================== */
   const toggle = $("#toggle"), opts = $$(".opt", toggle), thumb = $(".thumb", toggle);
   const groups = $$(".group", groupsEl);
+  let switching = 0;
   const place = () => {
     const on = opts.find((o) => o.getAttribute("aria-checked") === "true");
     thumb.style.setProperty("--tw", `${on.offsetWidth}px`);
     thumb.style.setProperty("--tx", `${on.offsetLeft}px`);
   };
-  const choose = (group) => {
+  // the half that's going dims away quickly; the frames of the one coming develop in, in reading order
+  const choose = async (group) => {
+    const my = ++switching;
+    groups.forEach((g) => g.getAnimations().forEach((a) => a.cancel()));
     const was = groups.find((g) => !g.hidden), next = groups.find((g) => g.dataset.group === group);
     opts.forEach((o) => o.setAttribute("aria-checked", String(o.dataset.group === group)));
     place();
     if (was === next) return;
+    if (!reduceMotion) {
+      await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: AWAY, fill: "forwards" }).finished.catch(() => {});
+      if (my !== switching) return;
+    }
     // if you're down in the work, come back to its top so you see the change
     const workTop = work.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
     if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
     const y = window.scrollY;
+    was.getAnimations().forEach((a) => a.cancel());
     was.hidden = true;
     next.hidden = false;
     // the browser would keep a frame from the half that's gone in view (scroll anchoring); stay where you were
     if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
-    $$(".tile", next).forEach((tile) => tile.classList.add("in"));
-    if (!reduceMotion) next.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 600, easing: "cubic-bezier(.2,.8,.2,1)" });
+    $$(".tile", next).forEach((tile) => { tile.classList.remove("in", "rising"); reveal.observe(tile); });
   };
   opts.forEach((o) => o.addEventListener("click", () => choose(o.dataset.group)));
   toggle.addEventListener("keydown", (e) => {
@@ -170,19 +180,31 @@
   requestAnimationFrame(() => toggle.classList.add("is-set"));   // from here on the pill slides
 
   /* ======================================================================
-     FRAMES — they come up as you reach them; click one and its film opens
+     FRAMES — the pictures develop in their frames as you reach them, those that arrive together in reading order;
+     click one and its film opens (its first stills start loading as the pointer arrives on it)
      ====================================================================== */
-  const reveal = new IntersectionObserver((entries) => entries.forEach((e) => {
-    if (e.isIntersecting) { e.target.classList.add("in"); reveal.unobserve(e.target); }
-  }), { rootMargin: "0px 0px -6% 0px" });
+  const develop = (tile, delay) => {
+    tile.style.setProperty("--d", `${delay}ms`);
+    tile.classList.add("rising", "in");
+    // once it's settled, hovering it answers at once
+    setTimeout(() => { tile.classList.remove("rising"); tile.style.removeProperty("--d"); }, delay + 1800);
+  };
+  const reveal = new IntersectionObserver((entries) => {
+    entries.filter((e) => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+      .forEach((e, i) => { develop(e.target, Math.min(i, 5) * 110); reveal.unobserve(e.target); });
+  }, { rootMargin: "0px 0px -8% 0px" });
 
   $$(".tile").forEach((tile) => {
-    if (tile.getBoundingClientRect().top < innerHeight) tile.classList.add("in");
+    if (reduceMotion) tile.classList.add("in");
     else reveal.observe(tile);
     tile.addEventListener("click", (e) => {
       e.preventDefault();
       location.hash = `#/${tile.dataset.slug}`;
     });
+    tile.addEventListener("pointerenter", () => {
+      bySlug.get(tile.dataset.slug)?.stills.slice(0, 3).forEach((s) => { new Image().src = `/media/stills/${s}.jpg`; });
+    }, { once: true });
   });
 
   /* ======================================================================
@@ -206,11 +228,43 @@
   if (!reduceMotion) reveals.forEach(([el, kind]) => { el.classList.add(kind); arrive.observe(el); });
 
   /* ======================================================================
-     THE FILM — a layer over the site. Each film has its own address (#/vetala), so the back button closes it and a
-     film can be sent on its own
+     THE FILM — a panel laid over the site. Each film has its own address (#/vetala), so the back button closes it and a
+     film can be sent on its own. It comes up once its first picture is ready: the site dims and blurs as the panel
+     rises into place (from the bottom on phones) and its title and credits settle in after it; the film's player
+     fades in over its first still once the panel has settled. Prev and next slide one film out and the next in.
+     Closing is quicker than opening. Whatever is cut short carries on from where it had got to
      ====================================================================== */
-  const scrim = $("#scrim"), proj = $("#proj");
-  let lastFocus = null, closeTimer = 0;
+  const scrim = $("#scrim"), layer = $("#layer"), proj = $("#proj"), sheetBody = $("#proj-body"), progress = $("#sheet-progress");
+  const asPhone = window.matchMedia("(max-width: 760px)");
+  let lastFocus = null, current = null, moving = 0;
+  const motion = (el, frames, o) => (reduceMotion ? null : el.animate(frames, o));
+  const over = (a) => (a ? a.finished.catch(() => {}) : Promise.resolve());
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  // stop whatever an element is doing, leaving it where it had got to
+  const hold = (el) => el.getAnimations().forEach((a) => { try { a.commitStyles(); } catch (e) {} a.cancel(); });
+  const rest = (el) => { el.getAnimations().forEach((a) => a.cancel()); el.removeAttribute("style"); };
+  // a picture fades up once it's in; one that's already in is simply there
+  const settle = (img) => {
+    if (img.complete && img.naturalWidth) img.classList.add("is-in");
+    else img.addEventListener("load", () => img.classList.add("is-in"), { once: true });
+  };
+  // the panel waits (briefly) for its first picture, so it never arrives empty
+  const ready = (ms) => {
+    const img = $("#proj-player img");
+    return Promise.race([img ? img.decode().catch(() => {}) : Promise.resolve(), wait(ms)]);
+  };
+  const credits = () => [$("#proj-title"), ...$$("#proj-credits > div"), $("#proj-stills"), $("#proj-follow")];
+  const play = (p) => {
+    const film = $("#proj-player .film");
+    if (!p.video || !film || $("iframe", film)) return;
+    film.insertAdjacentHTML("beforeend", `<iframe src="${embed(p.video)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${esc(p.title)}"></iframe>`);
+    $("iframe", film).addEventListener("load", (e) => e.target.classList.add("is-ready"), { once: true });
+  };
+  const track = () => {
+    const span = layer.scrollHeight - layer.clientHeight;
+    progress.style.setProperty("--sp", span > 0 ? (layer.scrollTop / span).toFixed(4) : 0);
+  };
+  layer.addEventListener("scroll", track, { passive: true });
   // the half that's switched on first, then the other: a film from the screen always has a place in the run
   const order = () => [...groups.filter((g) => !g.hidden), ...groups.filter((g) => g.hidden)].flatMap((g) => $$(".tile", g).map((t) => t.dataset.slug));
   const embed = ({ provider, id, hash }) => provider === "youtube"
@@ -222,53 +276,120 @@
     const list = order(), i = list.indexOf(p.slug);
     const prev = bySlug.get(list[(i - 1 + list.length) % list.length]);
     const next = bySlug.get(list[(i + 1) % list.length]);
-    $("#proj-player").innerHTML = p.video
-      ? `<div class="film"><iframe src="${embed(p.video)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${esc(p.title)}"></iframe></div>`
-      : `<img src="/media/stills/${p.stills[0]}.jpg" alt="${esc(p.title)}" />`;
-    $("#proj-player iframe")?.addEventListener("load", (e) => e.target.classList.add("is-ready"), { once: true });
+    // every picture is given its size, so each holds its space before it has loaded
+    const pic = (j, alt, cls = "") => {
+      const [w, h] = p.dims[j];
+      return `<img${cls && ` class="${cls}"`} src="/media/stills/${p.stills[j]}.jpg" width="${w}" height="${h}" alt="${alt}" decoding="async" />`;
+    };
+    const player = $("#proj-player");
+    player.classList.toggle("is-still", !p.video);
+    // a film opens on its first still; with no player, that still is the picture at the top and isn't repeated below
+    player.innerHTML = p.video ? `<div class="film">${pic(0, "", "poster")}</div>` : pic(0, esc(p.title));
     $("#proj-title").textContent = p.title;
     // what it won, where it has something, says more than what kind of film it is
     const rows = [["Director", p.director], ["Production", p.production], p.accolade ? ["Award", p.accolade] : ["Type", KINDS[p.kind] || p.kind]];
     if (p.note) rows.push(["With", p.note.replace(/^(Starring|Talent)\s+/i, "")]);
-    $("#proj-credits").innerHTML = rows.filter((r) => r[1]).slice(0, 3).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("");
-    $("#proj-stills").innerHTML = p.stills.map((s, j) => `<img src="/media/stills/${s}.jpg" alt="${esc(p.title)} — still ${j + 1}" loading="${j < 2 ? "eager" : "lazy"}" decoding="async" />`).join("");
+    // an award reads as what it was, then where: "Best Cinematography – SSIFF" sets as two lines
+    const cell = (k, v) => (k === "Award" ? esc(v).replace(/\s+[–—-]\s+(.+)$/, "<span>$1</span>") : esc(v));
+    $("#proj-credits").innerHTML = rows.filter((r) => r[1]).slice(0, 3).map(([k, v]) => `<div><dt>${k}</dt><dd>${cell(k, v)}</dd></div>`).join("");
+    $("#proj-stills").innerHTML = p.stills.map((s, j) => j).filter((j) => p.video || j > 0)
+      .map((j) => `<figure class="still">${pic(j, `${esc(p.title)} — still ${j + 1}`).replace("<img", `<img loading="${j < 3 ? "eager" : "lazy"}"`)}</figure>`).join("");
+    $$("img", proj).forEach(settle);
     $("#proj-pos").textContent = `${pad(i + 1)} / ${pad(list.length)}`;
     $("#proj-prev").href = `#/${prev.slug}`;
     $("#proj-next").href = `#/${next.slug}`;
     const follow = $("#proj-follow");
     follow.href = `#/${next.slug}`;
     $(".proj-follow-title", follow).textContent = next.title;
-    $("#proj-scroll").scrollTop = 0;
+    layer.scrollTop = 0;
+    track();
+    current = p.slug;
     document.title = `${p.title} — Charlie Painter`;
   };
 
-  const open = (p) => {
-    renderFilm(p);
-    clearTimeout(closeTimer);
-    if (!openSheet) lastFocus = document.activeElement;
+  const open = async (p) => {
+    if (openSheet) return turn(p);
+    const my = ++moving, cutShort = !layer.hidden;   // reopened while it was still going
+    lastFocus = document.activeElement;
     openSheet = proj;
-    proj.hidden = false;
-    scrim.classList.add("is-on");
+    [sheetBody, ...credits()].forEach(rest);
+    renderFilm(p);
     document.body.classList.add("is-locked");
     wake();
-    requestAnimationFrame(() => requestAnimationFrame(() => proj.classList.add("is-open")));
+    const phone = asPhone.matches;
+    const from = phone ? { transform: `translateY(${innerHeight}px)` } : { opacity: 0, transform: "translateY(28px) scale(.97)" };
+    const to = phone ? { transform: "none" } : { opacity: 1, transform: "none" };
+    hold(proj);
+    hold(scrim);
+    if (!cutShort) { proj.removeAttribute("style"); scrim.removeAttribute("style"); }
+    // the site dims at once; the panel waits, out of sight, for its first picture (not long), then rises
+    const rise = motion(proj, cutShort ? [to] : [from, to], { duration: phone ? 560 : 520, easing: phone ? "cubic-bezier(.32, .72, 0, 1)" : EXPO, fill: "forwards" });
+    rise?.pause();
+    layer.hidden = false;
+    scrim.classList.add("is-on");
     proj.focus({ preventScroll: true });
+    motion(scrim, cutShort ? [{ opacity: 1 }] : [{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: "ease-out", fill: "forwards" });
+    if (!cutShort) await ready(220);
+    if (my !== moving) return;
+    rise?.play();
+    // then its title and credits settle in after it, coming into focus; the stills below just rise
+    if (!cutShort) credits().forEach((el, k) => {
+      const soft = el.matches(".proj-title, .proj-credits > div");
+      motion(el, [{ opacity: 0, transform: "translateY(14px)", filter: soft ? "blur(6px)" : "none" }, { opacity: 1, transform: "none", filter: soft ? "blur(0px)" : "none" }],
+        { duration: 700, delay: 140 + k * 60, easing: EXPO, fill: "backwards" });
+    });
+    await over(rise);
+    if (my !== moving) return;
+    rest(proj);
+    rest(scrim);
+    play(p);
   };
-  const close = () => {
+  // from one film to the next while the panel is up: this one slides away, that one slides in from the side it's on
+  const turn = async (p) => {
+    if (p.slug === current) return;
+    const my = ++moving, list = order(), n = list.length;
+    let d = list.indexOf(p.slug) - list.indexOf(current);
+    if (d > n / 2) d -= n;
+    if (d < -n / 2) d += n;
+    const dir = d < 0 ? -1 : 1;
+    hold(sheetBody);
+    await over(motion(sheetBody, [{ opacity: 0, transform: `translateX(${-dir * 24}px)` }], { duration: 170, easing: AWAY, fill: "forwards" }));
+    if (my !== moving) return;
+    renderFilm(p);
+    await ready(200);
+    if (my !== moving) return;
+    rest(sheetBody);
+    const slide = motion(sheetBody, [{ opacity: 0, transform: `translateX(${dir * 36}px)` }, { opacity: 1, transform: "none" }], { duration: 560, easing: EXPO });
+    await over(slide);
+    if (my === moving) play(p);
+  };
+  const close = async () => {
     if (!openSheet) return;
+    const my = ++moving;
     openSheet = null;
-    proj.classList.remove("is-open");
-    scrim.classList.remove("is-on");
-    document.body.classList.remove("is-locked");
+    current = null;
     document.title = "Charlie Painter — Director of Photography, London";
-    closeTimer = setTimeout(() => { proj.hidden = true; $("#proj-player").innerHTML = ""; $("#proj-stills").innerHTML = ""; }, reduceMotion ? 0 : 600);
     wake();
     lastFocus?.focus?.({ preventScroll: true });
+    const phone = asPhone.matches;
+    [proj, scrim, sheetBody, ...credits()].forEach(hold);
+    const away = motion(proj, [phone ? { transform: `translateY(${innerHeight}px)` } : { opacity: 0, transform: "translateY(14px) scale(.985)" }],
+      { duration: phone ? 340 : 220, easing: AWAY, fill: "forwards" });
+    const fade = motion(scrim, [{ opacity: 0 }], { duration: phone ? 340 : 280, easing: "ease-out", fill: "forwards" });
+    await Promise.all([over(away), over(fade)]);
+    if (my !== moving) return;
+    layer.hidden = true;
+    scrim.classList.remove("is-on");
+    document.body.classList.remove("is-locked");
+    [proj, scrim, sheetBody, ...credits()].forEach(rest);
+    $("#proj-player").innerHTML = "";
+    $("#proj-stills").innerHTML = "";
   };
   // closing drops the film's address without moving the page
   const dismiss = (e) => { e?.preventDefault(); history.pushState(null, "", location.pathname + location.search); close(); };
   $(".proj-back").addEventListener("click", dismiss);
-  scrim.addEventListener("click", dismiss);
+  // a click on the blurred site around the panel closes it too
+  layer.addEventListener("click", (e) => { if (e.target === layer) dismiss(e); });
   document.addEventListener("keydown", (e) => {
     if (!openSheet) return;
     if (e.key === "Escape") dismiss(e);
