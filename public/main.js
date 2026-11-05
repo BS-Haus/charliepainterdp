@@ -4,8 +4,9 @@
   const pad = (n) => String(n).padStart(2, "0");
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const EXPO = "cubic-bezier(.16, 1, .3, 1)";    // arriving: away at once, then a long settle
-  const AWAY = "cubic-bezier(.4, 0, 1, 1)";      // leaving: gathers speed as it goes
+  // whatever the visitor sets moving goes at once and settles (in or out: nothing eases in); a sheet let go of runs on
+  const OUT = "cubic-bezier(.23, 1, .32, 1)";
+  const DRAWER = "cubic-bezier(.32, .72, 0, 1)";
   const PROJECTS = window.PROJECTS || [];
   const KINDS = window.KINDS || {};
   const bySlug = new Map(PROJECTS.map((p) => [p.slug, p]));
@@ -152,7 +153,7 @@
     place();
     if (was === next) return;
     if (!reduceMotion) {
-      await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: AWAY, fill: "forwards" }).finished.catch(() => {});
+      await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: OUT, fill: "forwards" }).finished.catch(() => {});
       if (my !== switching) return;
     }
     // if you're down in the work, come back to its top so you see the change
@@ -207,34 +208,43 @@
     }, { once: true });
   });
 
+  // a CV line for a film that's here opens it from anywhere on its row
+  $$(".cv-row[data-slug]").forEach((row) => row.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return;
+    location.hash = `#/${row.dataset.slug}`;
+  }));
+
   /* ======================================================================
      CV, CONTACT AND FEATURED — they come up like a focus pull: the rules draw across and the type comes into focus,
      top to bottom. Whatever arrives together is staggered in reading order
      ====================================================================== */
   const reveals = [
-    ...$$(".cv .sec-head, .contact .sec-head, .press .sec-head, .cv-block, .press-item").map((el) => [el, "rv-rule"]),
+    ...$$(".cv .sec-head, .contact .sec-head, .press .sec-head").map((el) => [el, "rv-rule"]),
     ...$$(".sec-title, .about, .mail, .press-title").map((el) => [el, "rv-wipe"]),
-    ...$$(".sec-head .label, .cv-block h3, .cv-list li, .links a, .portrait, .press-stand, .press-read").map((el) => [el, "rv"]),
+    ...$$(".sec-head .label, .cv-group, .links a, .portrait, .press-item").map((el) => [el, "rv"]),
   ];
   const arrive = new IntersectionObserver((entries) => {
     entries.filter((e) => e.isIntersecting)
       .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
       .forEach((e, i) => {
-        e.target.style.setProperty("--rv-delay", `${Math.min(i, 14) * 55}ms`);
+        const delay = Math.min(i, 14) * 55;
+        e.target.style.setProperty("--rv-delay", `${delay}ms`);
         e.target.classList.add("in");
         arrive.unobserve(e.target);
+        // once it has settled it's itself again: its own hover and press answer at once
+        setTimeout(() => { e.target.classList.remove("rv", "rv-wipe", "rv-rule", "in"); e.target.style.removeProperty("--rv-delay"); }, delay + 1700);
       });
   }, { rootMargin: "0px 0px -8% 0px" });
   if (!reduceMotion) reveals.forEach(([el, kind]) => { el.classList.add(kind); arrive.observe(el); });
 
   /* ======================================================================
      THE FILM — a panel laid over the site. Each film has its own address (#/vetala), so the back button closes it and a
-     film can be sent on its own. It comes up once its first picture is ready: the site dims and blurs as the panel
-     rises into place (from the bottom on phones) and its title and credits settle in after it; the film's player
-     fades in over its first still once the panel has settled. Prev and next slide one film out and the next in.
-     Closing is quicker than opening. Whatever is cut short carries on from where it had got to
+     film can be sent on its own. It comes up once its first picture is ready, quickly and whole: the site dims and blurs
+     as the panel comes up into focus (on phones the sheet rises from the bottom, solid all the way); the film's player
+     fades in over its first still once it has settled. Prev and next swap one film for the next, sliding from the side
+     it's on. Going is quicker than coming. Whatever is cut short carries on from where it had got to
      ====================================================================== */
-  const scrim = $("#scrim"), layer = $("#layer"), proj = $("#proj"), sheetBody = $("#proj-body"), progress = $("#sheet-progress");
+  const scrim = $("#scrim"), layer = $("#layer"), deck = $("#deck"), proj = $("#proj"), sheetBody = $("#proj-body"), progress = $("#sheet-progress");
   const asPhone = window.matchMedia("(max-width: 760px)");
   let lastFocus = null, current = null, moving = 0;
   const motion = (el, frames, o) => (reduceMotion ? null : el.animate(frames, o));
@@ -253,7 +263,6 @@
     const img = $("#proj-player img");
     return Promise.race([img ? img.decode().catch(() => {}) : Promise.resolve(), wait(ms)]);
   };
-  const credits = () => [$("#proj-title"), ...$$("#proj-credits > div"), $("#proj-stills"), $("#proj-follow")];
   const play = (p) => {
     const film = $("#proj-player .film");
     if (!p.video || !film || $("iframe", film)) return;
@@ -263,6 +272,7 @@
   const track = () => {
     const span = layer.scrollHeight - layer.clientHeight;
     progress.style.setProperty("--sp", span > 0 ? (layer.scrollTop / span).toFixed(4) : 0);
+    proj.classList.toggle("is-scrolled", proj.getBoundingClientRect().top < -0.5);   // the bar's rule shows once something's under it
   };
   layer.addEventListener("scroll", track, { passive: true });
   // the half that's switched on first, then the other: a film from the screen always has a place in the run
@@ -312,35 +322,30 @@
     const my = ++moving, cutShort = !layer.hidden;   // reopened while it was still going
     lastFocus = document.activeElement;
     openSheet = proj;
-    [sheetBody, ...credits()].forEach(rest);
+    rest(sheetBody);
     renderFilm(p);
     document.body.classList.add("is-locked");
     wake();
     const phone = asPhone.matches;
-    const from = phone ? { transform: `translateY(${innerHeight}px)` } : { opacity: 0, transform: "translateY(28px) scale(.97)" };
-    const to = phone ? { transform: "none" } : { opacity: 1, transform: "none" };
-    hold(proj);
+    // desktop: up 16px into focus over 240ms; phone: the sheet (and its handle) rise from below the screen over 320ms
+    const from = phone ? { transform: "translateY(calc(100% + 48px))" } : { opacity: 0, transform: "translateY(16px)", filter: "blur(4px)" };
+    const to = phone ? { transform: "none" } : { opacity: 1, transform: "none", filter: "blur(0px)" };
+    hold(deck);
     hold(scrim);
-    if (!cutShort) { proj.removeAttribute("style"); scrim.removeAttribute("style"); }
-    // the site dims at once; the panel waits, out of sight, for its first picture (not long), then rises
-    const rise = motion(proj, cutShort ? [to] : [from, to], { duration: phone ? 560 : 520, easing: phone ? "cubic-bezier(.32, .72, 0, 1)" : EXPO, fill: "forwards" });
+    if (!cutShort) { deck.removeAttribute("style"); scrim.removeAttribute("style"); }
+    // the site dims at once; the panel waits, out of sight, for its first picture (not long), then comes up
+    const rise = motion(deck, cutShort ? [to] : [from, to], { duration: phone ? 320 : 240, easing: OUT, fill: "forwards" });
     rise?.pause();
     layer.hidden = false;
     scrim.classList.add("is-on");
     proj.focus({ preventScroll: true });
-    motion(scrim, cutShort ? [{ opacity: 1 }] : [{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: "ease-out", fill: "forwards" });
-    if (!cutShort) await ready(220);
+    motion(scrim, cutShort ? [{ opacity: 1 }] : [{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: OUT, fill: "forwards" });
+    if (!cutShort) await ready(120);
     if (my !== moving) return;
     rise?.play();
-    // then its title and credits settle in after it, coming into focus; the stills below just rise
-    if (!cutShort) credits().forEach((el, k) => {
-      const soft = el.matches(".proj-title, .proj-credits > div");
-      motion(el, [{ opacity: 0, transform: "translateY(14px)", filter: soft ? "blur(6px)" : "none" }, { opacity: 1, transform: "none", filter: soft ? "blur(0px)" : "none" }],
-        { duration: 700, delay: 140 + k * 60, easing: EXPO, fill: "backwards" });
-    });
     await over(rise);
     if (my !== moving) return;
-    rest(proj);
+    rest(deck);
     rest(scrim);
     play(p);
   };
@@ -353,17 +358,18 @@
     if (d < -n / 2) d += n;
     const dir = d < 0 ? -1 : 1;
     hold(sheetBody);
-    await over(motion(sheetBody, [{ opacity: 0, transform: `translateX(${-dir * 24}px)` }], { duration: 170, easing: AWAY, fill: "forwards" }));
+    await over(motion(sheetBody, [{ opacity: 0, transform: `translateX(${-dir * 12}px)` }], { duration: 150, easing: OUT, fill: "forwards" }));
     if (my !== moving) return;
     renderFilm(p);
-    await ready(200);
+    await ready(120);
     if (my !== moving) return;
     rest(sheetBody);
-    const slide = motion(sheetBody, [{ opacity: 0, transform: `translateX(${dir * 36}px)` }, { opacity: 1, transform: "none" }], { duration: 560, easing: EXPO });
+    const slide = motion(sheetBody, [{ opacity: 0, transform: `translateX(${dir * 16}px)` }, { opacity: 1, transform: "none" }], { duration: 250, easing: OUT });
     await over(slide);
     if (my === moving) play(p);
   };
-  const close = async () => {
+  // let go of after a pull, a sheet runs on out on the drawer curve; otherwise it goes in 200ms, back the way it came
+  const close = async (thrown = false) => {
     if (!openSheet) return;
     const my = ++moving;
     openSheet = null;
@@ -372,24 +378,65 @@
     wake();
     lastFocus?.focus?.({ preventScroll: true });
     const phone = asPhone.matches;
-    [proj, scrim, sheetBody, ...credits()].forEach(hold);
-    const away = motion(proj, [phone ? { transform: `translateY(${innerHeight}px)` } : { opacity: 0, transform: "translateY(14px) scale(.985)" }],
-      { duration: phone ? 340 : 220, easing: AWAY, fill: "forwards" });
-    const fade = motion(scrim, [{ opacity: 0 }], { duration: phone ? 340 : 280, easing: "ease-out", fill: "forwards" });
+    [deck, scrim, sheetBody].forEach(hold);
+    const away = motion(deck, [phone ? { transform: "translateY(calc(100% + 48px))" } : { opacity: 0, transform: "translateY(16px)", filter: "blur(4px)" }],
+      { duration: thrown ? 300 : 200, easing: thrown ? DRAWER : OUT, fill: "forwards" });
+    const fade = motion(scrim, [{ opacity: 0 }], { duration: thrown ? 300 : 200, easing: OUT, fill: "forwards" });
     await Promise.all([over(away), over(fade)]);
     if (my !== moving) return;
     layer.hidden = true;
     scrim.classList.remove("is-on");
     document.body.classList.remove("is-locked");
-    [proj, scrim, sheetBody, ...credits()].forEach(rest);
+    [deck, scrim, sheetBody].forEach(rest);
     $("#proj-player").innerHTML = "";
     $("#proj-stills").innerHTML = "";
   };
   // closing drops the film's address without moving the page
-  const dismiss = (e) => { e?.preventDefault(); history.pushState(null, "", location.pathname + location.search); close(); };
+  const dismiss = (e, thrown) => { e?.preventDefault(); history.pushState(null, "", location.pathname + location.search); close(thrown); };
   $(".proj-back").addEventListener("click", dismiss);
+  $("#grab").addEventListener("click", dismiss);
+
+  /* On a phone the sheet can be pulled down to close, from anywhere on it once it's scrolled to its top: a pull past
+     min(64px, 15% of the sheet) or a flick (faster than 0.11px/ms over the last 100ms) sends it off; anything less springs
+     it back. A finger that catches it springing back takes it from where it is. Moving under 4px is still a tap */
+  let pull = null;
+  const offset = () => parseFloat(getComputedStyle(deck).translate.split(" ")[1]) || 0;
+  layer.addEventListener("touchstart", (e) => {
+    if (!asPhone.matches || !openSheet || e.touches.length > 1) return;
+    deck.getAnimations().filter((a) => a.effect.getKeyframes().some((k) => "translate" in k)).forEach((a) => { try { a.commitStyles(); } catch (x) {} a.cancel(); });
+    const y = e.touches[0].clientY;
+    pull = { y0: y, from: offset(), on: false, top: layer.scrollTop <= 0, trail: [[e.timeStamp, y]] };
+  }, { passive: true });
+  layer.addEventListener("touchmove", (e) => {
+    if (!pull) return;
+    const y = e.touches[0].clientY, dy = y - pull.y0;
+    if (!pull.on) {
+      if (!pull.top || layer.scrollTop > 0 || dy < 0) { pull = null; return; }   // that's a scroll
+      e.preventDefault();
+      if (dy < 4) return;
+      pull.on = true;
+    }
+    e.preventDefault();
+    deck.style.translate = `0 ${Math.max(0, pull.from + dy)}px`;
+    pull.trail.push([e.timeStamp, y]);
+    while (pull.trail.length > 2 && e.timeStamp - pull.trail[0][0] > 100) pull.trail.shift();
+  }, { passive: false });
+  const letGo = (e) => {
+    if (!pull) return;
+    const was = pull;
+    pull = null;
+    if (!was.on) return;
+    e.preventDefault();   // the end of a pull isn't a tap on what it started on
+    const at = offset(), [t0, y0] = was.trail[0], [t1, y1] = was.trail[was.trail.length - 1];
+    const speed = t1 > t0 ? (y1 - y0) / (t1 - t0) : 0;
+    if (e.type === "touchend" && (at > Math.min(64, proj.offsetHeight * 0.15) || speed > 0.11)) return dismiss(null, true);
+    deck.style.translate = "";
+    motion(deck, [{ translate: `0 ${at}px` }, { translate: "0 0" }], { duration: 400, easing: DRAWER });
+  };
+  layer.addEventListener("touchend", letGo, { passive: false });
+  layer.addEventListener("touchcancel", letGo);
   // a click on the blurred site around the panel closes it too
-  layer.addEventListener("click", (e) => { if (e.target === layer) dismiss(e); });
+  layer.addEventListener("click", (e) => { if (e.target === layer || e.target === deck) dismiss(e); });
   document.addEventListener("keydown", (e) => {
     if (!openSheet) return;
     if (e.key === "Escape") dismiss(e);

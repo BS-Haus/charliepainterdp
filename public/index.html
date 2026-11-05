@@ -165,59 +165,65 @@
       </div>
     </section>
 
-    <!-- CV: the plain list producers expect -->
+    <!-- CV: the tables producers expect, a film here opening from its row -->
     <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label"><span>Director / Prod Co.</span></p></header>
-      <div class="cv-block">
-        <h3 class="label">Feature film</h3>
-        <ul class="cv-list">
-          <li><span class="cv-t">Nice To See You Anyway</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
-          <li><span class="cv-t">Cynthia</span><span class="cv-c">James Hood / Banshee</span></li>
-        </ul>
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">26 credits · 5 awards</p></header>
+      <div class="cv-body">
+      <div class="cv-group">
+        <h3 class="cv-group-title" id="cv-feature-film">Feature film</h3>
+        <div class="cv-table" role="table" aria-labelledby="cv-feature-film">
+          <div class="cv-row cv-head" role="row"><span role="columnheader">Film</span><span role="columnheader">Director</span><span role="columnheader">Production</span></div>
+          <div class="cv-row" role="row"><span role="cell">Nice To See You Anyway</span><span role="cell">Cyrus Mirzashafa</span><span role="cell">Thulsa Films</span></div>
+          <div class="cv-row" role="row"><span role="cell">Cynthia</span><span role="cell">James Hood</span><span role="cell">Banshee</span></div>
+        </div>
       </div>
-      <div class="cv-block">
-        <h3 class="label">Short film</h3>
-        <ul class="cv-list">
-          <li><span class="cv-t">Carry With Both Hands</span><span class="cv-c">Tim Rogg / St Maur Pictures</span></li>
-          <li><span class="cv-t">If (Starring Clive Russell)</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
-          <li><span class="cv-t">Vetala</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
-          <li><span class="cv-t">Operation Dynamo</span><span class="cv-c">George Rowlands / CPC</span></li>
-          <li><span class="cv-t">Flush!</span><span class="cv-c">Nico Bourgeais / Fusion Alpha</span></li>
-          <li><span class="cv-t">In Vitro Felicitas</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
-          <li><span class="cv-t">Mired</span><span class="cv-c">James Hood / Banshee</span></li>
-          <li><span class="cv-t">Memories of a Life</span><span class="cv-c">Ellie Hague / Thulsa Films</span></li>
-          <li><span class="cv-t">Dukh</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
-          <li><span class="cv-t">Brownies or Ice Cream?</span><span class="cv-c">Stefan Poelman / Pink Momentum</span></li>
-          <li><span class="cv-t">What Could’ve Been?</span><span class="cv-c">Niamh Ennis / CPC</span></li>
-          <li><span class="cv-t">Would Smith?</span><span class="cv-c">Matty Mahoney / Mohawk</span></li>
-          <li><span class="cv-t">Confess</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
-        </ul>
+      <div class="cv-group">
+        <h3 class="cv-group-title" id="cv-short-film">Short film</h3>
+        <div class="cv-table opens" role="table" aria-labelledby="cv-short-film">
+          <div class="cv-row cv-head" role="row"><span role="columnheader">Film</span><span role="columnheader">Director</span><span role="columnheader">Production</span><span role="columnheader"></span></div>
+          <div class="cv-row" role="row"><span role="cell">Carry With Both Hands</span><span role="cell">Tim Rogg</span><span role="cell">St Maur Pictures</span><span role="cell"></span></div>
+          <div class="cv-row" role="row" data-slug="iffilm"><span role="cell"><a href="#/iffilm">If (Starring Clive Russell)</a></span><span role="cell">Cyrus Mirzashafa</span><span role="cell">Thulsa Films</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="vetala"><span role="cell"><a href="#/vetala">Vetala</a></span><span role="cell">Ajit Mann</span><span role="cell">M &amp; K</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="operationdynamo"><span role="cell"><a href="#/operationdynamo">Operation Dynamo</a></span><span role="cell">George Rowlands</span><span role="cell">CPC</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="flush"><span role="cell"><a href="#/flush">Flush!</a></span><span role="cell">Nico Bourgeais</span><span role="cell">Fusion Alpha</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="invitrofelicitas"><span role="cell"><a href="#/invitrofelicitas">In Vitro Felicitas</a></span><span role="cell">Cyrus Mirzashafa</span><span role="cell">Thulsa Films</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Mired</span><span role="cell">James Hood</span><span role="cell">Banshee</span><span role="cell"></span></div>
+          <div class="cv-row" role="row" data-slug="moal"><span role="cell"><a href="#/moal">Memories of a Life</a></span><span role="cell">Ellie Hague</span><span role="cell">Thulsa Films</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Dukh</span><span role="cell">Ajit Mann</span><span role="cell">M &amp; K</span><span role="cell"></span></div>
+          <div class="cv-row" role="row" data-slug="brownies-or-ice-cream"><span role="cell"><a href="#/brownies-or-ice-cream">Brownies or Ice Cream?</a></span><span role="cell">Stefan Poelman</span><span role="cell">Pink Momentum</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">What Could’ve Been?</span><span role="cell">Niamh Ennis</span><span role="cell">CPC</span><span role="cell"></span></div>
+          <div class="cv-row" role="row"><span role="cell">Would Smith?</span><span role="cell">Matty Mahoney</span><span role="cell">Mohawk</span><span role="cell"></span></div>
+          <div class="cv-row" role="row" data-slug="confess"><span role="cell"><a href="#/confess">Confess</a></span><span role="cell">Ajit Mann</span><span role="cell">M &amp; K</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+        </div>
       </div>
-      <div class="cv-block">
-        <h3 class="label">Commercial</h3>
-        <ul class="cv-list">
-          <li><span class="cv-t">66°North</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
-          <li><span class="cv-t">John Smith’s</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
-          <li><span class="cv-t">Aberfeldy</span><span class="cv-c">Jess Leuty / CPC</span></li>
-          <li><span class="cv-t">Vision Pro</span><span class="cv-c">Nico Bourgeais / CPC</span></li>
-          <li><span class="cv-t">Mars</span><span class="cv-c"></span></li>
-          <li><span class="cv-t">Peroni</span><span class="cv-c"></span></li>
-          <li><span class="cv-t">LJF 25</span><span class="cv-c">Lauren Smith / Serious Music</span></li>
-          <li><span class="cv-t">Serious Music</span><span class="cv-c"></span></li>
-          <li><span class="cv-t">Elizabeth Day</span><span class="cv-c"></span></li>
-          <li><span class="cv-t">NAQ Music</span><span class="cv-c"></span></li>
-          <li><span class="cv-t">Phox Water</span><span class="cv-c"></span></li>
-        </ul>
+      <div class="cv-group">
+        <h3 class="cv-group-title" id="cv-commercial">Commercial</h3>
+        <div class="cv-table opens" role="table" aria-labelledby="cv-commercial">
+          <div class="cv-row cv-head" role="row"><span role="columnheader">Film</span><span role="columnheader">Director</span><span role="columnheader">Production</span><span role="columnheader"></span></div>
+          <div class="cv-row" role="row" data-slug="66north"><span role="cell"><a href="#/66north">66°North</a></span><span role="cell">Dann Emmons</span><span role="cell">One Thousand Eyes</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="johnsmiths"><span role="cell"><a href="#/johnsmiths">John Smith’s</a></span><span role="cell">Dann Emmons</span><span role="cell">One Thousand Eyes</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="aberfeldy"><span role="cell"><a href="#/aberfeldy">Aberfeldy</a></span><span role="cell">Jess Leuty</span><span role="cell">CPC</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row" data-slug="vision-pro"><span role="cell"><a href="#/vision-pro">Vision Pro</a></span><span role="cell">Nico Bourgeais</span><span role="cell">CPC</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Mars</span><span role="cell">–</span><span role="cell">–</span><span role="cell"></span></div>
+          <div class="cv-row" role="row"><span role="cell">Peroni</span><span role="cell">–</span><span role="cell">–</span><span role="cell"></span></div>
+          <div class="cv-row" role="row"><span role="cell">LJF 25</span><span role="cell">Lauren Smith</span><span role="cell">Serious Music</span><span role="cell"></span></div>
+          <div class="cv-row" role="row"><span role="cell">Serious Music</span><span role="cell">–</span><span role="cell">–</span><span role="cell"></span></div>
+          <div class="cv-row" role="row"><span role="cell">Elizabeth Day</span><span role="cell">–</span><span role="cell">–</span><span role="cell"></span></div>
+          <div class="cv-row" role="row"><span role="cell">NAQ Music</span><span role="cell">–</span><span role="cell">–</span><span role="cell"></span></div>
+          <div class="cv-row" role="row" data-slug="phox-water"><span role="cell"><a href="#/phox-water">Phox Water</a></span><span role="cell">–</span><span role="cell">–</span><span role="cell"><span class="view" aria-hidden="true">View</span></span></div>
+        </div>
       </div>
-      <div class="cv-block">
-        <h3 class="label">Awards</h3>
-        <ul class="cv-list awards">
-          <li><span class="label">Winner</span><span class="cv-t">Best Cinematography</span><span class="cv-c">SSIFF 2025</span></li>
-          <li><span class="label">Nominee</span><span class="cv-t">Best Cinematography</span><span class="cv-c">YETI Film Fest</span></li>
-          <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">LakeCity</span></li>
-          <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">Cambridge Short Film Festival</span></li>
-          <li><span class="label">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
-        </ul>
+      <div class="cv-group">
+        <h3 class="cv-group-title" id="cv-awards">Awards</h3>
+        <div class="cv-table awards" role="table" aria-labelledby="cv-awards">
+          <div class="cv-row cv-head" role="row"><span role="columnheader">Award</span><span role="columnheader">Festival</span><span role="columnheader">Result</span></div>
+          <div class="cv-row" role="row"><span role="cell">Best Cinematography</span><span role="cell">SSIFF 2025</span><span role="cell"><span class="result won">Winner</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Best Cinematography</span><span role="cell">YETI Film Fest</span><span role="cell"><span class="result">Nominee</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Best Film</span><span role="cell">LakeCity</span><span role="cell"><span class="result won">Winner</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Best Film</span><span role="cell">Cambridge Short Film Festival</span><span role="cell"><span class="result won">Winner</span></span></div>
+          <div class="cv-row" role="row"><span role="cell">Best Drama</span><span role="cell">Arena 51 Film Festival</span><span role="cell"><span class="result won">Winner</span></span></div>
+        </div>
+      </div>
       </div>
     </section>
 
@@ -262,11 +268,14 @@
   <span class="scrim" id="scrim" aria-hidden="true"></span>
 
   <div class="layer" id="layer" hidden>
+    <div class="deck" id="deck">
+    <!-- on a phone, the handle above the sheet: tap it, or pull the sheet down, to close -->
+    <button class="grab" id="grab" type="button" aria-label="Close"></button>
     <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1">
       <div class="sheet-bar label">
-        <a class="sheet-close proj-back" href="#work">Close</a>
+        <a class="sheet-close proj-back btn" href="#work">Close</a>
         <span class="proj-pos" id="proj-pos"></span>
-        <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
+        <span class="proj-steps"><a class="btn" id="proj-prev" href="#">← Prev</a><a class="btn" id="proj-next" href="#">Next →</a></span>
         <span class="sheet-progress" id="sheet-progress" aria-hidden="true"><i></i></span>
       </div>
       <div class="sheet-body" id="proj-body">
@@ -278,6 +287,7 @@
         <div class="proj-stills" id="proj-stills"></div>
         <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
       </div>
+    </div>
     </div>
   </div>
 

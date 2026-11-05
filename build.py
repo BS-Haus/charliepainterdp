@@ -5,6 +5,7 @@ Edit content.json (add a film, reorder, change credits), then run:  python3 buil
 """
 import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -96,30 +97,53 @@ def press():
     )
 
 
-def cv_rows(rows):
-    return "\n".join(
-        f'          <li><span class="cv-t">{esc(t)}</span><span class="cv-c">{esc(" / ".join(x for x in (d, p) if x))}</span></li>'
-        for t, d, p in rows
-    )
+def plain(title):
+    """A title without its aside or curly quotes, to match a CV line to a film on the site."""
+    return re.sub(r"\s*\(.*?\)", "", title).replace("’", "'").strip().lower()
+
+
+BY_TITLE = {plain(f["title"]): f["slug"] for f in FILMS.values()}
+
+
+def table(label, head, rows, cls=""):
+    """One of the CV's tables, titled above its frame. Cells are plain text, a missing one an en dash."""
+    cells = lambda xs, role: "".join(f'<span role="{role}">{x}</span>' for x in xs)
+    lines = [f'          <div class="cv-row cv-head" role="row">{cells(head, "columnheader")}</div>']
+    for r in rows:
+        lines.append(f'          <div class="cv-row" role="row"{r[1]}>{cells(r[0], "cell")}</div>')
+    body = "\n".join(lines)
+    return f'''      <div class="cv-group">
+        <h3 class="cv-group-title" id="cv-{label.lower().replace(" ", "-")}">{label}</h3>
+        <div class="cv-table{cls}" role="table" aria-labelledby="cv-{label.lower().replace(" ", "-")}">
+{body}
+        </div>
+      </div>'''
 
 
 def cv():
-    blocks = []
+    """The credits, a table to each kind. A film with its own page here opens from its row, which ends in a View pill."""
+    groups = []
     for key, label in (("feature", "Feature film"), ("short", "Short film"), ("commercial", "Commercial")):
-        blocks.append(f'''      <div class="cv-block">
-        <h3 class="label">{label}</h3>
-        <ul class="cv-list">
-{cv_rows(content["cv"][key])}
-        </ul>
-      </div>''')
-    return "\n".join(blocks)
+        lines = [(t, d, p, BY_TITLE.get(plain(t))) for t, d, p in content["cv"][key]]
+        opens = any(slug for *_, slug in lines)   # the View column only where something opens
+        rows = []
+        for t, d, p, slug in lines:
+            name = f'<a href="#/{slug}">{esc(t)}</a>' if slug else esc(t)
+            view = ['<span class="view" aria-hidden="true">View</span>' if slug else ""] if opens else []
+            rows.append(([name, esc(d) or "–", esc(p) or "–", *view], f' data-slug="{slug}"' if slug else ""))
+        groups.append(table(label, ["Film", "Director", "Production", *([""] if opens else [])], rows, " opens" if opens else ""))
+    return "\n".join(groups)
 
 
 def awards():
-    return "\n".join(
-        f'          <li><span class="label">{esc(r)}</span><span class="cv-t">{esc(a)}</span><span class="cv-c">{esc(f)}</span></li>'
-        for r, a, f in content["awards"]
-    )
+    """What the work has won: a dot for the result, lit for a win."""
+    rows = [([esc(a), esc(f), f'<span class="result{" won" if r == "Winner" else ""}">{esc(r)}</span>'], "") for r, a, f in content["awards"]]
+    return table("Awards", ["Award", "Festival", "Result"], rows, " awards")
+
+
+def cv_count():
+    n = sum(len(v) for v in content["cv"].values())
+    return f"{n} credits · {len(content['awards'])} awards"
 
 
 def name_mark(name="Charlie Painter"):
@@ -144,6 +168,7 @@ toggle = "".join(
 out = out.replace("{{TOGGLE}}", toggle)
 out = out.replace("{{CV}}", cv())
 out = out.replace("{{AWARDS}}", awards())
+out = out.replace("{{CV_COUNT}}", cv_count())
 out = out.replace("{{ABOUT}}", esc(content["about"]))
 out = out.replace("{{PRESS}}", press())
 out = out.replace("{{KINDS}}", json.dumps(KINDS))

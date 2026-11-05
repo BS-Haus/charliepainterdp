@@ -84,15 +84,12 @@
       </div>
     </section>
 
-    <!-- CV: the plain list producers expect -->
+    <!-- CV: the tables producers expect, a film here opening from its row -->
     <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label"><span>Director / Prod Co.</span></p></header>
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label">{{CV_COUNT}}</p></header>
+      <div class="cv-body">
 {{CV}}
-      <div class="cv-block">
-        <h3 class="label">Awards</h3>
-        <ul class="cv-list awards">
 {{AWARDS}}
-        </ul>
       </div>
     </section>
 
@@ -133,11 +130,14 @@
   <span class="scrim" id="scrim" aria-hidden="true"></span>
 
   <div class="layer" id="layer" hidden>
+    <div class="deck" id="deck">
+    <!-- on a phone, the handle above the sheet: tap it, or pull the sheet down, to close -->
+    <button class="grab" id="grab" type="button" aria-label="Close"></button>
     <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1">
       <div class="sheet-bar label">
-        <a class="sheet-close proj-back" href="#work">Close</a>
+        <a class="sheet-close proj-back btn" href="#work">Close</a>
         <span class="proj-pos" id="proj-pos"></span>
-        <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
+        <span class="proj-steps"><a class="btn" id="proj-prev" href="#">← Prev</a><a class="btn" id="proj-next" href="#">Next →</a></span>
         <span class="sheet-progress" id="sheet-progress" aria-hidden="true"><i></i></span>
       </div>
       <div class="sheet-body" id="proj-body">
@@ -149,6 +149,7 @@
         <div class="proj-stills" id="proj-stills"></div>
         <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
       </div>
+    </div>
     </div>
   </div>
 

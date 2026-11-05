@@ -36,6 +36,33 @@
   --expo: cubic-bezier(0.16, 1, 0.3, 1);   /* things arriving: away at once, then a long settle */
   --section: clamp(80px, 10vw, 150px);     /* the gap before each part of the page after the work */
   --screen-ratio: 2.39;       /* the first screen's screen: scope */
+  /* TACTILE — what can be pressed is built from one warm dark ladder (after the tactile-design skill). A raised thing is
+     a step or two lighter than what it sits on, edged with one solid 0.5px line three steps above its own fill, with a
+     tight black drop under it: no soft glows, no lit top edges. It gives a little under the finger (a button 3%, a round
+     one 6%, a card 1%), and a hover only changes colour */
+  --ink-1: #0e0e0d;
+  --ink-2: #161615;
+  --ink-3: #1e1e1c;
+  --ink-4: #262624;
+  --ink-5: #2f2e2b;
+  --ink-6: #393834;
+  --ink-7: #48463f;
+  --ink-10: #8a8881;
+  --ink-11: #b5b3ad;
+  --drop: 0 1px 2px 0 rgb(0 0 0 / .5);
+  --shadow-card: 0 0 0 .5px var(--ink-6), var(--drop), 0 3px 4px -2px rgb(0 0 0 / .4);
+  --shadow-modal: 0 0 0 .5px var(--ink-7), var(--drop), 0 6px 8px -4px rgb(0 0 0 / .5);
+  /* a control borrows its fill, hover and edge from what it sits on: the page here; cards, tables and the film panel
+     say their own */
+  --c-fill: var(--ink-3);
+  --c-hover: var(--ink-4);
+  --c-edge: var(--ink-6);
+  --focus-ring: var(--ink-10);
+  --ease-out: cubic-bezier(.23, 1, .32, 1);      /* anything the user caused */
+  /* the switch's pill: a spring, bounce .12 over .4s, so it settles without riding into the ends of its track */
+  --spring: linear(0, 0.0505 5%, 0.1646 10%, 0.3024 15%, 0.4404 20%, 0.5659 25%, 0.6731 30%, 0.7607 35%, 0.8297 40%, 0.8825 45%,
+    0.9216 50%, 0.9498 55%, 0.9696 60%, 0.983 65%, 0.9918 70%, 0.9973 75%, 1.0004 80%, 1.0021 85%, 1.0028 90%, 1.003 95%, 1);
+  --press: scale .15s var(--ease-out);
   color-scheme: dark;
 }
 
@@ -51,7 +78,7 @@ ul, ol { list-style: none; padding: 0; }
 i { font-style: normal; }
 [hidden] { display: none !important; }
 ::selection { background: var(--rec); color: #000; }
-:focus-visible { outline: 1px solid var(--rec); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 /* the instrument parts: small tracked capitals */
 .label { font-family: var(--text); font-size: 11.5px; letter-spacing: .12em; line-height: 1.6; text-transform: uppercase; }
 .credit { font-family: var(--text); font-size: 14px; letter-spacing: .01em; line-height: 1.45; }
@@ -64,7 +91,8 @@ i { font-style: normal; }
 .hero { position: sticky; top: 0; z-index: 0; display: flex; flex-direction: column; height: 100vh; height: 100svh; overflow: hidden; background: #000;
   padding: var(--pad) var(--pad) calc(var(--bar) + var(--name-h, 13vw) + var(--pad) * 1.6); }
 .stage { flex: 1; min-height: 0; display: grid; place-items: center; margin-top: var(--pad); container-type: size; }
-.screen { position: relative; display: block; width: min(100cqw, 100cqh * var(--screen-ratio)); aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); }
+.screen { position: relative; display: block; width: min(100cqw, 100cqh * var(--screen-ratio)); aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); transition: var(--press); }
+.screen:active { scale: .99; }
 .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s var(--ease); user-select: none; -webkit-user-drag: none; }
 /* the next still dissolves in over the last, which stays put underneath until it's covered */
 .screen img.is-on { z-index: 2; opacity: 1; }
@@ -72,13 +100,16 @@ i { font-style: normal; }
 .screen img.is-on, .screen img.was-on { animation: drift 3.8s linear both; }
 @keyframes drift { from { transform: scale(1); } to { transform: scale(1.045); } }
 .screen-open { position: absolute; right: 16px; bottom: 12px; z-index: 3; color: #fff; text-shadow: 0 0 12px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .4s var(--ease); }
-.screen:hover .screen-open, .screen:focus-visible .screen-open { opacity: 1; transform: none; }
+.screen:focus-visible .screen-open { opacity: 1; transform: none; }
+@media (hover: hover) and (pointer: fine) { .screen:hover .screen-open { opacity: 1; transform: none; } }
 /* the bar along the top: a segment for each film, filling while its stills are up, its name under it */
 .ticker { flex: none; }
 .ticker-now { display: none; }
 .ticker-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 12px; }
-.tick { display: grid; gap: 10px; width: 100%; padding: 4px 0 8px; text-align: left; color: var(--dim); transition: color .25s; }
-.tick:hover, .tick[aria-current="true"] { color: var(--fg); }
+.tick { display: grid; gap: 10px; width: 100%; padding: 4px 0 8px; text-align: left; color: var(--dim); transition: color .15s var(--ease-out), var(--press); }
+.tick[aria-current="true"] { color: var(--fg); }
+.tick:active { scale: .97; }
+@media (hover: hover) and (pointer: fine) { .tick:hover { color: var(--fg); } }
 .seg { position: relative; display: block; height: 2px; overflow: hidden; background: var(--line); }
 .seg i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(var(--p, 0)); }
 .tick-name { display: flex; align-items: center; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -110,83 +141,113 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 /* spelled out along the bottom of the reel; once the bar is the header and the name has joined it, just DP */
 .role-short, .bar.is-top .role-full { display: none; }
 .bar.is-top .role-short { display: inline; }
-.nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 12px; }
-.nav a { color: var(--mid); transition: color .2s; }
-.nav a:hover, .nav a.is-on { color: var(--fg); }
+/* the places to go: quiet until touched — a hover washes in behind the name, the part you're in sits a step deeper, and
+   a press gives a little (-10px: the last one's padding, so its letters still line up with the edge) */
+.nav { justify-self: end; display: flex; gap: clamp(2px, .6vw, 10px); margin-right: -10px; font-size: 12px; }
+.nav a { display: grid; place-items: center; height: 32px; padding: 0 10px; border-radius: 6px; color: var(--mid);
+  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), var(--press); }
+.nav a.is-on { color: var(--fg); background: var(--ink-3); }
+.nav a:active { scale: .97; color: var(--fg); background: var(--ink-2); }
+.nav a.is-on:active { background: var(--ink-3); }
+@media (hover: hover) and (pointer: fine) { .nav a:hover { color: var(--fg); background: var(--ink-2); } .nav a.is-on:hover { background: var(--ink-3); } }
 
-/* THE SWITCH — narrative or commercial work. A light pill slides under the one that's on, and its light is lit */
-.toggle { position: relative; display: inline-flex; padding: 3px; border-radius: 999px; background: #050505; border: 1px solid var(--line); }
-.thumb { position: absolute; top: 3px; bottom: 3px; left: 0; width: var(--tw, 0); border-radius: 999px; background: var(--fg);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, .5); transform: translateX(var(--tx, 0)); transition: transform .5s var(--ease), width .5s var(--ease); }
-.toggle:not(.is-set) .thumb { transition: none; }
-.opt { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 32px; padding: 0 18px; border-radius: 999px; color: var(--mid); transition: color .35s; }
-.opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .3; transform: translateY(-0.08em); transition: background .3s, opacity .3s, box-shadow .3s; }
-.opt:hover { color: var(--fg); }
-.opt[aria-checked="true"] { color: #050505; }
-.opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
+/* THE SWITCH — narrative or commercial work: a well sunk in the bar, and in it a raised pill that springs across under the
+   one that's on, its light lit. An option gives a little as it's pressed */
+.toggle { position: relative; display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--ink-2); }
+.thumb { position: absolute; top: 4px; bottom: 4px; left: 0; width: var(--tw, 0); border-radius: 999px; background: var(--ink-4); box-shadow: 0 0 0 .5px var(--ink-7), var(--drop);
+  transform: translateX(var(--tx, 0)); transition: transform .4s var(--spring), width .4s var(--spring); }
+.toggle:not(.is-set) .thumb { transition: none; }   /* the first placement snaps */
+.opt { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 28px; padding: 0 16px; border-radius: 999px; color: var(--mid);
+  transition: color .15s var(--ease-out), var(--press); }
+.opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .3; transform: translateY(-0.08em); transition: background-color .15s, opacity .15s; }
+.opt:active { scale: .97; }
+.opt[aria-checked="true"] { color: var(--fg); }
+.opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; }
+@media (hover: hover) and (pointer: fine) { .opt:hover { color: var(--fg); } }
 
 /* THE WORK — the frames for whichever half is switched on, straight on from the bar */
 .groups { display: grid; overflow-anchor: none; }
 
-/* FRAMES — each film's one best still; hover for its title and credit, click to open it. The hairlines are there from
-   the start; as you reach them the pictures develop in them, in reading order — out of a blur, settling from a little
-   close — and on phones the caption follows */
-.tile { position: relative; overflow: hidden; background: var(--tile); cursor: pointer; isolation: isolate; }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border-bottom: 1px solid var(--line); }
-.grid .tile { aspect-ratio: 2.2 / 1; }
-.grid:has(> .tile:last-child:nth-child(odd))::after { content: ""; background: var(--bg); }   /* an odd last row ends in black */
-.tile > img { width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; transition: transform 1.2s var(--ease); }
-.tile-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: grid; gap: 6px; padding: 60px var(--pad) 20px; pointer-events: none;
-  background: linear-gradient(0deg, rgba(0, 0, 0, .72), rgba(0, 0, 0, 0)); transition: opacity .35s var(--ease), transform .45s var(--ease); }
-.tile-title { font-family: var(--display); font-size: clamp(26px, 2.3vw, 38px); line-height: 1.02; letter-spacing: -0.01em; color: #fff; }
-.tile-title a { pointer-events: auto; }
-.tile-credit { color: rgba(255, 255, 255, .8); }
+/* FRAMES — a card for each film: its one best still and, under it, its title in capitals with what it won (or who made
+   it) beneath — always there, since nothing should wait for a hover. A card sits a step up off the page, edged and
+   dropped; a hover lifts its fill a step, a press gives a little. As you reach them the pictures develop in their cards,
+   in reading order — out of a blur, settling from a little close — and the captions follow */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 16px var(--pad) 0; }
+.tile { position: relative; display: flex; flex-direction: column; overflow: clip; border-radius: 8px; background: var(--ink-2); box-shadow: var(--shadow-card); cursor: pointer; isolation: isolate;
+  transition: background-color .15s var(--ease-out), var(--press); }
+.tile:active { scale: .99; }
+.tile > img { width: 100%; height: auto; aspect-ratio: 2.2 / 1; object-fit: cover; background: var(--tile); user-select: none; -webkit-user-drag: none; }
+.tile-cap { display: grid; gap: 2px; padding: 14px 16px 16px; }
+.tile-title { font-family: var(--text); font-size: 12px; line-height: 1.5; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
+.tile-credit { font-size: 15px; color: var(--fg); }
 .js .tile:not(.in) > img { opacity: 0; filter: blur(18px); transform: scale(1.12); }
 .js .tile:not(.in) .tile-cap { opacity: 0; transform: translateY(10px); }
 .tile.rising > img { transition: opacity .9s var(--expo) var(--d, 0ms), filter 1.1s var(--expo) var(--d, 0ms), transform 1.6s var(--expo) var(--d, 0ms); }
 .tile.rising .tile-cap { transition: opacity .8s var(--expo) calc(var(--d, 0ms) + 180ms), transform 1s var(--expo) calc(var(--d, 0ms) + 180ms); }
-@media (hover: hover) and (pointer: fine) {
-  .grid .tile-cap { opacity: 0; transform: translateY(8px); }
-  .grid .tile:hover .tile-cap, .grid .tile:focus-within .tile-cap { opacity: 1; transform: none; }
-  .grid .tile.in:hover > img { transform: scale(1.025); }
-}
+@media (hover: hover) and (pointer: fine) { .tile:hover { background: var(--ink-3); } }
 
 /* CV, CONTACT, FEATURED — the rest of the page: the plain list producers expect, how to reach him, the press */
 .cv, .contact, .press { margin-top: var(--section); border-top: 1px solid var(--line); }
 .sec-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; height: 84px; padding: 0 var(--pad); border-bottom: 1px solid var(--line); color: var(--dim); }
 .sec-title { font-family: var(--display); font-size: clamp(32px, 3vw, 46px); line-height: 1; letter-spacing: -0.01em; color: var(--fg); }
-/* the CV's heading names its columns, each over its own */
-.cv .sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); gap: 0; padding: 0; }
-.cv .sec-title { padding: 0 var(--pad); }
-.cv .sec-head .label { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; padding: 0 var(--pad) 0 calc(var(--pad) + 1px); }   /* (+1: the list's rule) */
-.cv .sec-head .label span { grid-column: 2; }
-.cv-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); border-bottom: 1px solid var(--line); }
-.cv-block h3 { padding: 28px var(--pad) 24px; color: var(--mid); }
-.cv-list { padding: 16px var(--pad) 20px; border-left: 1px solid var(--hair); }
-.cv-list li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: baseline; gap: 24px; padding: 6px 0; }
-.cv-t { font-family: var(--display); font-size: 21px; line-height: 1.2; }
-.cv-c { font-size: 14px; color: var(--mid); }
-.awards li { grid-template-columns: 11ch minmax(0, 1.1fr) minmax(0, 1fr); }
-.awards .label { color: var(--dim); }
+/* THE CV — a table to each kind of work, and one of awards, each titled above its frame: a 0.5px frame with a tight
+   drop, hairlines between rows and columns, the film in full ink and the rest a step down, one typeface throughout. A
+   film with its own page here opens from its row: the row lifts a step on hover, gives a little when pressed, and ends in
+   a View pill */
+.cv-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 36px var(--pad) 0; }   /* (a wide table slides inside its frame; it never widens the page) */
+.cv-group-title { margin-bottom: 12px; font-family: var(--display); font-size: 24px; line-height: 1.2; }
+.cv-table { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); overflow: clip; border-radius: 8px; background: var(--ink-2);
+  box-shadow: 0 0 0 .5px var(--ink-5), var(--drop); font-size: 14px; line-height: 20px; font-variant-numeric: tabular-nums;
+  --c-fill: var(--ink-4); --c-hover: var(--ink-5); --c-edge: var(--ink-7); }
+.cv-table.opens { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) auto; }
+.cv-row { position: relative; display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: center; background: var(--ink-2);
+  transition: background-color .15s var(--ease-out), var(--press); }
+.cv-row + .cv-row { border-top: .5px solid var(--ink-5); }
+.cv-row > * { min-width: 0; padding: 9px 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--ink-10); }
+.cv-row > * + * { border-left: .5px solid var(--ink-5); }
+.cv-row > :first-child { color: var(--fg); background: inherit; }
+.cv-head > * { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--fg); }
+.cv-row[data-slug] { cursor: pointer; }
+.cv-row[data-slug]:active { scale: .99; background: var(--ink-3); }
+.cv-row > :last-child:has(.view) { padding-block: 7px; }
+.view { display: inline-grid; place-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--c-fill); box-shadow: 0 0 0 .5px var(--c-edge), var(--drop);
+  font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-11); transition: background-color .15s var(--ease-out), color .15s var(--ease-out); }
+.result { display: inline-flex; align-items: center; gap: 8px; }
+.result::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.result.won { color: var(--fg); }
+.result.won::before { background: var(--rec); }
+@media (hover: hover) and (pointer: fine) {
+  .cv-row[data-slug]:hover { background: var(--ink-3); }
+  .cv-row[data-slug]:hover .view { background: var(--c-hover); color: var(--fg); }
+}
 /* who he is at the top; the address and the places to find him at the foot, level with the foot of the portrait */
 .contact-body { display: grid; grid-template-columns: minmax(0, 1fr) min(30vw, 420px); gap: 48px var(--pad); padding: 40px var(--pad) 0; }
 .contact-text { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; }
 .about { max-width: 34ch; font-family: var(--display); font-size: clamp(28px, 2.6vw, 40px); line-height: 1.14; letter-spacing: -0.01em; text-wrap: pretty; }
-.mail { display: inline-block; font-family: var(--display); font-size: clamp(30px, 4vw, 60px); line-height: 1.05; letter-spacing: -0.015em; transition: color .25s; }
-.mail:hover { color: var(--rec); }
-.links { display: flex; gap: 10px; margin-top: 26px; color: var(--mid); }
-.links a { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; transition: color .2s, background .2s, border-color .2s; }
+/* the address reads as a link (underlined, brighter on hover); the places to find him are round buttons raised off the
+   page, which give as they're pressed */
+.mail { display: inline-block; font-family: var(--display); font-size: clamp(30px, 4vw, 60px); line-height: 1.05; letter-spacing: -0.015em;
+  text-decoration: underline 1px var(--ink-6); text-underline-offset: .16em; transition: text-decoration-color .15s var(--ease-out); }
+.links { display: flex; gap: 10px; margin-top: 26px; }
+.links a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--ink-11); background: var(--c-fill); box-shadow: 0 0 0 .5px var(--c-edge), var(--drop);
+  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), var(--press); }
 .links svg { width: 18px; height: 18px; fill: currentColor; }
-.links a:hover { color: #050505; background: var(--fg); border-color: var(--fg); }
+.links a:active { scale: .94; color: var(--fg); background: var(--c-hover); }
+@media (hover: hover) and (pointer: fine) {
+  .mail:hover { text-decoration-color: var(--ink-10); }
+  .links a:hover { color: var(--fg); background: var(--c-hover); }
+}
 .portrait { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: var(--tile); }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
-/* the press, set like the CV: the piece's title large, what it's about beneath, where to read it */
-.press-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 32px; padding: 40px var(--pad) 48px; border-bottom: 1px solid var(--line); }
-.press-title { font-family: var(--display); font-size: clamp(34px, 4.4vw, 68px); line-height: 1.02; letter-spacing: -0.015em; text-wrap: balance; transition: color .25s; }
+/* the press: a card for the piece — its title large, what it's about beneath, where to read it — raised like the frames,
+   lifting a step on hover and giving a little when pressed */
+.press-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 32px; margin: 24px var(--pad) 0; padding: 36px 32px 40px; border-radius: 8px;
+  background: var(--ink-2); box-shadow: var(--shadow-card); transition: background-color .15s var(--ease-out), var(--press); }
+.press-item:active { scale: .99; background: var(--ink-3); }
+.press-title { font-family: var(--display); font-size: clamp(34px, 4.4vw, 68px); line-height: 1.02; letter-spacing: -0.015em; text-wrap: balance; }
 .press-stand { grid-column: 1; max-width: 44ch; font-size: 17px; color: var(--mid); text-wrap: pretty; }
-.press-read { grid-column: 2; grid-row: 1; align-self: start; padding-top: .6em; color: var(--mid); transition: color .2s; }
-.press-item:hover .press-title { color: var(--rec); }
-.press-item:hover .press-read { color: var(--fg); }
+.press-read { grid-column: 2; grid-row: 1; align-self: start; padding-top: .6em; color: var(--mid); transition: color .15s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .press-item:hover { background: var(--ink-3); } .press-item:hover .press-read { color: var(--fg); } }
 /* as CV and contact come up, the rules draw across and the type pulls into focus, top to bottom: rows rise out of a
    blur; the big lines are uncovered from the top down */
 @property --wipe { syntax: "<percentage>"; inherits: false; initial-value: 130%; }
@@ -203,31 +264,44 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .closing img { width: 100%; height: min(100svh, 68vw); object-fit: cover; }
 .closing::after { content: ""; position: absolute; inset: auto 0 0; height: 120px; background: linear-gradient(0deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0)); pointer-events: none; }
 .foot { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; display: flex; justify-content: space-between; gap: 24px; padding: 18px var(--pad) 22px; color: rgba(255, 255, 255, .72); }
-.foot a:hover { color: #fff; }
+.foot a { display: inline-block; transition: color .15s var(--ease-out), var(--press); }
+.foot a:active { scale: .97; color: #fff; }
+@media (hover: hover) and (pointer: fine) { .foot a:hover { color: #fff; } }
 
 /* THE FILM — a panel laid over the site rather than a page: the site stays there behind it, blurred and dimmed, and the
    panel is smoked glass, the way a panel comes up over the desktop. The film on black, its credits, every still.
    The layer scrolls as one, panel and all, so it moves like a page laid on the site, not a window inside one; its bar
    stays at the top, and in place of a scrollbar the line along the bar's foot fills as you go down the film, as the
-   segments do on the first screen. main.js brings it in and out. On phones it rises from the bottom as a sheet */
+   segments do on the first screen. main.js brings it in and out. On phones it rises from the bottom as a sheet, with a
+   handle above it: tap the handle, or pull the sheet down from its top, to close it.
+   The panel is the ground its buttons borrow from: a solid 0.5px edge and a tight drop, no soft glow round it, no lit
+   top edge. (The blur behind it is Charlie's brief; the skill would only dim the page) */
 .scrim { position: fixed; inset: 0; z-index: 45; background: rgba(5, 5, 5, .5); -webkit-backdrop-filter: blur(24px) saturate(1.1); backdrop-filter: blur(24px) saturate(1.1);
   opacity: 0; pointer-events: none; }
 .scrim.is-on { opacity: 1; }
 /* (the gap above the panel is its margin, not the layer's padding, so its bar can stick right at the top) */
-.layer { position: fixed; inset: 0; z-index: 50; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding-bottom: clamp(16px, 4.5vh, 48px); }
+.layer { position: fixed; inset: 0; z-index: 50; overflow-y: auto; overscroll-behavior: none; scrollbar-width: none; padding-bottom: clamp(16px, 4.5vh, 48px); }
 .layer::-webkit-scrollbar { display: none; }
-.sheet { position: relative; width: min(1240px, 100% - 2 * clamp(16px, 4vw, 64px)); margin: clamp(16px, 4.5vh, 48px) auto 0; overflow: clip; container-type: inline-size;
-  background: rgba(14, 14, 14, .88); border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px;
-  box-shadow: 0 40px 120px rgba(0, 0, 0, .65), inset 0 1px 0 rgba(255, 255, 255, .06); }
+.deck { width: min(1240px, 100% - 2 * clamp(16px, 4vw, 64px)); margin: clamp(16px, 4.5vh, 48px) auto 0; }
+.grab { display: none; }
+.sheet { position: relative; overflow: clip; container-type: inline-size; background: rgb(22 22 21 / .92); border-radius: 8px; box-shadow: var(--shadow-modal);
+  --c-fill: var(--ink-4); --c-hover: var(--ink-5); --c-edge: var(--ink-7); }
 .sheet:focus { outline: 0; }
-.sheet-bar { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; height: 54px; padding: 0 var(--pad);
-  background: rgba(14, 14, 14, .8); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); border-bottom: 1px solid rgba(255, 255, 255, .1); color: var(--mid); }
-.sheet-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; overflow: hidden; }
+/* its bar: the rule along its foot shows only once there's something scrolled under it */
+.sheet-bar { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; height: 56px; padding: 0 12px;
+  background: rgb(22 22 21 / .86); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); color: var(--mid); }
+.sheet-bar::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: .5px; background: var(--ink-6); opacity: 0; transition: opacity .2s var(--ease-out); }
+.sheet.is-scrolled .sheet-bar::after { opacity: 1; }
+.sheet-progress { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 1px; overflow: hidden; }
 .sheet-progress i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(var(--sp, 0)); }
-.proj-back { justify-self: start; transition: color .2s; }
-.proj-pos { color: var(--dim); }
-.proj-steps { justify-self: end; display: flex; gap: 28px; }
-.proj-steps a:hover, .proj-back:hover { color: var(--fg); }
+/* the panel's buttons, raised off it: a step lighter, edged, dropped; a hover lifts them a step, a press gives a little */
+.btn { position: relative; display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 6px; color: var(--ink-11); background: var(--c-fill);
+  box-shadow: 0 0 0 .5px var(--c-edge), var(--drop); transition: color .15s var(--ease-out), background-color .15s var(--ease-out), var(--press); }
+.btn:active { scale: .97; color: var(--fg); background: var(--c-hover); }
+@media (hover: hover) and (pointer: fine) { .btn:hover { color: var(--fg); background: var(--c-hover); } }
+.proj-back { justify-self: start; }
+.proj-pos { color: var(--ink-10); }
+.proj-steps { justify-self: end; display: flex; gap: 8px; }
 .proj-player { position: relative; display: grid; place-items: center; background: #000; height: min(62vh, 56.25cqw); border-bottom: 1px solid var(--line); }
 .proj-player .film { position: relative; width: min(100%, calc(min(62vh, 56.25cqw) * 16 / 9)); aspect-ratio: 16 / 9; background: #000; }
 /* the film arrives as its first still, and the player fades in over it once the panel has settled and it has loaded.
@@ -256,9 +330,12 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .still { display: grid; align-items: center; margin: 0; background: #000; }
 .still:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .proj-stills img { width: 100%; height: auto; }
-.proj-follow { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 24px; padding: 32px var(--pad) 48px; font-family: var(--display); font-size: clamp(32px, 4vw, 60px); line-height: 1; }
+/* on to the next film: the row lifts a step on hover and gives a little when pressed */
+.proj-follow { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 24px; padding: 32px var(--pad) 48px; font-family: var(--display); font-size: clamp(32px, 4vw, 60px); line-height: 1;
+  transition: background-color .15s var(--ease-out), var(--press); }
 .proj-follow .label { color: var(--dim); }
-.proj-follow:hover .proj-follow-title { color: var(--rec); }
+.proj-follow:active { scale: .99; background: var(--ink-3); }
+@media (hover: hover) and (pointer: fine) { .proj-follow:hover { background: var(--ink-3); } }
 
 /* THE INTRO — once per visit, like the start of a film. Black; the masking opens from a line across the middle onto
    the first still, the screen a little smaller than it will be; it settles out to its size as the name comes up from
@@ -282,10 +359,6 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
 
 /* NARROWER */
 @media (max-width: 960px) {
-  .cv-block { grid-template-columns: minmax(0, 1fr); }
-  .cv-list { border-left: 0; padding-top: 0; }
-  .cv .sec-head { display: flex; padding: 0 var(--pad); }
-  .cv .sec-title, .cv .sec-head .label { display: block; padding: 0; }
   .proj-head { grid-template-columns: minmax(0, 1fr); }
   .proj-credits { border-left: 0; border-top: 1px solid var(--hair); }
 }
@@ -298,9 +371,11 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
   .bar-left { padding-left: var(--pad); }
   .bar-role { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 10px; letter-spacing: .08em; }
   .bar.is-top .bar-role { display: none; }
-  .nav { gap: 14px; padding-right: var(--pad); font-size: 11px; letter-spacing: .1em; }
-  .toggle { grid-column: 1 / -1; grid-row: 2; display: flex; margin: 0 var(--pad) 10px; }
-  .opt { flex: 1; height: 36px; }
+  /* the places to go a thumb's height to tap; the switch's options 34px in a 42px well, its labels a size up */
+  .nav { gap: 0; margin-right: 0; padding-right: calc(var(--pad) - 8px); font-size: 11px; letter-spacing: .1em; }
+  .nav a { height: 44px; padding: 0 8px; }
+  .toggle { grid-column: 1 / -1; grid-row: 2; display: flex; margin: 0 var(--pad) 8px; }
+  .opt { flex: 1; height: 34px; font-size: 12.5px; }
   .hero { padding-top: max(4px, env(safe-area-inset-top)); }
   .ticker-now { display: flex; align-items: center; gap: 12px; height: 22px; white-space: nowrap; }
   .ticker-now .rec { margin-right: -2px; }
@@ -308,32 +383,49 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
   .ticker-list { gap: 6px; }
   .tick { padding: 21px 0; }   /* a thumb's height to tap */
   .tick-name, .screen-open { display: none; }
-  /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
-  .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }
-  .grid::after { display: none; }
-  .grid .tile { overflow: visible; background: none; }
-  .grid .tile > img { height: auto; aspect-ratio: 1.6 / 1; background: var(--tile); }
-  .tile-cap { position: static; gap: 1px; padding: 14px 0 0; background: none; }
-  .tile-title { font-family: var(--text); font-size: 13px; line-height: 1.5; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
-  .tile-credit { font-size: 15.5px; color: var(--fg); }
-  .cv-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }
-  .awards li { grid-template-columns: minmax(0, 1fr) auto; }
-  .awards li .cv-t { grid-column: 1 / -1; order: -1; }
+  /* one card to a row; on a touch screen the hover look shows while it's pressed */
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .tile > img { aspect-ratio: 1.6 / 1; }
+  .tile-title { font-size: 13px; }
+  .tile-credit { font-size: 15.5px; }
+  .tile:active { background: var(--ink-3); }
+  /* a table keeps its columns and slides sideways under the finger (no scrollbar); the film stays put at the left, and
+     every row is a thumb's height */
+  .cv-body { gap: 32px; padding-top: 28px; }
+  .cv-group-title { font-size: 22px; }
+  .cv-table { grid-template-columns: max-content max-content max-content; overflow-x: auto; overscroll-behavior-x: none; scrollbar-width: none; }
+  .cv-table::-webkit-scrollbar { display: none; }
+  .cv-table.opens { grid-template-columns: max-content max-content max-content auto; }
+  .cv-row > * { padding: 12px 14px; }
+  .cv-row > :last-child:has(.view) { padding-block: 10px; }
+  .cv-row > :first-child { position: sticky; left: 0; z-index: 1; box-shadow: .5px 0 0 var(--ink-5); }
+  .cv-row[data-slug]:active { scale: none; }
   .contact-body { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 28px; }
   .contact-text { gap: 36px; }
   .mail { font-size: 7.2vw; }   /* the whole address, on one line */
   .links { margin-top: 20px; }
-  .links a { width: 52px; height: 52px; }
-  .press-item { grid-template-columns: minmax(0, 1fr); padding: 32px var(--pad) 40px; }
+  .links a { width: 48px; height: 48px; }
+  .press-item { grid-template-columns: minmax(0, 1fr); padding: 26px 20px 30px; }
   .press-stand { font-size: 15.5px; }
   .press-read { grid-column: 1; grid-row: auto; padding-top: 6px; }
   .closing img { height: 118vw; }
   .scrim { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  /* the sheet: full width, its top corners round, a white handle above it on the dimmed page (88×44 to tap; it gives as
+     it's pressed). No Close: the handle, a pull down or the back button close it */
   .layer { padding-bottom: 0; }
-  .sheet { width: 100%; min-height: calc(100% - max(10px, env(safe-area-inset-top))); margin-top: max(10px, env(safe-area-inset-top)); border-radius: 14px 14px 0 0; border-bottom: 0; }
+  .deck { width: 100%; margin-top: env(safe-area-inset-top); }
+  .grab { display: block; position: relative; width: 88px; height: 44px; margin: 0 auto; touch-action: none; }
+  .grab::before { content: ""; position: absolute; left: 26px; right: 26px; bottom: 12px; height: 5px; border-radius: 999px; background: #fff;
+    box-shadow: inset 0 -.5px 0 rgb(0 0 0 / .08), 0 0 0 .5px rgb(0 0 0 / .12), 0 1px 2px rgb(0 0 0 / .28); transition: var(--press); }
+  .grab:active::before { scale: .94; }
+  .grab:focus-visible { outline: 0; }
+  .grab:focus-visible::before { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #fff; }
+  .sheet { min-height: calc(100svh - 44px - env(safe-area-inset-top)); border-radius: 14px 14px 0 0; box-shadow: 0 0 0 .5px var(--ink-6); }
   .proj-follow { padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
-  .sheet-bar { grid-template-columns: minmax(0, 1fr) auto; }
-  .proj-pos { display: none; }
+  .sheet-bar { grid-template-columns: minmax(0, 1fr) auto; padding: 0 12px 0 var(--pad); }
+  .proj-back { display: none; }
+  .btn { height: 36px; }
+  .btn::after { content: ""; position: absolute; inset: -4px; }   /* a thumb's height to tap */
   .proj-credits { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .proj-credits > div:nth-child(3) { border-left: 0; }
   .proj-stills { grid-template-columns: minmax(0, 1fr); }
