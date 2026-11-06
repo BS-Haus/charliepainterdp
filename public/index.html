@@ -3,15 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <!-- what search and link previews see: one set per page (the site, or one film), all pointing at the same address -->
   <title>Charlie Painter — Director of Photography, London</title>
   <meta name="description" content="Charlie Painter is a London-based cinematographer working across narrative features, shorts and commercials. Winner of Best Cinematography at SSIFF 2025 and a British Society of Cinematographers mentee." />
+  <link rel="canonical" href="https://charliepainterdp.vercel.app/" />
   <meta name="theme-color" content="#050505" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Charlie Painter" />
+  <meta property="og:url" content="https://charliepainterdp.vercel.app/" />
   <meta property="og:title" content="Charlie Painter — Director of Photography" />
   <meta property="og:description" content="Narrative features, shorts and commercials. London." />
-  <meta property="og:image" content="/media/stills/operationdynamo-1.jpg" />
-  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://charliepainterdp.vercel.app/media/stills/operationdynamo-1.jpg" />
+  <meta property="og:image:width" content="1600" />
+  <meta property="og:image:height" content="844" />
+  <meta property="og:image:alt" content="A still from Operation Dynamo, shot by Charlie Painter" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Charlie Painter", "jobTitle": "Director of Photography", "description": "Charlie Painter is a narrative features & shorts cinematographer, based in London, and a British Society of Cinematographers mentee.", "url": "https://charliepainterdp.vercel.app/", "image": "https://charliepainterdp.vercel.app/media/portrait.jpg", "email": "mailto:charlie@charliepainterdp.com", "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"}, "sameAs": ["https://vimeo.com/charliepainterdp", "https://www.instagram.com/charliepainter_dp", "https://www.imdb.com/name/nm15809574/"], "award": ["Best Cinematography, SSIFF 2025", "Best Film, LakeCity", "Best Film, Cambridge Short Film Festival", "Best Drama, Arena 51 Film Festival"]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
@@ -21,7 +31,8 @@
     (function () {
       var html = document.documentElement;
       html.classList.add("js");
-      try { if (!sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro", "is-waiting"); } catch (e) {}
+      // (not when the visit starts on a film's own page: the film opens straight away)
+      try { if (!html.dataset.film && !sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro", "is-waiting"); } catch (e) {}
       setTimeout(function () { html.classList.remove("is-waiting"); }, 1500);   // main.js starts it sooner, once the reel has a picture
       // the wordmark's face: types.js lists them; ?type=… tries another (see /explore.html)
       var key = new URLSearchParams(location.search).get("type");
@@ -48,10 +59,10 @@
   <section class="hero" id="top" aria-label="Selected stills">
     <div class="ticker label" id="ticker">
       <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="66north"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li><button class="tick" data-slug="johnsmiths"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li></ol>
-      <p class="ticker-now" aria-live="polite"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
+      <p class="ticker-now"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
     </div>
     <div class="stage">
-      <a class="screen" id="screen" href="#/vetala" aria-label="Open Vetala">
+      <a class="screen" id="screen" href="/vetala" aria-label="Open Vetala">
         <img src="/media/stills/vetala-9.jpg" alt="" data-slug="vetala" loading="eager" decoding="async" draggable="false" class="is-on" />
         <img src="/media/stills/vetala-3.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
         <img src="/media/stills/vetala-4.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
@@ -84,7 +95,7 @@
         <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
         <p class="bar-role label"><span class="role-full">Director of Photography</span><abbr class="role-short" title="Director of Photography">DP</abbr></p>
       </div>
-      <div class="toggle label" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span><button class="opt" role="radio" aria-checked="true" data-group="narrative">Narrative</button><button class="opt" role="radio" aria-checked="false" data-group="commercial">Commercial</button></div>
+      <div class="toggle label" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span><button class="opt" role="radio" aria-checked="true" data-group="narrative">Narrative</button><button class="opt" role="radio" aria-checked="false" tabindex="-1" data-group="commercial">Commercial</button></div>
       <nav class="nav label" aria-label="Sections">
         <a href="#work">Work</a>
         <a href="#cv">CV</a>
@@ -92,45 +103,46 @@
       </nav>
     </header>
 
-    <section class="work" id="work" aria-label="Work">
+    <section class="work" id="work" aria-labelledby="work-title">
+      <h2 class="sr-only" id="work-title">Work</h2>
       <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
         <div class="grid">
         <article class="tile" data-slug="iffilm">
           <img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/iffilm">If</a></h3><p class="tile-credit credit">Best Cinematography – SSIFF</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/iffilm">If</a></h3><p class="tile-credit credit">Best Cinematography – SSIFF</p></div>
         </article>
         <article class="tile" data-slug="vetala">
           <img src="/media/stills/vetala-1.jpg" alt="" loading="eager" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/vetala">Vetala</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/vetala">Vetala</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
         </article>
         <article class="tile" data-slug="operationdynamo">
           <img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit credit">George Rowlands / CPC</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit credit">George Rowlands / CPC</p></div>
         </article>
         <article class="tile" data-slug="accomplice">
           <img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/accomplice">Accomplice</a></h3><p class="tile-credit credit">Dominic Fraser / CPC</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/accomplice">Accomplice</a></h3><p class="tile-credit credit">Dominic Fraser / CPC</p></div>
         </article>
         <article class="tile" data-slug="flush">
           <img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/flush">Flush!</a></h3><p class="tile-credit credit">Nico Bourgeais / Fusion Alpha</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/flush">Flush!</a></h3><p class="tile-credit credit">Nico Bourgeais / Fusion Alpha</p></div>
         </article>
         <article class="tile" data-slug="invitrofelicitas">
           <img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
         </article>
         <article class="tile" data-slug="confess">
           <img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/confess">Confess</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/confess">Confess</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
         </article>
         <article class="tile" data-slug="moal">
           <img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/moal">Memories of a Life</a></h3><p class="tile-credit credit">Ellie Hague / Thulsa Films</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/moal">Memories of a Life</a></h3><p class="tile-credit credit">Ellie Hague / Thulsa Films</p></div>
         </article>
         <article class="tile" data-slug="brownies-or-ice-cream">
           <img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit credit">Stefan Poelman / Pink Momentum</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit credit">Stefan Poelman / Pink Momentum</p></div>
         </article>
         </div>
       </section>
@@ -138,27 +150,27 @@
         <div class="grid">
         <article class="tile" data-slug="66north">
           <img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
         </article>
         <article class="tile" data-slug="johnsmiths">
           <img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
         </article>
         <article class="tile" data-slug="aberfeldy">
           <img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/aberfeldy">Aberfeldy</a></h3><p class="tile-credit credit">Jess Leuty / CPC</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/aberfeldy">Aberfeldy</a></h3><p class="tile-credit credit">Jess Leuty / CPC</p></div>
         </article>
         <article class="tile" data-slug="vision-pro">
           <img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/vision-pro">Vision Pro</a></h3><p class="tile-credit credit">Nico Bourgeais / CPC</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/vision-pro">Vision Pro</a></h3><p class="tile-credit credit">Nico Bourgeais / CPC</p></div>
         </article>
         <article class="tile" data-slug="london-jazz-festival">
           <img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit credit">Lauren Smith / Serious Music</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit credit">Lauren Smith / Serious Music</p></div>
         </article>
         <article class="tile" data-slug="phox-water">
           <img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/phox-water">Phox Water</a></h3><p class="tile-credit credit">Commercial</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/phox-water">Phox Water</a></h3><p class="tile-credit credit">Commercial</p></div>
         </article>
         </div>
       </section>

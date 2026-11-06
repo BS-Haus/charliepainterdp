@@ -34,6 +34,10 @@
   --bar: 66px;                /* the bar: at the bottom of the first screen, then the header */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --expo: cubic-bezier(0.16, 1, 0.3, 1);   /* things arriving: away at once, then a long settle */
+  --out: cubic-bezier(.23, 1, .32, 1);     /* whatever the visitor sets off: it goes at once and settles; hovers and colours too */
+  /* the switch's pill: a spring (bounce .12 over .4s), so it settles without riding into the ends of its track */
+  --spring: linear(0, 0.0505 5%, 0.1646 10%, 0.3024 15%, 0.4404 20%, 0.5659 25%, 0.6731 30%, 0.7607 35%, 0.8297 40%, 0.8825 45%,
+    0.9216 50%, 0.9498 55%, 0.9696 60%, 0.983 65%, 0.9918 70%, 0.9973 75%, 1.0004 80%, 1.0021 85%, 1.0028 90%, 1.003 95%, 1);
   --section: clamp(80px, 10vw, 150px);     /* the gap before each part of the page after the work */
   --screen-ratio: 2.39;       /* the first screen's screen: scope */
   color-scheme: dark;
@@ -50,6 +54,8 @@ h1, h2, h3, p, ul, dl, dd { margin: 0; font-weight: inherit; }
 ul, ol { list-style: none; padding: 0; }
 i { font-style: normal; }
 [hidden] { display: none !important; }
+/* there for screen readers, not for the eye */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 ::selection { background: var(--rec); color: #000; }
 :focus-visible { outline: 1px solid var(--rec); outline-offset: 2px; }
 /* the instrument parts: small tracked capitals */
@@ -71,19 +77,25 @@ i { font-style: normal; }
 .screen img.was-on { z-index: 1; opacity: 1; transition: none; }
 .screen img.is-on, .screen img.was-on { animation: drift 3.8s linear both; }
 @keyframes drift { from { transform: scale(1); } to { transform: scale(1.045); } }
-.screen-open { position: absolute; right: 16px; bottom: 12px; z-index: 3; color: #fff; text-shadow: 0 0 12px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .4s var(--ease); }
+.screen-open { position: absolute; right: 16px; bottom: 12px; z-index: 3; color: #fff; text-shadow: 0 0 12px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(4px); transition: opacity .15s var(--out), transform .15s var(--out); }
 .screen:hover .screen-open, .screen:focus-visible .screen-open { opacity: 1; transform: none; }
 /* the bar along the top: a segment for each film, filling while its stills are up, its name under it */
 .ticker { flex: none; }
 .ticker-now { display: none; }
 .ticker-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 12px; }
-.tick { display: grid; gap: 10px; width: 100%; padding: 4px 0 8px; text-align: left; color: var(--dim); transition: color .25s; }
+.tick { display: grid; gap: 10px; width: 100%; padding: 4px 0 8px; text-align: left; color: var(--dim); transition: color .15s var(--out); }
 .tick:hover, .tick[aria-current="true"] { color: var(--fg); }
 .seg { position: relative; display: block; height: 2px; overflow: hidden; background: var(--line); }
-.seg i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.seg i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(0); }   /* main.js fills it */
 .tick-name { display: flex; align-items: center; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tick[aria-current="true"] .tick-name::before { content: ""; flex: none; width: 5px; height: 5px; margin-right: 10px; border-radius: 50%; background: var(--rec); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
-.hero-shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: rgba(0, 0, 0, calc(var(--cover, 0) * .85)); }
+/* as the page slides up over the screen, the screen goes dark: tied to the scroll itself where the browser can (no script,
+   no repainting), else main.js sets the opacity */
+.hero-shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #000; opacity: 0; }
+@supports (animation-timeline: scroll()) {
+  .hero-shade { animation: shade linear both; animation-timeline: scroll(root block); animation-range: 0px calc(100svh - var(--bar)); }
+}
+@keyframes shade { to { opacity: .85; } }
 /* the wordmark: centred, set edge to edge (main.js sizes it to the width once the face has loaded). It belongs
    to the page, sitting on the bar, so the bar carries it up and off the top as you scroll */
 .hero-name { position: absolute; bottom: calc(100% + var(--pad) * .55); left: var(--pad); right: var(--pad); text-align: center; white-space: nowrap; color: #fff;
@@ -102,25 +114,25 @@ html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 /* the small wordmark joins the role once the bar is the header */
 .mark { flex: none; max-width: 0; overflow: hidden; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
   font-variation-settings: var(--mark-vary-small); font-size: 17px; letter-spacing: 0; line-height: 1.1; opacity: 0;
-  transition: max-width .55s var(--ease), margin .55s var(--ease), opacity .35s; pointer-events: none; }
+  transition: max-width .55s var(--ease), margin .55s var(--ease), opacity .35s, visibility .55s; pointer-events: none; visibility: hidden; }
 html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
-.bar.is-top .mark { max-width: 280px; margin-right: 22px; opacity: 1; pointer-events: auto; }
+.bar.is-top .mark { max-width: 280px; margin-right: 22px; opacity: 1; pointer-events: auto; visibility: visible; }
 .bar-role { color: var(--mid); white-space: nowrap; }
 .bar-role abbr { text-decoration: none; }
 /* spelled out along the bottom of the reel; once the bar is the header and the name has joined it, just DP */
 .role-short, .bar.is-top .role-full { display: none; }
 .bar.is-top .role-short { display: inline; }
 .nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 12px; }
-.nav a { color: var(--mid); transition: color .2s; }
+.nav a { color: var(--mid); transition: color .15s var(--out); }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
 
 /* THE SWITCH — narrative or commercial work. A light pill slides under the one that's on, and its light is lit */
 .toggle { position: relative; display: inline-flex; padding: 3px; border-radius: 999px; background: #050505; border: 1px solid var(--line); }
 .thumb { position: absolute; top: 3px; bottom: 3px; left: 0; width: var(--tw, 0); border-radius: 999px; background: var(--fg);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, .5); transform: translateX(var(--tx, 0)); transition: transform .5s var(--ease), width .5s var(--ease); }
+  box-shadow: 0 1px 8px rgba(0, 0, 0, .5); transform: translateX(var(--tx, 0)); transition: transform .4s var(--spring), width .4s var(--spring); }
 .toggle:not(.is-set) .thumb { transition: none; }
-.opt { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 32px; padding: 0 18px; border-radius: 999px; color: var(--mid); transition: color .35s; }
-.opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .3; transform: translateY(-0.08em); transition: background .3s, opacity .3s, box-shadow .3s; }
+.opt { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 32px; padding: 0 18px; border-radius: 999px; color: var(--mid); transition: color .15s var(--out); }
+.opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .3; transform: translateY(-0.08em); transition: background-color .15s var(--out), opacity .15s var(--out), box-shadow .15s var(--out); }
 .opt:hover { color: var(--fg); }
 .opt[aria-checked="true"] { color: #050505; }
 .opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
@@ -137,11 +149,11 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .grid:has(> .tile:last-child:nth-child(odd))::after { content: ""; background: var(--bg); }   /* an odd last row ends in black */
 .tile > img { width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; transition: transform 1.2s var(--ease); }
 .tile-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: grid; gap: 6px; padding: 60px var(--pad) 20px; pointer-events: none;
-  background: linear-gradient(0deg, rgba(0, 0, 0, .72), rgba(0, 0, 0, 0)); transition: opacity .35s var(--ease), transform .45s var(--ease); }
+  background: linear-gradient(0deg, rgba(0, 0, 0, .72), rgba(0, 0, 0, 0)); transition: opacity .15s var(--out), transform .25s var(--out); }
 .tile-title { font-family: var(--display); font-size: clamp(26px, 2.3vw, 38px); line-height: 1.02; letter-spacing: -0.01em; color: #fff; }
 .tile-title a { pointer-events: auto; }
 .tile-credit { color: rgba(255, 255, 255, .8); }
-.js .tile:not(.in) > img { opacity: 0; filter: blur(18px); transform: scale(1.12); }
+.js .tile:not(.in) > img { opacity: 0; filter: blur(6px); transform: scale(1.12); }   /* (blur kept small: these are big pictures) */
 .js .tile:not(.in) .tile-cap { opacity: 0; transform: translateY(10px); }
 .tile.rising > img { transition: opacity .9s var(--expo) var(--d, 0ms), filter 1.1s var(--expo) var(--d, 0ms), transform 1.6s var(--expo) var(--d, 0ms); }
 .tile.rising .tile-cap { transition: opacity .8s var(--expo) calc(var(--d, 0ms) + 180ms), transform 1s var(--expo) calc(var(--d, 0ms) + 180ms); }
@@ -172,26 +184,27 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .contact-body { display: grid; grid-template-columns: minmax(0, 1fr) min(30vw, 420px); gap: 48px var(--pad); padding: 40px var(--pad) 0; }
 .contact-text { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; }
 .about { max-width: 34ch; font-family: var(--display); font-size: clamp(28px, 2.6vw, 40px); line-height: 1.14; letter-spacing: -0.01em; text-wrap: pretty; }
-.mail { display: inline-block; font-family: var(--display); font-size: clamp(30px, 4vw, 60px); line-height: 1.05; letter-spacing: -0.015em; transition: color .25s; }
+.mail { display: inline-block; font-family: var(--display); font-size: clamp(30px, 4vw, 60px); line-height: 1.05; letter-spacing: -0.015em; transition: color .15s var(--out); }
 .mail:hover { color: var(--rec); }
 .links { display: flex; gap: 10px; margin-top: 26px; color: var(--mid); }
-.links a { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; transition: color .2s, background .2s, border-color .2s; }
+.links a { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; transition: color .15s var(--out), background-color .15s var(--out), border-color .15s var(--out); }
 .links svg { width: 18px; height: 18px; fill: currentColor; }
 .links a:hover { color: #050505; background: var(--fg); border-color: var(--fg); }
 .portrait { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: var(--tile); }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
 /* the press, set like the CV: the piece's title large, what it's about beneath, where to read it */
 .press-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 32px; padding: 40px var(--pad) 48px; border-bottom: 1px solid var(--line); }
-.press-title { font-family: var(--display); font-size: clamp(34px, 4.4vw, 68px); line-height: 1.02; letter-spacing: -0.015em; text-wrap: balance; transition: color .25s; }
+.press-title { font-family: var(--display); font-size: clamp(34px, 4.4vw, 68px); line-height: 1.02; letter-spacing: -0.015em; text-wrap: balance; transition: color .15s var(--out); }
 .press-stand { grid-column: 1; max-width: 44ch; font-size: 17px; color: var(--mid); text-wrap: pretty; }
-.press-read { grid-column: 2; grid-row: 1; align-self: start; padding-top: .6em; color: var(--mid); transition: color .2s; }
+.press-read { grid-column: 2; grid-row: 1; align-self: start; padding-top: .6em; color: var(--mid); transition: color .15s var(--out); }
 .press-item:hover .press-title { color: var(--rec); }
 .press-item:hover .press-read { color: var(--fg); }
 /* as CV and contact come up, the rules draw across and the type pulls into focus, top to bottom: rows rise out of a
    blur; the big lines are uncovered from the top down */
 @property --wipe { syntax: "<percentage>"; inherits: false; initial-value: 130%; }
-.js .rv { opacity: 0; filter: blur(10px); transform: translateY(16px); transition: opacity .9s var(--ease), filter 1.1s var(--ease), transform 1.1s var(--ease); transition-delay: var(--rv-delay, 0ms); }
+.js .rv { opacity: 0; filter: blur(6px); transform: translateY(16px); transition: opacity .9s var(--ease), filter 1.1s var(--ease), transform 1.1s var(--ease); transition-delay: var(--rv-delay, 0ms); }
 .js .rv.in { opacity: 1; filter: none; transform: none; }
+.js .portrait.rv { filter: none; }   /* a large picture just fades and rises */
 .js .rv-wipe { --wipe: 0%; -webkit-mask-image: linear-gradient(180deg, #000 calc(var(--wipe) - 30%), transparent var(--wipe)); mask-image: linear-gradient(180deg, #000 calc(var(--wipe) - 30%), transparent var(--wipe));
   filter: blur(6px); transition: --wipe 1.5s var(--ease), filter 1.3s var(--ease); transition-delay: var(--rv-delay, 0ms); }
 .js .rv-wipe.in { --wipe: 130%; filter: none; }
@@ -203,6 +216,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .closing img { width: 100%; height: min(100svh, 68vw); object-fit: cover; }
 .closing::after { content: ""; position: absolute; inset: auto 0 0; height: 120px; background: linear-gradient(0deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0)); pointer-events: none; }
 .foot { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; display: flex; justify-content: space-between; gap: 24px; padding: 18px var(--pad) 22px; color: rgba(255, 255, 255, .72); }
+.foot a { transition: color .15s var(--out); }
 .foot a:hover { color: #fff; }
 
 /* THE FILM — a panel laid over the site rather than a page: the site stays there behind it, blurred and dimmed, and the
@@ -221,10 +235,15 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
   box-shadow: 0 40px 120px rgba(0, 0, 0, .65), inset 0 1px 0 rgba(255, 255, 255, .06); }
 .sheet:focus { outline: 0; }
 .sheet-bar { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; height: 54px; padding: 0 var(--pad);
-  background: rgba(14, 14, 14, .8); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); border-bottom: 1px solid rgba(255, 255, 255, .1); color: var(--mid); }
+  background: #111; border-bottom: 1px solid rgba(255, 255, 255, .1); color: var(--mid); }
 .sheet-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; overflow: hidden; }
-.sheet-progress i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(var(--sp, 0)); }
-.proj-back { justify-self: start; transition: color .2s; }
+.sheet-progress i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(0); }
+@supports (animation-timeline: scroll()) {
+  .layer { scroll-timeline: --film block; }
+  .sheet-progress i { animation: progress linear both; animation-timeline: --film; }
+}
+@keyframes progress { to { transform: scaleX(1); } }
+.proj-back { justify-self: start; transition: color .15s var(--out); }
 .proj-pos { color: var(--dim); }
 .proj-steps { justify-self: end; display: flex; gap: 28px; }
 .proj-steps a:hover, .proj-back:hover { color: var(--fg); }
@@ -307,7 +326,8 @@ html.is-waiting :is(.screen, .hero-name-in, .ticker, .bar) { animation-play-stat
   .ticker-kind { color: var(--dim); }
   .ticker-list { gap: 6px; }
   .tick { padding: 21px 0; }   /* a thumb's height to tap */
-  .tick-name, .screen-open { display: none; }
+  .screen-open { display: none; }
+  .tick-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }   /* (still the button's name) */
   /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }
   .grid::after { display: none; }

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Render public/index.html from template.html + content.json.
+"""Render public/index.html from template.html + content.json, and a page for each film (public/<slug>.html, served at
+/<slug>): the same site with that film open, so a link to a film previews as that film.
 
 Edit content.json (add a film, reorder, change credits), then run:  python3 build.py
 """
@@ -8,6 +9,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).parent
+SITE = "https://charliepainterdp.vercel.app"   # the address search and link previews are pointed at
 content = json.loads((ROOT / "content.json").read_text())
 esc = html.escape
 
@@ -49,7 +51,7 @@ def film_tile(f, eager):
     under = f.get("accolade") or credit_line(f) or f["kind"]
     return f'''        <article class="tile" data-slug="{f["slug"]}">
           <img src="/media/stills/{f["stills"][0]}.jpg" alt="" loading="{"eager" if eager else "lazy"}" decoding="async" draggable="false" />
-          <div class="tile-cap"><h3 class="tile-title"><a href="#/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit credit">{esc(under)}</p></div>
+          <div class="tile-cap"><h3 class="tile-title"><a href="/{f["slug"]}">{esc(title_of(f))}</a></h3><p class="tile-credit credit">{esc(under)}</p></div>
         </article>'''
 
 
@@ -137,8 +139,10 @@ out = out.replace("{{FIRST_SLUG}}", first["slug"]).replace("{{FIRST_TITLE}}", es
 out = out.replace("{{FIRST_KIND}}", esc(KINDS.get(first["kind"], first["kind"])))
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
 # the switch on the bar: narrative or commercial work
+# (one Tab stop: the one that's on; the arrow keys move between them)
+off = ' tabindex="-1"'
 toggle = "".join(
-    f'<button class="opt" role="radio" aria-checked="{"true" if g == "narrative" else "false"}" data-group="{g}">{LABELS[g]}</button>'
+    f'<button class="opt" role="radio" aria-checked="{"true" if g == "narrative" else "false"}"{"" if g == "narrative" else off} data-group="{g}">{LABELS[g]}</button>'
     for g in ("narrative", "commercial")
 )
 out = out.replace("{{TOGGLE}}", toggle)
@@ -148,5 +152,56 @@ out = out.replace("{{ABOUT}}", esc(content["about"]))
 out = out.replace("{{PRESS}}", press())
 out = out.replace("{{KINDS}}", json.dumps(KINDS))
 out = out.replace("{{PROJECTS}}", json.dumps(projects(), ensure_ascii=False).replace("</", "<\\/"))
-(ROOT / "public" / "index.html").write_text(out)
-print("Built public/index.html")
+
+
+def person():
+    """Who the site is about, for search: only what the page itself says."""
+    data = {
+        "@context": "https://schema.org", "@type": "Person", "name": "Charlie Painter", "jobTitle": "Director of Photography",
+        "description": content["about"], "url": f"{SITE}/", "image": f"{SITE}/media/portrait.jpg", "email": "mailto:charlie@charliepainterdp.com",
+        "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"},
+        "sameAs": ["https://vimeo.com/charliepainterdp", "https://www.instagram.com/charliepainter_dp", "https://www.imdb.com/name/nm15809574/"],
+        "award": [f"{a}, {f}" for r, a, f in content["awards"] if r == "Winner"],
+    }
+    return '\n  <script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + "</script>"
+
+
+def about_film(f):
+    """A film's page, in a sentence: what it is, who made it, what it won."""
+    kind = KINDS.get(f["kind"], f["kind"]).lower()
+    line = f"{title_of(f)}, {'an' if kind[0] in 'aeiou' else 'a'} {kind}"
+    if f.get("director"):
+        line += f" directed by {f['director']}"
+    if f.get("production"):
+        line += f" for {f['production']}"
+    line += ". Cinematography by Charlie Painter."
+    if f.get("accolade"):
+        line += f" {f['accolade']}."
+    return line
+
+
+def page(film=None):
+    """The site's head for the whole site, or for one film's own page."""
+    if film is None:
+        still, title = "operationdynamo-1", "Charlie Painter — Director of Photography, London"
+        meta = {"TITLE": title, "OG_TITLE": "Charlie Painter — Director of Photography", "URL": f"{SITE}/",
+                "DESCRIPTION": "Charlie Painter is a London-based cinematographer working across narrative features, shorts and commercials. "
+                               "Winner of Best Cinematography at SSIFF 2025 and a British Society of Cinematographers mentee.",
+                "OG_DESCRIPTION": "Narrative features, shorts and commercials. London.", "OG_IMAGE_ALT": "A still from Operation Dynamo, shot by Charlie Painter",
+                "JSONLD": person(), "FILM_ATTR": ""}
+    else:
+        still, title = film["stills"][0], f"{title_of(film)} — Charlie Painter"
+        meta = {"TITLE": title, "OG_TITLE": title, "URL": f"{SITE}/{film['slug']}", "DESCRIPTION": about_film(film), "OG_DESCRIPTION": about_film(film),
+                "OG_IMAGE_ALT": f"A still from {title_of(film)}", "JSONLD": "", "FILM_ATTR": f' data-film="{film["slug"]}"'}
+    w, h = jpeg_size(still)
+    meta.update({"OG_IMAGE": f"{SITE}/media/stills/{still}.jpg", "OG_IMAGE_W": str(w), "OG_IMAGE_H": str(h)})
+    head = out
+    for k, v in meta.items():
+        head = head.replace("{{" + k + "}}", v if k in ("JSONLD", "FILM_ATTR") else esc(v))
+    return head
+
+
+(ROOT / "public" / "index.html").write_text(page())
+for f in FILMS.values():
+    (ROOT / "public" / f"{f['slug']}.html").write_text(page(f))
+print(f"Built public/index.html and {len(FILMS)} film pages")

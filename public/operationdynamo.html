@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en" data-film="operationdynamo">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <!-- what search and link previews see: one set per page (the site, or one film), all pointing at the same address -->
+  <title>Operation Dynamo — Charlie Painter</title>
+  <meta name="description" content="Operation Dynamo, a short film directed by George Rowlands for CPC. Cinematography by Charlie Painter." />
+  <link rel="canonical" href="https://charliepainterdp.vercel.app/operationdynamo" />
+  <meta name="theme-color" content="#050505" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Charlie Painter" />
+  <meta property="og:url" content="https://charliepainterdp.vercel.app/operationdynamo" />
+  <meta property="og:title" content="Operation Dynamo — Charlie Painter" />
+  <meta property="og:description" content="Operation Dynamo, a short film directed by George Rowlands for CPC. Cinematography by Charlie Painter." />
+  <meta property="og:image" content="https://charliepainterdp.vercel.app/media/stills/operationdynamo-1.jpg" />
+  <meta property="og:image:width" content="1600" />
+  <meta property="og:image:height" content="844" />
+  <meta property="og:image:alt" content="A still from Operation Dynamo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/types.js"></script>
+  <script>
+    (function () {
+      var html = document.documentElement;
+      html.classList.add("js");
+      // (not when the visit starts on a film's own page: the film opens straight away)
+      try { if (!html.dataset.film && !sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro", "is-waiting"); } catch (e) {}
+      setTimeout(function () { html.classList.remove("is-waiting"); }, 1500);   // main.js starts it sooner, once the reel has a picture
+      // the wordmark's face: types.js lists them; ?type=… tries another (see /explore.html)
+      var key = new URLSearchParams(location.search).get("type");
+      if (!window.MARKS[key]) key = window.MARK_DEFAULT;
+      var t = window.MARKS[key], st = html.style;
+      window.loadMark(key);
+      st.setProperty("--mark-font", t.stack);
+      st.setProperty("--mark-weight", t.weight);
+      st.setProperty("--mark-small", t.small);
+      st.setProperty("--mark-stretch", t.stretch || "100%");
+      st.setProperty("--mark-track", t.track || "0");
+      st.setProperty("--mark-words", t.words || "-.06em");
+      st.setProperty("--mark-vary", t.vary || "normal");
+      st.setProperty("--mark-vary-small", t.varySmall || t.vary || "normal");
+      st.setProperty("--mark-style", t.italic ? "italic" : "normal");
+      html.dataset.markCase = t.caps ? "caps" : "as-set";
+    })();
+  </script>
+</head>
+<body>
+  <!-- THE FIRST SCREEN: along the top, which film you're looking at; beneath, a scope screen in the dark playing stills
+       from the best of the work, three from each film. Click the screen and that film opens. Pinned; the page slides up
+       over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
+  <section class="hero" id="top" aria-label="Selected stills">
+    <div class="ticker label" id="ticker">
+      <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="66north"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li><button class="tick" data-slug="johnsmiths"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li></ol>
+      <p class="ticker-now"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
+    </div>
+    <div class="stage">
+      <a class="screen" id="screen" href="/vetala" aria-label="Open Vetala">
+        <img src="/media/stills/vetala-9.jpg" alt="" data-slug="vetala" loading="eager" decoding="async" draggable="false" class="is-on" />
+        <img src="/media/stills/vetala-3.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/vetala-4.jpg" alt="" data-slug="vetala" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/operationdynamo-1.jpg" alt="" data-slug="operationdynamo" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/operationdynamo-5.jpg" alt="" data-slug="operationdynamo" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/operationdynamo-2.jpg" alt="" data-slug="operationdynamo" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/iffilm-4.jpg" alt="" data-slug="iffilm" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/iffilm-3.jpg" alt="" data-slug="iffilm" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/iffilm-5.jpg" alt="" data-slug="iffilm" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/66north-2.jpg" alt="" data-slug="66north" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/66north-r2.jpg" alt="" data-slug="66north" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/66north-r1.jpg" alt="" data-slug="66north" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/johnsmiths-1.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/johnsmiths-r2.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
+        <img src="/media/stills/johnsmiths-r3.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
+        <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
+      </a>
+    </div>
+    <span class="hero-shade" aria-hidden="true"></span>
+  </section>
+
+  <main class="page">
+    <!-- THE NAME: edge to edge, sitting on the bar; as you scroll the bar pushes it up and off the top -->
+    <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
+
+    <!-- THE BAR: the role, the narrative / commercial switch and the places to go. It waits along the bottom of the first
+         screen, rides up with the work, and stays at the top as the header, where the small name takes over -->
+    <header class="bar" id="bar">
+      <div class="bar-left">
+        <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
+        <p class="bar-role label"><span class="role-full">Director of Photography</span><abbr class="role-short" title="Director of Photography">DP</abbr></p>
+      </div>
+      <div class="toggle label" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span><button class="opt" role="radio" aria-checked="true" data-group="narrative">Narrative</button><button class="opt" role="radio" aria-checked="false" tabindex="-1" data-group="commercial">Commercial</button></div>
+      <nav class="nav label" aria-label="Sections">
+        <a href="#work">Work</a>
+        <a href="#cv">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="work" id="work" aria-labelledby="work-title">
+      <h2 class="sr-only" id="work-title">Work</h2>
+      <div class="groups" id="groups">
+      <section class="group" data-group="narrative" aria-label="Narrative">
+        <div class="grid">
+        <article class="tile" data-slug="iffilm">
+          <img src="/media/stills/iffilm-1.jpg" alt="" loading="eager" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/iffilm">If</a></h3><p class="tile-credit credit">Best Cinematography – SSIFF</p></div>
+        </article>
+        <article class="tile" data-slug="vetala">
+          <img src="/media/stills/vetala-1.jpg" alt="" loading="eager" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/vetala">Vetala</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
+        </article>
+        <article class="tile" data-slug="operationdynamo">
+          <img src="/media/stills/operationdynamo-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/operationdynamo">Operation Dynamo</a></h3><p class="tile-credit credit">George Rowlands / CPC</p></div>
+        </article>
+        <article class="tile" data-slug="accomplice">
+          <img src="/media/stills/accomplice-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/accomplice">Accomplice</a></h3><p class="tile-credit credit">Dominic Fraser / CPC</p></div>
+        </article>
+        <article class="tile" data-slug="flush">
+          <img src="/media/stills/flush-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/flush">Flush!</a></h3><p class="tile-credit credit">Nico Bourgeais / Fusion Alpha</p></div>
+        </article>
+        <article class="tile" data-slug="invitrofelicitas">
+          <img src="/media/stills/invitrofelicitas-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/invitrofelicitas">In Vitro Felicitas</a></h3><p class="tile-credit credit">Cyrus Mirzashafa / Thulsa Films</p></div>
+        </article>
+        <article class="tile" data-slug="confess">
+          <img src="/media/stills/confess-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/confess">Confess</a></h3><p class="tile-credit credit">Ajit Mann / M &amp; K</p></div>
+        </article>
+        <article class="tile" data-slug="moal">
+          <img src="/media/stills/moal-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/moal">Memories of a Life</a></h3><p class="tile-credit credit">Ellie Hague / Thulsa Films</p></div>
+        </article>
+        <article class="tile" data-slug="brownies-or-ice-cream">
+          <img src="/media/stills/brownies-or-ice-cream-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/brownies-or-ice-cream">Brownies or Ice Cream?</a></h3><p class="tile-credit credit">Stefan Poelman / Pink Momentum</p></div>
+        </article>
+        </div>
+      </section>
+      <section class="group" data-group="commercial" aria-label="Commercial" hidden>
+        <div class="grid">
+        <article class="tile" data-slug="66north">
+          <img src="/media/stills/66north-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/66north">66°North ‘Calming the Storm’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
+        </article>
+        <article class="tile" data-slug="johnsmiths">
+          <img src="/media/stills/johnsmiths-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/johnsmiths">John Smith’s ‘Traditions’</a></h3><p class="tile-credit credit">Dann Emmons / One Thousand Eyes</p></div>
+        </article>
+        <article class="tile" data-slug="aberfeldy">
+          <img src="/media/stills/aberfeldy-2.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/aberfeldy">Aberfeldy</a></h3><p class="tile-credit credit">Jess Leuty / CPC</p></div>
+        </article>
+        <article class="tile" data-slug="vision-pro">
+          <img src="/media/stills/vision-pro-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/vision-pro">Vision Pro</a></h3><p class="tile-credit credit">Nico Bourgeais / CPC</p></div>
+        </article>
+        <article class="tile" data-slug="london-jazz-festival">
+          <img src="/media/stills/london-jazz-festival-1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/london-jazz-festival">London Jazz Festival</a></h3><p class="tile-credit credit">Lauren Smith / Serious Music</p></div>
+        </article>
+        <article class="tile" data-slug="phox-water">
+          <img src="/media/stills/phox-r1.jpg" alt="" loading="lazy" decoding="async" draggable="false" />
+          <div class="tile-cap"><h3 class="tile-title"><a href="/phox-water">Phox Water</a></h3><p class="tile-credit credit">Commercial</p></div>
+        </article>
+        </div>
+      </section>
+      </div>
+    </section>
+
+    <!-- CV: the plain list producers expect -->
+    <section class="cv" id="cv" aria-label="CV">
+      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label"><span>Director / Prod Co.</span></p></header>
+      <div class="cv-block">
+        <h3 class="label">Feature film</h3>
+        <ul class="cv-list">
+          <li><span class="cv-t">Nice To See You Anyway</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
+          <li><span class="cv-t">Cynthia</span><span class="cv-c">James Hood / Banshee</span></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="label">Short film</h3>
+        <ul class="cv-list">
+          <li><span class="cv-t">Carry With Both Hands</span><span class="cv-c">Tim Rogg / St Maur Pictures</span></li>
+          <li><span class="cv-t">If (Starring Clive Russell)</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
+          <li><span class="cv-t">Vetala</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
+          <li><span class="cv-t">Operation Dynamo</span><span class="cv-c">George Rowlands / CPC</span></li>
+          <li><span class="cv-t">Flush!</span><span class="cv-c">Nico Bourgeais / Fusion Alpha</span></li>
+          <li><span class="cv-t">In Vitro Felicitas</span><span class="cv-c">Cyrus Mirzashafa / Thulsa Films</span></li>
+          <li><span class="cv-t">Mired</span><span class="cv-c">James Hood / Banshee</span></li>
+          <li><span class="cv-t">Memories of a Life</span><span class="cv-c">Ellie Hague / Thulsa Films</span></li>
+          <li><span class="cv-t">Dukh</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
+          <li><span class="cv-t">Brownies or Ice Cream?</span><span class="cv-c">Stefan Poelman / Pink Momentum</span></li>
+          <li><span class="cv-t">What Could’ve Been?</span><span class="cv-c">Niamh Ennis / CPC</span></li>
+          <li><span class="cv-t">Would Smith?</span><span class="cv-c">Matty Mahoney / Mohawk</span></li>
+          <li><span class="cv-t">Confess</span><span class="cv-c">Ajit Mann / M &amp; K</span></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="label">Commercial</h3>
+        <ul class="cv-list">
+          <li><span class="cv-t">66°North</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
+          <li><span class="cv-t">John Smith’s</span><span class="cv-c">Dann Emmons / One Thousand Eyes</span></li>
+          <li><span class="cv-t">Aberfeldy</span><span class="cv-c">Jess Leuty / CPC</span></li>
+          <li><span class="cv-t">Vision Pro</span><span class="cv-c">Nico Bourgeais / CPC</span></li>
+          <li><span class="cv-t">Mars</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">Peroni</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">LJF 25</span><span class="cv-c">Lauren Smith / Serious Music</span></li>
+          <li><span class="cv-t">Serious Music</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">Elizabeth Day</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">NAQ Music</span><span class="cv-c"></span></li>
+          <li><span class="cv-t">Phox Water</span><span class="cv-c"></span></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="label">Awards</h3>
+        <ul class="cv-list awards">
+          <li><span class="label">Winner</span><span class="cv-t">Best Cinematography</span><span class="cv-c">SSIFF 2025</span></li>
+          <li><span class="label">Nominee</span><span class="cv-t">Best Cinematography</span><span class="cv-c">YETI Film Fest</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">LakeCity</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">Cambridge Short Film Festival</span></li>
+          <li><span class="label">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT: who he is at the top; how to reach him at the foot, level with the foot of his portrait -->
+    <section class="contact" id="contact" aria-label="Contact">
+      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK</p></header>
+      <div class="contact-body">
+        <div class="contact-text">
+          <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
+          <div class="reach">
+            <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+            <nav class="links" aria-label="Elsewhere">
+              <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
+              <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
+              <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
+            </nav>
+          </div>
+        </div>
+        <figure class="portrait"><img src="/media/portrait.jpg" alt="Charlie Painter at the camera" loading="lazy" decoding="async" /></figure>
+      </div>
+    </section>
+
+    <!-- FEATURED: the press, set like the CV -->
+    <section class="press" id="press" aria-label="Featured">
+      <header class="sec-head"><h2 class="sec-title">Featured</h2><p class="label">Press</p></header>
+      <a class="press-item" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
+        <span class="press-title">A Complex Operation</span>
+        <span class="press-stand credit">Charlie Painter runs through his approach to lensing Second World War film Operation Dynamo</span>
+        <span class="press-read label">Read in British Cinematographer ↗&#xFE0E;</span>
+      </a>
+    </section>
+
+    <!-- THE LAST FRAME: one of his photographs, edge to edge, with the way back to the top -->
+    <figure class="closing">
+      <img src="/media/closing-garage.webp" alt="A figure alone in an underground car park" loading="lazy" decoding="async" />
+      <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
+    </figure>
+  </main>
+
+  <!-- THE FILM: a panel laid over the site, which blurs behind it. The layer scrolls as one, panel and all; the line
+       along the foot of the panel's bar fills as you go down it -->
+  <span class="scrim" id="scrim" aria-hidden="true"></span>
+
+  <div class="layer" id="layer" hidden>
+    <div class="sheet proj" id="proj" role="dialog" aria-modal="true" aria-labelledby="proj-title" tabindex="-1">
+      <div class="sheet-bar label">
+        <a class="sheet-close proj-back" href="#work">Close</a>
+        <span class="proj-pos" id="proj-pos"></span>
+        <span class="proj-steps"><a id="proj-prev" href="#">← Prev</a><a id="proj-next" href="#">Next →</a></span>
+        <span class="sheet-progress" id="sheet-progress" aria-hidden="true"><i></i></span>
+      </div>
+      <div class="sheet-body" id="proj-body">
+        <div class="proj-player" id="proj-player"></div>
+        <header class="proj-head">
+          <h2 class="proj-title" id="proj-title"></h2>
+          <dl class="proj-credits label" id="proj-credits"></dl>
+        </header>
+        <div class="proj-stills" id="proj-stills"></div>
+        <a class="proj-follow" id="proj-follow" href="#"><span class="label">Next</span><span class="proj-follow-title"></span><span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+
+  <script>window.PROJECTS = [{"slug": "iffilm", "group": "narrative", "title": "If", "name": "If", "kind": "Short", "note": "Starring Clive Russell", "accolade": "Best Cinematography – SSIFF", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": {"provider": "vimeo", "id": "1088718265"}, "stills": ["iffilm-1", "iffilm-2", "iffilm-3", "iffilm-4", "iffilm-5"], "dims": [[1600, 680], [1600, 680], [1600, 682], [1600, 682], [1600, 682]]}, {"slug": "vetala", "group": "narrative", "title": "Vetala", "name": "Vetala", "kind": "Short", "note": "", "accolade": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["vetala-1", "vetala-2", "vetala-3", "vetala-4", "vetala-5", "vetala-6", "vetala-7", "vetala-8", "vetala-9"], "dims": [[1600, 666], [1600, 666], [1600, 666], [1600, 666], [1600, 666], [1600, 666], [1600, 666], [1600, 666], [1600, 666]]}, {"slug": "operationdynamo", "group": "narrative", "title": "Operation Dynamo", "name": "Operation Dynamo", "kind": "Short", "note": "", "accolade": "", "director": "George Rowlands", "production": "CPC", "video": {"provider": "vimeo", "id": "1126894625", "hash": "97279ba9a1"}, "stills": ["operationdynamo-1", "operationdynamo-2", "operationdynamo-3", "operationdynamo-4", "operationdynamo-5"], "dims": [[1600, 844], [1600, 844], [1600, 844], [1600, 844], [1600, 844]]}, {"slug": "accomplice", "group": "narrative", "title": "Accomplice", "name": "Accomplice", "kind": "Short", "note": "", "accolade": "", "director": "Dominic Fraser", "production": "CPC", "video": null, "stills": ["accomplice-1", "accomplice-2", "accomplice-3", "accomplice-4", "accomplice-5", "accomplice-6"], "dims": [[1600, 600], [1600, 600], [1600, 600], [1600, 600], [1600, 600], [1600, 600]]}, {"slug": "flush", "group": "narrative", "title": "Flush!", "name": "Flush!", "kind": "Short", "note": "", "accolade": "", "director": "Nico Bourgeais", "production": "Fusion Alpha", "video": {"provider": "vimeo", "id": "1133511001", "hash": "98df98088f"}, "stills": ["flush-1", "flush-2", "flush-3", "flush-4", "flush-5"], "dims": [[1600, 676], [1600, 676], [1600, 676], [1600, 676], [1600, 676]]}, {"slug": "invitrofelicitas", "group": "narrative", "title": "In Vitro Felicitas", "name": "In Vitro Felicitas", "kind": "Short", "note": "", "accolade": "", "director": "Cyrus Mirzashafa", "production": "Thulsa Films", "video": null, "stills": ["invitrofelicitas-1"], "dims": [[1600, 600]]}, {"slug": "confess", "group": "narrative", "title": "Confess", "name": "Confess", "kind": "Short", "note": "", "accolade": "", "director": "Ajit Mann", "production": "M & K", "video": null, "stills": ["confess-1", "confess-2", "confess-3", "confess-4", "confess-5"], "dims": [[1600, 676], [1600, 676], [1600, 676], [1600, 676], [1600, 676]]}, {"slug": "moal", "group": "narrative", "title": "Memories of a Life", "name": "Memories of a Life", "kind": "Short", "note": "", "accolade": "", "director": "Ellie Hague", "production": "Thulsa Films", "video": null, "stills": ["moal-1", "moal-2", "moal-3", "moal-4", "moal-5"], "dims": [[1600, 844], [1600, 844], [1600, 844], [1600, 844], [1600, 844]]}, {"slug": "brownies-or-ice-cream", "group": "narrative", "title": "Brownies or Ice Cream?", "name": "Brownies or Ice Cream?", "kind": "Short", "note": "", "accolade": "", "director": "Stefan Poelman", "production": "Pink Momentum", "video": null, "stills": ["brownies-or-ice-cream-1", "brownies-or-ice-cream-2", "brownies-or-ice-cream-3"], "dims": [[1600, 1200], [1600, 1200], [1600, 1200]]}, {"slug": "66north", "group": "commercial", "title": "66°North ‘Calming the Storm’", "name": "66°North", "kind": "Commercial", "note": "Talent Oli Cook", "accolade": "", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1213570673", "hash": "ef3a99b161"}, "stills": ["66north-2", "66north-1", "66north-r1", "66north-r2", "66north-r3"], "dims": [[1600, 800], [1600, 600], [1600, 692], [1600, 692], [1600, 692]]}, {"slug": "johnsmiths", "group": "commercial", "title": "John Smith’s ‘Traditions’", "name": "John Smith’s", "kind": "Commercial", "note": "", "accolade": "", "director": "Dann Emmons", "production": "One Thousand Eyes", "video": {"provider": "vimeo", "id": "1189764769"}, "stills": ["johnsmiths-1", "johnsmiths-r1", "johnsmiths-r2", "johnsmiths-r3"], "dims": [[1600, 934], [1196, 800], [1196, 800], [1196, 800]]}, {"slug": "aberfeldy", "group": "commercial", "title": "Aberfeldy", "name": "Aberfeldy", "kind": "Brand film", "note": "", "accolade": "", "director": "Jess Leuty", "production": "CPC", "video": {"provider": "vimeo", "id": "1176200194"}, "stills": ["aberfeldy-2", "aberfeldy-r1", "aberfeldy-r2", "aberfeldy-r3", "aberfeldy-r4"], "dims": [[1600, 844], [1600, 800], [1600, 800], [1600, 800], [1600, 800]]}, {"slug": "vision-pro", "group": "commercial", "title": "Vision Pro", "name": "Vision Pro", "kind": "Commercial", "note": "", "accolade": "", "director": "Nico Bourgeais", "production": "CPC", "video": {"provider": "vimeo", "id": "926185147"}, "stills": ["vision-pro-1", "vision-pro-2", "vision-pro-3", "vision-pro-4", "vision-pro-5"], "dims": [[1600, 900], [1600, 680], [1600, 672], [1600, 680], [1600, 668]]}, {"slug": "london-jazz-festival", "group": "commercial", "title": "London Jazz Festival", "name": "London Jazz Festival", "kind": "Brand film", "note": "", "accolade": "", "director": "Lauren Smith", "production": "Serious Music", "video": {"provider": "youtube", "id": "ugaZUGlBulc"}, "stills": ["london-jazz-festival-1", "london-jazz-festival-2", "london-jazz-festival-3", "london-jazz-festival-r1", "london-jazz-festival-r2", "london-jazz-festival-r3"], "dims": [[1600, 800], [1600, 800], [1600, 800], [1600, 800], [1600, 800], [1600, 800]]}, {"slug": "phox-water", "group": "commercial", "title": "Phox Water", "name": "Phox Water", "kind": "Commercial", "note": "", "accolade": "", "director": "", "production": "", "video": null, "stills": ["phox-r1", "phox-r2", "phox-r3"], "dims": [[1600, 800], [1600, 800], [1600, 800]]}]; window.KINDS = {"Short": "Short film", "Feature": "Feature film"};</script>
+  <script src="/main.js" defer></script>
+</body>
+</html>
