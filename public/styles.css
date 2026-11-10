@@ -72,10 +72,11 @@ i { font-style: normal; }
    the next, each drifting in a little while it's up */
 .hero { position: sticky; top: 0; z-index: 0; display: flex; flex-direction: column; height: 100vh; height: 100svh; overflow: hidden; background: #000;
   padding: 0 var(--pad) var(--bar); }
-/* (three rows: a margin above, the picture with its line, and the title's space below; whatever the picture leaves is
-   shared between the margin and the title's space, so the title always sits in the middle of its space) */
-.stage { --gap: clamp(20px, 3.4svh, 40px); --line-gap: 10px; --band: calc(var(--title-h, 80px) + 2 * var(--gap));
-  flex: 1; min-height: 0; display: grid; grid-template-rows: minmax(var(--gap), 1fr) auto minmax(var(--band), 1fr); justify-items: center; align-items: center;
+/* (three rows: a set margin above, the picture with its line, and the title's space below, which takes whatever the
+   picture leaves, so the picture sits up near the top and the title in the middle of the space under it; that space is
+   never less than the title with --title-gap either side) */
+.stage { --gap: clamp(20px, 3.4svh, 40px); --title-gap: clamp(32px, 5svh, 60px); --line-gap: 10px; --band: calc(var(--title-h, 80px) + 2 * var(--title-gap));
+  flex: 1; min-height: 0; display: grid; grid-template-rows: var(--gap) auto minmax(var(--band), 1fr); justify-items: center; align-items: center;
   container-type: size; }
 .frame { grid-row: 2; width: min(100cqw, (100cqh - var(--gap) - var(--ticker-h, 24px) - var(--line-gap) - var(--band)) * var(--screen-ratio)); }
 .hero-title { grid-row: 3; }
@@ -372,7 +373,7 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
   .opt { height: 40px; }
   /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
   .hero { padding: env(safe-area-inset-top) 0 var(--bar); }
-  .stage { --gap: clamp(16px, 3svh, 28px); }
+  .stage { --gap: clamp(16px, 3svh, 28px); --title-gap: clamp(24px, 4svh, 40px); }
   .ticker { padding: 0 var(--pad); }   /* (the picture runs edge to edge; its line keeps the gutter) */
   .ticker-now { height: 24px; font-size: 12.5px; }
   .hero-role { font-size: 12.5px; }
