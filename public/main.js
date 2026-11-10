@@ -34,7 +34,7 @@
         try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
         introDone = true;
         wake();
-      }, 6400);   // the intro's own clock (styles.css)
+      }, 5000);   // the intro's own clock (styles.css)
     };
     if (shots[0].complete) roll();
     else shots[0].addEventListener("load", roll, { once: true });

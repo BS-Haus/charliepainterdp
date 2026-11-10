@@ -65,17 +65,18 @@ i { font-style: normal; }
 /* a light, used only for something that is on */
 .rec { display: inline-block; flex: none; width: 5px; height: 5px; margin-right: 12px; border-radius: 50%; background: var(--rec); vertical-align: middle; transform: translateY(-0.12em); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
 
-/* THE FIRST SCREEN — pinned. One group, evenly spaced and centred in the space above the bar: his name, small, like the
-   title card of an art-house film; the picture, as big as fits (a scope screen; on a phone a tall 4:5 frame); the film
-   that's up. Where the picture fills the height, the title and the film sit in the middle of the space above and below
-   it. main.js measures the title and the film, so the picture can take exactly what they leave. The stills dissolve one
-   into the next, each drifting in a little while it's up */
+/* THE FIRST SCREEN — pinned. The picture, as big as fits (a scope screen; on a phone a tall 4:5 frame), centred between
+   the top of the window and the bar; his name, small, like the title card of an art-house film, in the middle of the
+   space above it; the film that's up in the middle of the space below. The two spaces are always equal, each at least
+   the taller of the two (main.js measures them) plus a gap either side. The stills dissolve one into the next, each
+   drifting in a little while it's up */
 .hero { position: sticky; top: 0; z-index: 0; display: flex; flex-direction: column; height: 100vh; height: 100svh; overflow: hidden; background: #000;
   padding: 0 var(--pad) var(--bar); }
-.stage { --gap: clamp(20px, 3.4svh, 40px); flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap);
-  padding-block: var(--gap); container-type: size; }
+.stage { --gap: clamp(20px, 3.4svh, 40px); --band: calc(max(var(--title-h, 80px), var(--ticker-h, 70px)) + 2 * var(--gap));
+  flex: 1; min-height: 0; display: grid; grid-template-rows: minmax(var(--band), 1fr) auto minmax(var(--band), 1fr); justify-items: center; align-items: center;
+  container-type: size; }
 /* the picture and the label under its corner are one link; the label comes up only while the pointer is on it */
-.screen-link { position: relative; display: block; flex: none; width: min(100cqw, (100cqh - var(--title-h, 80px) - var(--ticker-h, 70px) - 2 * var(--gap)) * var(--screen-ratio)); }
+.screen-link { position: relative; display: block; width: min(100cqw, (100cqh - 2 * var(--band)) * var(--screen-ratio)); }
 .screen { position: relative; display: block; width: 100%; aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); }
 .view-film { position: absolute; top: 100%; right: 0; padding-top: 10px; font-size: 12px; color: var(--fg); white-space: nowrap; pointer-events: none;
   opacity: 0; transform: translateY(6px); transition: opacity .25s var(--out), transform .35s var(--out); }
@@ -304,25 +305,25 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
    does under it; a pause; then the picture opens out from the middle as two soft-edged dark halves draw apart to the
    sides, coming up out of the dark as they go and growing a little to its size; then the film that's up and the bar
    come in. The stills start once it's done (the first holds still until then). Transform and opacity only.
-   One 6.4s clock: black to 0.4s; the name 0.4–2.6s; Director of Photography 1.8–3.8s; the curtains part 3.8–6.1s while
-   the picture comes up (3.8–5.7s) and settles to its size (3.8–6.5s); the film that's up 5.4–6.4s; the bar 5.6–6.4s */
+   One 5s clock: black to 0.3s; the name 0.3–2s; Director of Photography 1.2–2.8s; the curtains part 2.9–4.8s while the
+   picture comes up (2.9–4.5s) and settles to its size (2.9–5.1s); the film that's up 4.2–5s; the bar 4.3–5s */
 .screen::before, .screen::after { content: ""; position: absolute; top: 0; bottom: 0; z-index: 4; width: calc(50% + 60px); display: none; pointer-events: none; }
 .screen::before { left: 0; background: linear-gradient(90deg, #000 calc(100% - 120px), transparent); }
 .screen::after { right: 0; background: linear-gradient(270deg, #000 calc(100% - 120px), transparent); }
 .intro .screen::before, .intro .screen::after { display: block; }
-.intro .screen::before { animation: curtain-left 2.3s cubic-bezier(.65, 0, .35, 1) 3.8s both; }
-.intro .screen::after { animation: curtain-right 2.3s cubic-bezier(.65, 0, .35, 1) 3.8s both; }
+.intro .screen::before { animation: curtain-left 1.9s cubic-bezier(.65, 0, .35, 1) 2.9s both; }
+.intro .screen::after { animation: curtain-right 1.9s cubic-bezier(.65, 0, .35, 1) 2.9s both; }
 @keyframes curtain-left { to { transform: translateX(-100%); } }
 @keyframes curtain-right { to { transform: translateX(100%); } }
 @keyframes appear { from { opacity: 0; } }
 @keyframes grow { from { transform: scale(.94); } }
 @keyframes rise-edge { from { transform: translateY(100%); } }
-.intro .hero-name { animation: appear 2.2s cubic-bezier(.4, 0, .2, 1) .4s both; }
-.intro .hero-role { animation: appear 2s cubic-bezier(.4, 0, .2, 1) 1.8s both; }
-.intro .screen { animation: appear 1.9s cubic-bezier(.4, 0, .2, 1) 3.8s both, grow 2.7s cubic-bezier(.22, 1, .36, 1) 3.8s both; }
+.intro .hero-name { animation: appear 1.7s cubic-bezier(.4, 0, .2, 1) .3s both; }
+.intro .hero-role { animation: appear 1.6s cubic-bezier(.4, 0, .2, 1) 1.2s both; }
+.intro .screen { animation: appear 1.6s cubic-bezier(.4, 0, .2, 1) 2.9s both, grow 2.2s cubic-bezier(.22, 1, .36, 1) 2.9s both; }
 .intro .screen img { animation: none; }   /* the first still starts drifting when the stills start, not behind the curtains */
-.intro .ticker { animation: appear 1s var(--ease) 5.4s both; }
-.intro .bar { animation: rise-edge .8s var(--ease) 5.6s both; }
+.intro .ticker { animation: appear .8s var(--ease) 4.2s both; }
+.intro .bar { animation: rise-edge .7s var(--ease) 4.3s both; }
 /* on black until the screen has a still to open onto (main.js) */
 html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-waiting .screen::before, html.is-waiting .screen::after { animation-play-state: paused; }
 
