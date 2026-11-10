@@ -363,12 +363,17 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
   /* the bar is one slim row: the places to go (each a thumb's height), and once it's the header, the small name at the
      left. The narrative / commercial switch sits at the top of the work instead */
   :root { --bar: 56px; --screen-ratio: .8; }
-  .bar { grid-template-columns: minmax(0, 1fr) auto; }
+  .bar { grid-template-columns: minmax(0, 1fr) auto; container-type: inline-size; }
   .bar .toggle { display: none; }
   .mark { justify-self: start; font-size: 21px; }
-  .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em; }
+  /* the links: in the middle of the bar on the first screen; once it's the header and the name comes in on the left, they
+     slide over to the right (they're laid out on the right; on the first screen they're moved back to the middle: half
+     the room they leave, less the 10px they reach past the gutter) */
+  .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em;
+    transform: translateX(calc((100% - 100cqw) / 2 - 10px)); transition: transform .55s var(--ease); }
+  .bar.is-top .nav { transform: none; }
   .nav a { padding: 16px 10px; }
-  .work-switch { display: block; padding: 16px var(--pad) 0; }
+  .work-switch { display: block; padding: 16px var(--pad) 0; text-align: center; }
   .work-switch .toggle { display: inline-grid; }
   .opt { height: 40px; }
   /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
