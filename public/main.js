@@ -42,18 +42,11 @@
     setTimeout(roll, 1500);
   }
 
-  /* ---------- The name: a title under the picture (the stylesheet sizes it), except on a phone, where it runs edge to
-     edge, sized to the width once its face has loaded. The screen above takes whatever height it leaves ---------- */
-  const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName);
-  const edgeToEdge = window.matchMedia("(max-width: 760px)");
+  /* ---------- The name: a small title under the picture (the stylesheet sizes it); measured once its face has loaded,
+     so the picture can take the rest of the height ---------- */
+  const heroName = $("#hero-name");
   const fitName = () => {
-    heroName.style.fontSize = "";
-    if (edgeToEdge.matches) {
-      heroName.style.fontSize = "100px";
-      heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
-    }
     html.style.setProperty("--name-h", `${heroName.offsetHeight}px`);
-    html.style.setProperty("--name-w", `${nameIn.offsetWidth}px`);   // the films along the top run as wide as the name
     heroName.classList.add("is-fit");
   };
   document.fonts.ready.then(fitName);
@@ -67,7 +60,7 @@
      It rests while it's covered, while a film is open, and while the page is hidden
      ====================================================================== */
   const SHOT = 2400;   // how long each still is up
-  const ticks = $$(".tick"), segs = ticks.map((tk) => $(".seg i", tk)), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
+  const ticks = $$(".tick"), segs = ticks.map((tk) => $(".seg i", tk)), tickNow = $(".ticker-now"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
   const runs = ticks.map((t) => shots.filter((s) => s.dataset.slug === t.dataset.slug));   // each film's stills
   let at = 0, t = 0, last = 0, frame = 0, covered = false, filled = -1;
 
@@ -103,6 +96,8 @@
       if (tickTitle.textContent !== p.name) {
         tickTitle.textContent = p.name;
         tickKind.textContent = KINDS[p.kind] || p.kind;
+        // the name of the film that's up fades in as it changes
+        if (!reduceMotion) tickNow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: "cubic-bezier(.4, 0, .2, 1)" });
       }
     }
     fill();

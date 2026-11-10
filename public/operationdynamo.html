@@ -52,9 +52,10 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN: along the top, which film you're looking at; beneath, a scope screen in the dark playing stills
-       from the best of the work, three from each film. Click the screen and that film opens. Pinned; the page slides up
-       over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
+  <!-- THE FIRST SCREEN: along the top, small, which film you're looking at; beneath, a scope screen in the dark playing
+       stills from the best of the work, three from each film, with his name under it like the title card of an art-house
+       film. Click the screen and that film opens. Pinned; the page slides up over it. (Every ↗ carries &#xFE0E;, which
+       keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
     <div class="ticker label" id="ticker">
       <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="66north"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li><button class="tick" data-slug="johnsmiths"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li></ol>
@@ -79,14 +80,12 @@
         <img src="/media/stills/johnsmiths-r3.jpg" alt="" data-slug="johnsmiths" loading="lazy" decoding="async" draggable="false" />
         <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
       </a>
+      <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
   </section>
 
   <main class="page">
-    <!-- THE NAME: edge to edge, sitting on the bar; as you scroll the bar pushes it up and off the top -->
-    <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
-
     <!-- THE BAR: the role, the narrative / commercial switch and the places to go. It waits along the bottom of the first
          screen, rides up with the work, and stays at the top as the header, where the small name takes over -->
     <header class="bar" id="bar">

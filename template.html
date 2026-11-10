@@ -52,9 +52,10 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN: along the top, which film you're looking at; beneath, a scope screen in the dark playing stills
-       from the best of the work, three from each film. Click the screen and that film opens. Pinned; the page slides up
-       over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
+  <!-- THE FIRST SCREEN: along the top, small, which film you're looking at; beneath, a scope screen in the dark playing
+       stills from the best of the work, three from each film, with his name under it like the title card of an art-house
+       film. Click the screen and that film opens. Pinned; the page slides up over it. (Every ↗ carries &#xFE0E;, which
+       keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
     <div class="ticker label" id="ticker">
       <ol class="ticker-list" aria-label="Films">{{TICKER}}</ol>
@@ -65,14 +66,12 @@
         {{SCREEN}}
         <span class="screen-open label" aria-hidden="true">View film ↗&#xFE0E;</span>
       </a>
+      <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
   </section>
 
   <main class="page">
-    <!-- THE NAME: edge to edge, sitting on the bar; as you scroll the bar pushes it up and off the top -->
-    <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
-
     <!-- THE BAR: the role, the narrative / commercial switch and the places to go. It waits along the bottom of the first
          screen, rides up with the work, and stays at the top as the header, where the small name takes over -->
     <header class="bar" id="bar">
