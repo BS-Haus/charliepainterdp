@@ -130,33 +130,27 @@ html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .page { position: relative; z-index: 1; margin-top: calc(var(--bar) * -1); background: var(--bg); }
 .bar { position: sticky; top: 0; z-index: 30; height: var(--bar); display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; padding: 0 var(--pad);
   background: var(--body); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.bar-left { justify-self: start; display: flex; align-items: center; min-width: 0; }
-/* the small wordmark joins the role once the bar is the header */
-.mark { flex: none; max-width: 0; overflow: hidden; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
-  font-variation-settings: var(--mark-vary-small); font-size: 18px; letter-spacing: 0; line-height: 1.1; opacity: 0;
-  transition: max-width .55s var(--ease), margin .55s var(--ease), opacity .35s, visibility .55s; pointer-events: none; visibility: hidden; }
+.bar > .toggle { justify-self: start; }
+/* the small wordmark docks in the middle once the bar is the header (on the first screen the title card says it) */
+.mark { justify-self: center; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
+  font-variation-settings: var(--mark-vary-small); font-size: 18px; letter-spacing: 0; line-height: 1.1;
+  opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: opacity .45s var(--ease), transform .55s var(--ease), visibility .55s; }
 html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
-.bar.is-top .mark { max-width: 280px; margin-right: 22px; opacity: 1; pointer-events: auto; visibility: visible; }
-/* (on the first screen the title card already says what he does, so the bar says it only once it's the header) */
-.bar-role { color: var(--mid); white-space: nowrap; transition: opacity .35s var(--ease); }
-.bar:not(.is-top) .bar-role { opacity: 0; }
-.bar-role abbr { text-decoration: none; }
-/* spelled out along the bottom of the reel; once the bar is the header and the name has joined it, just DP */
-.role-short, .bar.is-top .role-full { display: none; }
-.bar.is-top .role-short { display: inline; }
+.bar.is-top .mark { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
 .nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 13px; }
 .nav a { color: var(--mid); transition: color .15s var(--out); }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
 
-/* THE SWITCH — narrative or commercial work. A light pill slides under the one that's on, and its light is lit */
-.toggle { position: relative; display: inline-flex; padding: 3px; border-radius: 999px; background: #050505; border: 1px solid var(--line); }
-.thumb { position: absolute; top: 3px; bottom: 3px; left: 0; width: var(--tw, 0); border-radius: 999px; background: var(--fg);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, .5); transform: translateX(var(--tx, 0)); transition: transform .4s var(--spring), width .4s var(--spring); }
+/* THE SWITCH — narrative or commercial work, kept light: the two words, the red light by the one that's on, and a
+   hairline under it that slides across to the other when you switch (under the word, not the light: 13px in) */
+.toggle { position: relative; display: inline-flex; gap: 26px; }
+.thumb { position: absolute; bottom: 4px; left: 13px; height: 1px; width: calc(var(--tw, 13px) - 13px); background: var(--fg);
+  transform: translateX(var(--tx, 0)); transition: transform .4s var(--spring), width .4s var(--spring); }
 .toggle:not(.is-set) .thumb { transition: none; }
-.opt { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 32px; padding: 0 18px; border-radius: 999px; color: var(--mid); transition: color .15s var(--out); }
-.opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .3; transform: translateY(-0.08em); transition: background-color .15s var(--out), opacity .15s var(--out), box-shadow .15s var(--out); }
+.opt { position: relative; display: flex; align-items: center; gap: 8px; height: 36px; color: var(--dim); transition: color .15s var(--out); }
+.opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .35; transform: translateY(-0.08em); transition: background-color .15s var(--out), opacity .15s var(--out), box-shadow .15s var(--out); }
 .opt:hover { color: var(--fg); }
-.opt[aria-checked="true"] { color: #050505; }
+.opt[aria-checked="true"] { color: var(--fg); }
 .opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
 
 /* THE WORK — the frames for whichever half is switched on, straight on from the bar */
@@ -345,12 +339,13 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
      left. The narrative / commercial switch sits at the top of the work instead */
   :root { --bar: 56px; --screen-ratio: .8; }
   .bar { grid-template-columns: minmax(0, 1fr) auto; }
-  .bar .toggle, .bar-role { display: none; }
+  .bar .toggle { display: none; }
+  .mark { justify-self: start; }
   .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em; }
   .nav a { padding: 16px 10px; }
   .work-switch { display: block; padding: 16px var(--pad) 0; }
-  .work-switch .toggle { display: flex; }
-  .opt { flex: 1; height: 40px; }
+  .work-switch .toggle { display: inline-flex; }
+  .opt { height: 44px; }
   /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
   .hero { padding: env(safe-area-inset-top) 0 var(--bar); }
   .stage { --gap: clamp(16px, 3svh, 28px); }
