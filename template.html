@@ -52,29 +52,29 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN, read like a camera's monitor: the picture, a scope screen in the dark playing stills from the
-       best of the work, three from each film; his name and what he does above it, like the title card of an art-house
-       film; and right under it a slim status line lined up with its edges: the film that's up on the left, a small dash
-       for each film on the right. Click the screen and that film opens (on the picture, View film takes the dashes'
-       place). Pinned; the page slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones
-       otherwise draw it as an emoji) -->
+  <!-- THE FIRST SCREEN: a scope screen in the dark playing stills from the best of the work, three from each film. Right
+       above it, a slim line lined up with its edges: the film that's up on the left, a small dash for each film on the
+       right. Under it, in the middle of the space down to the bar, his name and what he does, like the title card of an
+       art-house film. Click the screen and that film opens (on the picture, View film comes up under its corner). Pinned;
+       the page slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an
+       emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
     <div class="stage">
-      <div class="hero-title">
-        <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
-        <p class="hero-role label">Director of Photography</p>
-      </div>
       <div class="frame">
+        <div class="ticker label" id="ticker">
+          <p class="ticker-now"><span class="rec" aria-hidden="true"></span><span id="ticker-title">{{FIRST_TITLE}}</span><span class="ticker-kind" id="ticker-kind">{{FIRST_KIND}}</span></p>
+          <ol class="ticker-list" aria-label="Films">{{TICKER}}</ol>
+        </div>
         <a class="screen-link" id="screen" href="/{{FIRST_SLUG}}" aria-label="Open {{FIRST_TITLE}}">
           <span class="screen">
           {{SCREEN}}
           </span>
           <span class="view-film label" aria-hidden="true">View film ↗&#xFE0E;</span>
         </a>
-        <div class="ticker label" id="ticker">
-          <p class="ticker-now"><span class="rec" aria-hidden="true"></span><span id="ticker-title">{{FIRST_TITLE}}</span><span class="ticker-kind" id="ticker-kind">{{FIRST_KIND}}</span></p>
-          <ol class="ticker-list" aria-label="Films">{{TICKER}}</ol>
-        </div>
+      </div>
+      <div class="hero-title">
+        <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">{{NAME}}</h1>
+        <p class="hero-role label">Director of Photography</p>
       </div>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
