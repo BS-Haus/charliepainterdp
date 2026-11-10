@@ -42,12 +42,18 @@
     setTimeout(roll, 1500);
   }
 
-  /* ---------- The name: a small title under the picture (the stylesheet sizes it), shown once its face has loaded ---------- */
-  const heroName = $("#hero-name");
-  const fitName = () => heroName.classList.add("is-fit");
+  /* ---------- The name: a small title above the picture (the stylesheet sizes it), shown once its face has loaded. The
+     title and the film under the picture are measured, so the picture can take exactly what they leave ---------- */
+  const heroName = $("#hero-name"), heroTitle = $(".hero-title"), tickerEl = $("#ticker");
+  const fitName = () => {
+    html.style.setProperty("--title-h", `${heroTitle.offsetHeight}px`);
+    html.style.setProperty("--ticker-h", `${tickerEl.offsetHeight}px`);
+    heroName.classList.add("is-fit");
+  };
   document.fonts.ready.then(fitName);
   document.fonts.addEventListener("loadingdone", fitName);
   setTimeout(fitName, 2500);   // whatever happens with the fonts, show the name
+  window.addEventListener("resize", fitName);
 
   /* ======================================================================
      THE SCREEN — three stills from each of the best films, one dissolving into the next. The bar beneath has a segment
@@ -137,16 +143,17 @@
 
   /* ======================================================================
      THE SWITCH — narrative or commercial work. The light pill slides under the one that's on, and the frames change
-     over to that half
+     over to that half. There are two, kept in step: the bar's, and on a phone the one at the top of the work
      ====================================================================== */
-  const toggle = $("#toggle"), opts = $$(".opt", toggle), thumb = $(".thumb", toggle);
+  const toggles = $$(".toggle"), opts = $$(".opt");
   const groups = $$(".group", groupsEl);
   let switching = 0;
-  const place = () => {
-    const on = opts.find((o) => o.getAttribute("aria-checked") === "true");
+  const place = () => toggles.forEach((tg) => {
+    const on = $$(".opt", tg).find((o) => o.getAttribute("aria-checked") === "true"), thumb = $(".thumb", tg);
+    if (!on || !tg.offsetWidth) return;   // a switch that isn't showing is placed when it shows (on resize)
     thumb.style.setProperty("--tw", `${on.offsetWidth}px`);
     thumb.style.setProperty("--tx", `${on.offsetLeft}px`);
-  };
+  });
   // the half that's going dims away quickly; the frames of the one coming develop in, in reading order
   const choose = async (group) => {
     const my = ++switching;
@@ -171,17 +178,17 @@
     $$(".tile", next).forEach((tile) => { tile.classList.remove("in", "rising"); reveal.observe(tile); });
   };
   opts.forEach((o) => o.addEventListener("click", () => choose(o.dataset.group)));
-  toggle.addEventListener("keydown", (e) => {
+  toggles.forEach((tg) => tg.addEventListener("keydown", (e) => {
     const to = { ArrowRight: "commercial", ArrowLeft: "narrative" }[e.key];
     if (!to) return;
     e.preventDefault();
     choose(to);
-    $(`.opt[data-group="${to}"]`, toggle).focus();
-  });
+    $(`.opt[data-group="${to}"]`, tg).focus();
+  }));
   place();
   document.fonts.ready.then(place);
   window.addEventListener("resize", place);
-  requestAnimationFrame(() => toggle.classList.add("is-set"));   // from here on the pill slides
+  requestAnimationFrame(() => toggles.forEach((tg) => tg.classList.add("is-set")));   // from here on the pill slides
 
   /* ======================================================================
      FRAMES — the pictures develop in their frames as you reach them, those that arrive together in reading order;

@@ -59,24 +59,25 @@ i { font-style: normal; }
 ::selection { background: var(--rec); color: #000; }
 :focus-visible { outline: 1px solid var(--rec); outline-offset: 2px; }
 /* the instrument parts: small tracked capitals */
-.label { font-family: var(--text); font-size: 11.5px; letter-spacing: .12em; line-height: 1.6; text-transform: uppercase; }
-.credit { font-family: var(--text); font-size: 14px; letter-spacing: .01em; line-height: 1.45; }
+.label { font-family: var(--text); font-size: 12.5px; letter-spacing: .12em; line-height: 1.6; text-transform: uppercase; }
+.credit { font-family: var(--text); font-size: 15px; letter-spacing: .01em; line-height: 1.45; }
 
 /* a light, used only for something that is on */
 .rec { display: inline-block; flex: none; width: 5px; height: 5px; margin-right: 12px; border-radius: 50%; background: var(--rec); vertical-align: middle; transform: translateY(-0.12em); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
 
-/* THE FIRST SCREEN — pinned, in three bands. A scope screen in the dark, as big as fits, centred between the top of the
-   window and the bar; his name, small, like the title card of an art-house film, in the middle of the space above it;
-   the film that's up in the middle of the space below. Each band is at least --band tall, and they share whatever the
-   picture leaves equally. The stills dissolve one into the next, each drifting in a little while it's up */
+/* THE FIRST SCREEN — pinned. One group, evenly spaced and centred in the space above the bar: his name, small, like the
+   title card of an art-house film; the picture, as big as fits (a scope screen; on a phone a tall 4:5 frame); the film
+   that's up. Where the picture fills the height, the title and the film sit in the middle of the space above and below
+   it. main.js measures the title and the film, so the picture can take exactly what they leave. The stills dissolve one
+   into the next, each drifting in a little while it's up */
 .hero { position: sticky; top: 0; z-index: 0; display: flex; flex-direction: column; height: 100vh; height: 100svh; overflow: hidden; background: #000;
   padding: 0 var(--pad) var(--bar); }
-.stage { --band: clamp(116px, 14svh, 160px); flex: 1; min-height: 0; display: grid; grid-template-rows: minmax(var(--band), 1fr) auto minmax(var(--band), 1fr);
-  justify-items: center; align-items: center; container-type: size; }
+.stage { --gap: clamp(20px, 3.4svh, 40px); flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap);
+  padding-block: var(--gap); container-type: size; }
 /* the picture and the label under its corner are one link; the label comes up only while the pointer is on it */
-.screen-link { position: relative; display: block; width: min(100cqw, (100cqh - 2 * var(--band)) * var(--screen-ratio)); }
+.screen-link { position: relative; display: block; flex: none; width: min(100cqw, (100cqh - var(--title-h, 80px) - var(--ticker-h, 70px) - 2 * var(--gap)) * var(--screen-ratio)); }
 .screen { position: relative; display: block; width: 100%; aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); }
-.view-film { position: absolute; top: 100%; right: 0; padding-top: 10px; font-size: 10.5px; color: var(--fg); white-space: nowrap; pointer-events: none;
+.view-film { position: absolute; top: 100%; right: 0; padding-top: 10px; font-size: 12px; color: var(--fg); white-space: nowrap; pointer-events: none;
   opacity: 0; transform: translateY(6px); transition: opacity .25s var(--out), transform .35s var(--out); }
 .screen-link:focus-visible .view-film { opacity: 1; transform: none; }
 @media (hover: hover) and (pointer: fine) { .screen-link:hover .view-film { opacity: 1; transform: none; } }
@@ -90,14 +91,14 @@ i { font-style: normal; }
    dashes are hairlines; the one that's up stretches out and fills while its stills play, those already shown stay half
    lit. The names on the dashes are for screen readers */
 .ticker { display: grid; justify-items: center; gap: 4px; }
-.ticker-now { display: flex; align-items: center; justify-content: center; gap: 10px; height: 20px; font-size: 10.5px; white-space: nowrap; }
+.ticker-now { display: flex; align-items: center; justify-content: center; gap: 10px; height: 22px; font-size: 12px; white-space: nowrap; }
 .ticker-now .rec { margin-right: -2px; }
 .ticker-kind { color: var(--dim); }
 .ticker-list { display: flex; justify-content: center; margin: 0; }
 .tick { position: relative; display: grid; place-items: center; padding: 8px 4px; }   /* (a bigger target than the dash it draws) */
-.seg { position: relative; display: block; width: 14px; height: 1px; overflow: hidden; border-radius: 1px; background: rgba(241, 240, 236, .26);
+.seg { position: relative; display: block; width: 16px; height: 1px; overflow: hidden; border-radius: 1px; background: rgba(241, 240, 236, .26);
   transition: width .6s var(--ease), background-color .15s var(--out); }
-.tick[aria-current="true"] .seg { width: 56px; }
+.tick[aria-current="true"] .seg { width: 64px; }
 .seg i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(0); }   /* main.js fills it */
 .tick:not([aria-current="true"]) .seg i { opacity: .55; }
 .tick-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -114,10 +115,10 @@ i { font-style: normal; }
 /* the wordmark, small, with what he does under it: a title card in the middle of the space below the picture; it stays
    with the picture as the page slides over */
 .hero-title { display: grid; justify-items: center; gap: 10px; }
-.hero-role { color: var(--dim); font-size: 10.5px; }
+.hero-role { color: var(--dim); font-size: 12px; }
 .hero-name { margin: 0; text-align: center; white-space: nowrap; color: #fff;
   font-family: var(--mark-font); font-weight: var(--mark-weight); font-stretch: var(--mark-stretch); font-style: var(--mark-style); letter-spacing: var(--mark-track);
-  font-variation-settings: var(--mark-vary); font-size: clamp(22px, min(2.3vw, 4svh), 40px); line-height: 1; word-spacing: var(--mark-words); }
+  font-variation-settings: var(--mark-vary); font-size: clamp(32px, min(3vw, 5.2svh), 54px); line-height: 1; word-spacing: var(--mark-words); }
 html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .js .hero-name:not(.is-fit) { visibility: hidden; }
 .hero-name-in { display: inline-block; margin-right: calc(var(--mark-track) * -1); }   /* no tracking after the last letter, so it centres */
@@ -130,7 +131,7 @@ html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .bar-left { justify-self: start; display: flex; align-items: center; min-width: 0; }
 /* the small wordmark joins the role once the bar is the header */
 .mark { flex: none; max-width: 0; overflow: hidden; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
-  font-variation-settings: var(--mark-vary-small); font-size: 17px; letter-spacing: 0; line-height: 1.1; opacity: 0;
+  font-variation-settings: var(--mark-vary-small); font-size: 18px; letter-spacing: 0; line-height: 1.1; opacity: 0;
   transition: max-width .55s var(--ease), margin .55s var(--ease), opacity .35s, visibility .55s; pointer-events: none; visibility: hidden; }
 html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
 .bar.is-top .mark { max-width: 280px; margin-right: 22px; opacity: 1; pointer-events: auto; visibility: visible; }
@@ -141,7 +142,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 /* spelled out along the bottom of the reel; once the bar is the header and the name has joined it, just DP */
 .role-short, .bar.is-top .role-full { display: none; }
 .bar.is-top .role-short { display: inline; }
-.nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 12px; }
+.nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 13px; }
 .nav a { color: var(--mid); transition: color .15s var(--out); }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
 
@@ -157,6 +158,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
 
 /* THE WORK — the frames for whichever half is switched on, straight on from the bar */
+.work-switch { display: none; }
 .groups { display: grid; overflow-anchor: none; }
 
 /* FRAMES — each film's one best still; hover for its title and credit, click to open it. The hairlines are there from
@@ -196,7 +198,7 @@ html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text
 .cv-list { padding: 16px var(--pad) 20px; border-left: 1px solid var(--hair); }
 .cv-list li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: baseline; gap: 24px; padding: 6px 0; }
 .cv-t { font-family: var(--display); font-size: 21px; line-height: 1.2; }
-.cv-c { font-size: 14px; color: var(--mid); }
+.cv-c { font-size: 15px; color: var(--mid); }
 .awards li { grid-template-columns: 11ch minmax(0, 1.1fr) minmax(0, 1fr); }
 .awards .label { color: var(--dim); }
 /* who he is at the top; the address and the places to find him at the foot, level with the foot of the portrait */
@@ -337,25 +339,31 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
 /* PHONES — the bar has two rows: the role (then the name) with the places to go, and the switch. Along the top, just
    the segments (tall enough to tap) and, under them, the film that's up */
 @media (max-width: 760px) {
-  :root { --bar: 104px; }
-  .bar { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 50px 54px; padding: 0; }
-  .bar-left { padding-left: var(--pad); }
-  .bar-role { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 10px; letter-spacing: .08em; }
-  .bar.is-top .bar-role { display: none; }
-  .nav { gap: 14px; padding-right: var(--pad); font-size: 11px; letter-spacing: .1em; }
-  .toggle { grid-column: 1 / -1; grid-row: 2; display: flex; margin: 0 var(--pad) 10px; }
-  .opt { flex: 1; height: 36px; }
-  .hero { padding-top: env(safe-area-inset-top); }
-  .ticker-now { height: 22px; }
-  .tick { padding: 21px 12px; }   /* a thumb's size to tap */
+  /* the bar is one slim row: the places to go (each a thumb's height), and once it's the header, the small name at the
+     left. The narrative / commercial switch sits at the top of the work instead */
+  :root { --bar: 56px; --screen-ratio: .8; }
+  .bar { grid-template-columns: minmax(0, 1fr) auto; }
+  .bar .toggle, .bar-role { display: none; }
+  .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em; }
+  .nav a { padding: 16px 10px; }
+  .work-switch { display: block; padding: 16px var(--pad) 0; }
+  .work-switch .toggle { display: flex; }
+  .opt { flex: 1; height: 40px; }
+  /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
+  .hero { padding: env(safe-area-inset-top) 0 var(--bar); }
+  .stage { --gap: clamp(16px, 3svh, 28px); }
+  .ticker-now { height: 24px; font-size: 12.5px; }
+  .hero-role { font-size: 12.5px; }
+  .tick { padding: 14px 4px; }
+  .seg { width: 22px; }
   /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }
   .grid::after { display: none; }
   .grid .tile { overflow: visible; background: none; }
   .grid .tile > img { height: auto; aspect-ratio: 1.6 / 1; background: var(--tile); }
   .tile-cap { position: static; gap: 1px; padding: 14px 0 0; background: none; }
-  .tile-title { font-family: var(--text); font-size: 13px; line-height: 1.5; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
-  .tile-credit { font-size: 15.5px; color: var(--fg); }
+  .tile-title { font-family: var(--text); font-size: 14px; line-height: 1.5; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
+  .tile-credit { font-size: 16px; color: var(--fg); }
   .cv-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }
   .awards li { grid-template-columns: minmax(0, 1fr) auto; }
   .awards li .cv-t { grid-column: 1 / -1; order: -1; }
