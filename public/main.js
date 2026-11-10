@@ -34,7 +34,7 @@
         try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
         introDone = true;
         wake();
-      }, 3000);
+      }, 3800);
     };
     if (shots[0].complete) roll();
     else shots[0].addEventListener("load", roll, { once: true });
@@ -42,13 +42,18 @@
     setTimeout(roll, 1500);
   }
 
-  /* ---------- The name, edge to edge: sized to the width once its face has loaded. The screen above takes whatever
-     height it leaves ---------- */
+  /* ---------- The name: a title under the picture (the stylesheet sizes it), except on a phone, where it runs edge to
+     edge, sized to the width once its face has loaded. The screen above takes whatever height it leaves ---------- */
   const heroName = $("#hero-name"), nameIn = $(".hero-name-in", heroName);
+  const edgeToEdge = window.matchMedia("(max-width: 760px)");
   const fitName = () => {
-    heroName.style.fontSize = "100px";
-    heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
+    heroName.style.fontSize = "";
+    if (edgeToEdge.matches) {
+      heroName.style.fontSize = "100px";
+      heroName.style.fontSize = `${(100 * heroName.clientWidth) / nameIn.offsetWidth}px`;
+    }
     html.style.setProperty("--name-h", `${heroName.offsetHeight}px`);
+    html.style.setProperty("--name-w", `${nameIn.offsetWidth}px`);   // the films along the top run as wide as the name
     heroName.classList.add("is-fit");
   };
   document.fonts.ready.then(fitName);
