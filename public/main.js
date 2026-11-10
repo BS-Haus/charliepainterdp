@@ -42,17 +42,12 @@
     setTimeout(roll, 1500);
   }
 
-  /* ---------- The name: a small title under the picture (the stylesheet sizes it); measured once its face has loaded,
-     so the picture can take the rest of the height ---------- */
+  /* ---------- The name: a small title under the picture (the stylesheet sizes it), shown once its face has loaded ---------- */
   const heroName = $("#hero-name");
-  const fitName = () => {
-    html.style.setProperty("--name-h", `${heroName.offsetHeight}px`);
-    heroName.classList.add("is-fit");
-  };
+  const fitName = () => heroName.classList.add("is-fit");
   document.fonts.ready.then(fitName);
   document.fonts.addEventListener("loadingdone", fitName);
   setTimeout(fitName, 2500);   // whatever happens with the fonts, show the name
-  window.addEventListener("resize", fitName);
 
   /* ======================================================================
      THE SCREEN — three stills from each of the best films, one dissolving into the next. The bar beneath has a segment
@@ -61,6 +56,7 @@
      ====================================================================== */
   const SHOT = 2400;   // how long each still is up
   const ticks = $$(".tick"), segs = ticks.map((tk) => $(".seg i", tk)), tickNow = $(".ticker-now"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
+  const viewFilm = $("#view-film");
   const runs = ticks.map((t) => shots.filter((s) => s.dataset.slug === t.dataset.slug));   // each film's stills
   let at = 0, t = 0, last = 0, frame = 0, covered = false, filled = -1;
 
@@ -93,6 +89,8 @@
     if (p) {
       screen.href = `/${p.slug}`;
       screen.setAttribute("aria-label", `Open ${p.title}`);
+      viewFilm.href = `/${p.slug}`;
+      viewFilm.setAttribute("aria-label", `View film: ${p.title}`);
       if (tickTitle.textContent !== p.name) {
         tickTitle.textContent = p.name;
         tickKind.textContent = KINDS[p.kind] || p.kind;
