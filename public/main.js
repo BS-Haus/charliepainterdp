@@ -15,7 +15,9 @@
   $$(".year").forEach((y) => { y.textContent = new Date().getFullYear(); });
 
   const html = document.documentElement;
-  const hero = $(".hero"), screen = $("#screen"), shots = $$("img", screen);
+  const hero = $(".hero"), screen = $("#screen"), allShots = $$("img", screen);
+  // the reel that's showing: the stills from whichever half of the work is switched on (narrative to start with)
+  let shots = allShots.filter((s) => s.dataset.group === allShots[0].dataset.group);
   const work = $("#work"), groupsEl = $("#groups"), bar = $("#bar");
   let openSheet = null;
 
@@ -56,14 +58,23 @@
   window.addEventListener("resize", fitName);
 
   /* ======================================================================
-     THE SCREEN — three stills from each of the best films, one dissolving into the next. The bar beneath has a segment
-     for each film that fills while its stills are up; click one to go to that film, click the screen to open it.
-     It rests while it's covered, while a film is open, and while the page is hidden
+     THE SCREEN — three stills from each of the best films, one dissolving into the next: the narrative films, or the
+     commercial ones, whichever the switch is on. The line has a segment for each film that fills while its stills are
+     up; click one to go to that film, click the screen to open it. It rests while it's covered, while a film is open,
+     and while the page is hidden
      ====================================================================== */
   const SHOT = 2400;   // how long each still is up
-  const ticks = $$(".tick"), segs = ticks.map((tk) => $(".seg i", tk)), tickNow = $(".ticker-now"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
-  const runs = ticks.map((t) => shots.filter((s) => s.dataset.slug === t.dataset.slug));   // each film's stills
-  let at = 0, t = 0, last = 0, frame = 0, covered = false, filled = -1;
+  const allTicks = $$(".tick"), tickNow = $(".ticker-now"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
+  let reelGroup = shots[0].dataset.group, ticks, segs, runs;
+  // the dashes for the reel that's showing, and each film's stills in it
+  const cast = () => {
+    ticks = allTicks.filter((tk) => tk.dataset.group === reelGroup);
+    segs = ticks.map((tk) => $(".seg i", tk));
+    runs = ticks.map((tk) => shots.filter((s) => s.dataset.slug === tk.dataset.slug));
+    allTicks.forEach((tk) => { tk.parentElement.hidden = tk.dataset.group !== reelGroup; });
+  };
+  cast();
+  let at = 0, t = 0, last = 0, frame = 0, covered = false, filled = -1, cur = shots[0];
 
   const film = () => ticks.findIndex((tk) => tk.dataset.slug === shots[at].dataset.slug);
   // the films before are full and those after empty (set when the film changes); only the one that's up moves
@@ -76,12 +87,13 @@
     segs[f].style.transform = `scaleX(${((k + t / SHOT) / run.length).toFixed(4)})`;
   };
   const show = (i) => {
-    const prev = shots[at];
+    const prev = cur;
     at = (i + shots.length) % shots.length;
     const shot = shots[at];
+    cur = shot;
     t = 0;
     if (prev !== shot) {
-      shots.forEach((s) => s.classList.remove("was-on"));
+      allShots.forEach((s) => s.classList.remove("was-on"));
       prev.classList.replace("is-on", "was-on");
       shot.classList.add("is-on");
       // the one underneath goes once the new one has covered it
@@ -90,7 +102,7 @@
     // the next stills start loading before they're needed
     [1, 2].forEach((d) => { shots[(at + d) % shots.length].loading = "eager"; });
     const f = film(), p = bySlug.get(shot.dataset.slug);
-    ticks.forEach((tk, j) => (j === f ? tk.setAttribute("aria-current", "true") : tk.removeAttribute("aria-current")));
+    allTicks.forEach((tk) => (tk === ticks[f] ? tk.setAttribute("aria-current", "true") : tk.removeAttribute("aria-current")));   // (the other reel's too)
     if (p) {
       screen.href = `/${p.slug}`;
       screen.setAttribute("aria-label", `Open ${p.title}`);
@@ -117,9 +129,28 @@
     last = performance.now();
     frame = requestAnimationFrame(step);
   }
-  ticks.forEach((tk, i) => tk.addEventListener("click", () => { show(shots.indexOf(runs[i][0])); wake(); }));
+  allTicks.forEach((tk) => tk.addEventListener("click", () => { show(shots.findIndex((s) => s.dataset.slug === tk.dataset.slug)); wake(); }));
   document.addEventListener("visibilitychange", wake);
   show(0);
+  // the switch changes the reel: the other half's films from the first, its first still dissolving in over what was up
+  // (once it's loaded; the other half's first stills load early, once the page has settled)
+  let reeling = 0;
+  const reel = (group) => {
+    if (group === reelGroup) return;
+    const my = ++reeling;
+    reelGroup = group;
+    shots = allShots.filter((s) => s.dataset.group === group);
+    cast();
+    segs.forEach((seg) => { seg.style.transform = "scaleX(0)"; });
+    at = 0; t = 0; filled = -1;
+    cancelAnimationFrame(frame);
+    const first = shots[0];
+    first.loading = "eager";
+    (first.complete ? Promise.resolve() : first.decode()).catch(() => {}).then(() => { if (my === reeling) { show(0); wake(); } });
+  };
+  const loadOther = () => setTimeout(() => allShots.filter((s) => s.dataset.group !== reelGroup).slice(0, 2).forEach((s) => { s.loading = "eager"; }), 1500);
+  if (document.readyState === "complete") loadOther();
+  else window.addEventListener("load", loadOther, { once: true });
 
   /* ======================================================================
      THE BAR — the page slides up over the pinned screen, which dims and then rests. The bar on the page's top edge
@@ -163,6 +194,7 @@
     opts.forEach((o) => { const on = o.dataset.group === group; o.setAttribute("aria-checked", String(on)); o.tabIndex = on ? 0 : -1; });
     place();
     if (was === next) return;
+    reel(group);   // the reel on the first screen follows
     if (!reduceMotion) {
       await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: OUT, fill: "forwards" }).finished.catch(() => {});
       if (my !== switching) return;

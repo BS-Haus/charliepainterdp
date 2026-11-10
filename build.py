@@ -16,6 +16,7 @@ esc = html.escape
 LABELS = {"narrative": "Narrative", "commercial": "Commercial"}
 KINDS = {"Short": "Short film", "Feature": "Feature film"}
 FILMS = {f["slug"]: f for g in ("narrative", "commercial") for f in content[g]}
+GROUP = {f["slug"]: g for g in ("narrative", "commercial") for f in content[g]}   # which half of the work a film is in
 
 
 def title_of(f):
@@ -66,22 +67,25 @@ def group_section(group, first):
 
 
 def screen():
-    """The first screen's stills, three from each of the best films, one after another."""
+    """The first screen's stills, three from each of the best films, one after another; each knows its half of the work,
+    so the switch can change the reel (narrative to start with)"""
     shots = []
     for show in content["showcase"]:
         for s in show["stills"]:
             first = not shots
             on = ' class="is-on"' if first else ""
-            shots.append(f'<img src="/media/stills/{s}.jpg" alt="" data-slug="{show["slug"]}" loading="{"eager" if first else "lazy"}" '
-                         f'decoding="async" draggable="false"{on} />')
+            shots.append(f'<img src="/media/stills/{s}.jpg" alt="" data-slug="{show["slug"]}" data-group="{GROUP[show["slug"]]}" '
+                         f'loading="{"eager" if first else "lazy"}" decoding="async" draggable="false"{on} />')
     return "\n        ".join(shots)
 
 
 def ticker():
-    """Which film you're looking at: a segment for each that fills while its stills play, its name beneath."""
+    """Which film you're looking at: a segment for each that fills while its stills play, its name beneath. Only the
+    reel that's showing has its dashes out (narrative to start with)"""
     current = ' aria-current="true"'
+    start = GROUP[content["showcase"][0]["slug"]]
     return "".join(
-        f'<li><button class="tick" data-slug="{show["slug"]}"{current if i == 0 else ""}>'
+        f'<li{"" if GROUP[show["slug"]] == start else " hidden"}><button class="tick" data-slug="{show["slug"]}" data-group="{GROUP[show["slug"]]}"{current if i == 0 else ""}>'
         f'<span class="seg"><i></i></span><span class="tick-name">{esc(FILMS[show["slug"]]["title"])}</span></button></li>'
         for i, show in enumerate(content["showcase"])
     )
