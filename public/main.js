@@ -131,7 +131,7 @@
   const measure = () => { span = Math.max(1, hero.offsetHeight - bar.offsetHeight); };
   const onScroll = () => {
     const y = window.scrollY, c = clamp(y / span, 0, 1);
-    if (!scrollLinked) shade.style.opacity = (c * 0.85).toFixed(3);
+    if (!scrollLinked) { shade.style.opacity = (c * 0.85).toFixed(3); bar.style.setProperty("--grey", c.toFixed(3)); }
     bar.classList.toggle("is-top", y >= span - 0.5);
     if ((c >= 0.999) !== covered) {
       covered = c >= 0.999;
