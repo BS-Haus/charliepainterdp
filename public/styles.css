@@ -141,10 +141,9 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .nav a { color: var(--mid); transition: color .15s var(--out); }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
 
-/* THE SWITCH — narrative or commercial work. The one that's on is framed the way a viewfinder frames a shot: four fine
-   corner marks round it, which slide across and re-frame the other when you switch; its red light is lit.
-   (While we choose, ?switch=glass makes it a smoked-glass button with a lit pill that slides, and ?switch=light leaves
-   only the red light, which glides from one word to the other) */
+/* THE SWITCH — narrative or commercial work. The one that's on is framed the way a viewfinder frames a shot: four corner
+   marks round it, in the same soft hairline as the dashes under the picture, which slide across and re-frame the other
+   when you switch; its red light is lit */
 .toggle { position: relative; display: inline-flex; gap: 4px; }
 .thumb { position: absolute; top: 0; bottom: 0; left: 0; width: var(--tw, 0); transform: translateX(var(--tx, 0)); pointer-events: none;
   transition: transform .4s var(--spring), width .4s var(--spring); }
@@ -154,20 +153,13 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .opt:hover { color: var(--fg); }
 .opt[aria-checked="true"] { color: var(--fg); }
 .opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
-/* viewfinder: the corner marks, 7px arms of hairline, on a breath of light */
-.thumb { --c: rgba(241, 240, 236, .9); --l: 7px; background-color: rgba(241, 240, 236, .035);
+/* the corner marks: 7px arms of 1px hairline (the dashes' weight), at the dashes' soft tone rather than white, on a
+   breath of light */
+.thumb { --c: rgba(241, 240, 236, .38); --l: 7px; background-color: rgba(241, 240, 236, .035);
   background-image: linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
     linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c));
   background-size: var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l);
   background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom; background-repeat: no-repeat; }
-/* glass: a smoked track built into the bar, and a softly lit pill that slides in it */
-html[data-switch="glass"] .toggle { gap: 0; padding: 3px; border-radius: 999px; background: rgba(241, 240, 236, .05); box-shadow: inset 0 0 0 1px rgba(241, 240, 236, .1); }
-html[data-switch="glass"] .thumb { top: 3px; bottom: 3px; border-radius: 999px; background: rgba(241, 240, 236, .13); box-shadow: inset 0 0 0 .5px rgba(241, 240, 236, .24), 0 1px 6px rgba(0, 0, 0, .45); }
-html[data-switch="glass"] .opt { height: 32px; border-radius: 999px; }
-/* light: no shape at all; the red light itself glides from word to word (the words' own dots stay dim) */
-html[data-switch="light"] .thumb { top: 50%; bottom: auto; left: 14px; width: 5px; height: 5px; margin-top: -3px; border-radius: 50%; background: var(--rec);
-  box-shadow: 0 0 8px rgba(242, 35, 27, .9); }
-html[data-switch="light"] .opt[aria-checked="true"]::before { background: currentColor; opacity: .25; box-shadow: none; }
 
 /* THE WORK — the frames for whichever half is switched on, straight on from the bar */
 .work-switch { display: none; }

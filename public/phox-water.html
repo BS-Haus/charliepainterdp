@@ -30,9 +30,6 @@
     (function () {
       var html = document.documentElement;
       html.classList.add("js");
-      // the switch's treatment, while we choose: viewfinder unless ?switch=glass or ?switch=light
-      var sw = new URLSearchParams(location.search).get("switch");
-      if (sw === "glass" || sw === "light") html.dataset.switch = sw;
       // (not when the visit starts on a film's own page: the film opens straight away)
       try { if (!html.dataset.film && !sessionStorage.getItem("cp-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) html.classList.add("intro", "is-waiting"); } catch (e) {}
       setTimeout(function () { html.classList.remove("is-waiting"); }, 1500);   // main.js starts it sooner, once the reel has a picture
