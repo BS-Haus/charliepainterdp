@@ -149,10 +149,11 @@
   const groups = $$(".group", groupsEl);
   let switching = 0;
   const place = () => toggles.forEach((tg) => {
-    const on = $$(".opt", tg).find((o) => o.getAttribute("aria-checked") === "true"), thumb = $(".thumb", tg);
+    const all = $$(".opt", tg), on = all.find((o) => o.getAttribute("aria-checked") === "true"), thumb = $(".thumb", tg);
     if (!on || !tg.offsetWidth) return;   // a switch that isn't showing is placed when it shows (on resize)
     thumb.style.setProperty("--tw", `${on.offsetWidth}px`);
     thumb.style.setProperty("--tx", `${on.offsetLeft}px`);
+    thumb.style.setProperty("--lean", on === all[0] ? "4px" : "-4px");   // on hover it leans towards the other half
   });
   // the half that's going dims away quickly; the frames of the one coming develop in, in reading order
   const choose = async (group) => {
@@ -177,7 +178,9 @@
     if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
     $$(".tile", next).forEach((tile) => { tile.classList.remove("in", "rising"); reveal.observe(tile); });
   };
-  opts.forEach((o) => o.addEventListener("click", () => choose(o.dataset.group)));
+  // either half flips it, like a switch: the other half, or the one that's on (which hands over to the other)
+  const other = (group) => (group === "narrative" ? "commercial" : "narrative");
+  opts.forEach((o) => o.addEventListener("click", () => choose(o.getAttribute("aria-checked") === "true" ? other(o.dataset.group) : o.dataset.group)));
   toggles.forEach((tg) => tg.addEventListener("keydown", (e) => {
     const to = { ArrowRight: "commercial", ArrowLeft: "narrative" }[e.key];
     if (!to) return;

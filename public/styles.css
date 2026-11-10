@@ -141,14 +141,17 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .nav a { color: var(--mid); transition: color .15s var(--out); }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
 
-/* THE SWITCH — narrative or commercial work. The one that's on is framed the way a viewfinder frames a shot: four corner
-   marks round it, in the same soft hairline as the dashes under the picture, which slide across and re-frame the other
-   when you switch; its red light is lit */
-.toggle { position: relative; display: inline-flex; gap: 4px; }
-.thumb { position: absolute; top: 0; bottom: 0; left: 0; width: var(--tw, 0); transform: translateX(var(--tx, 0)); pointer-events: none;
-  transition: transform .4s var(--spring), width .4s var(--spring); }
+/* THE SWITCH — narrative or commercial work: one toggle, a faint hairline track with the two halves in it, equal. The half
+   that's on is framed the way a viewfinder frames a shot (four corner marks, in the same soft hairline as the dashes under
+   the picture) and its red light is lit; switch, and the frame slides across and re-frames the other. A click on either
+   half flips it, like a switch; on hover the frame leans a little towards the other side, to say it slides */
+.toggle { position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 3px; background: rgba(241, 240, 236, .025);
+  box-shadow: inset 0 0 0 1px rgba(241, 240, 236, .12); }
+.thumb { position: absolute; top: 3px; bottom: 3px; left: 0; width: var(--tw, 0); transform: translateX(var(--tx, 0)); translate: 0 0; pointer-events: none;
+  transition: transform .4s var(--spring), width .4s var(--spring), translate .3s var(--out); }
 .toggle:not(.is-set) .thumb { transition: none; }
-.opt { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; color: var(--dim); transition: color .15s var(--out); }
+@media (hover: hover) and (pointer: fine) { .toggle:hover .thumb { translate: var(--lean, 0) 0; } }
+.opt { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 16px; color: var(--dim); transition: color .15s var(--out); }
 .opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .35; transform: translateY(-0.08em); transition: background-color .15s var(--out), opacity .15s var(--out), box-shadow .15s var(--out); }
 .opt:hover { color: var(--fg); }
 .opt[aria-checked="true"] { color: var(--fg); }
@@ -352,8 +355,8 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
   .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em; }
   .nav a { padding: 16px 10px; }
   .work-switch { display: block; padding: 16px var(--pad) 0; }
-  .work-switch .toggle { display: inline-flex; }
-  .opt { height: 44px; }
+  .work-switch .toggle { display: inline-grid; }
+  .opt { height: 40px; }
   /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
   .hero { padding: env(safe-area-inset-top) 0 var(--bar); }
   .stage { --gap: clamp(16px, 3svh, 28px); }
