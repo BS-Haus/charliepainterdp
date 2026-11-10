@@ -133,25 +133,41 @@ html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .bar > .toggle { justify-self: start; }
 /* the small wordmark docks in the middle once the bar is the header (on the first screen the title card says it) */
 .mark { justify-self: center; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
-  font-variation-settings: var(--mark-vary-small); font-size: 18px; letter-spacing: 0; line-height: 1.1;
+  font-variation-settings: var(--mark-vary-small); font-size: clamp(22px, 1.7vw, 26px); letter-spacing: 0; line-height: 1.1;
   opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: opacity .45s var(--ease), transform .55s var(--ease), visibility .55s; }
-html[data-mark-case="caps"] .mark { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text-transform: uppercase; }
 .bar.is-top .mark { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
 .nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 13px; }
 .nav a { color: var(--mid); transition: color .15s var(--out); }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
 
-/* THE SWITCH — narrative or commercial work, kept light: the two words, the red light by the one that's on, and a
-   hairline under it that slides across to the other when you switch (under the word, not the light: 13px in) */
-.toggle { position: relative; display: inline-flex; gap: 26px; }
-.thumb { position: absolute; bottom: 4px; left: 13px; height: 1px; width: calc(var(--tw, 13px) - 13px); background: var(--fg);
-  transform: translateX(var(--tx, 0)); transition: transform .4s var(--spring), width .4s var(--spring); }
+/* THE SWITCH — narrative or commercial work. The one that's on is framed the way a viewfinder frames a shot: four fine
+   corner marks round it, which slide across and re-frame the other when you switch; its red light is lit.
+   (While we choose, ?switch=glass makes it a smoked-glass button with a lit pill that slides, and ?switch=light leaves
+   only the red light, which glides from one word to the other) */
+.toggle { position: relative; display: inline-flex; gap: 4px; }
+.thumb { position: absolute; top: 0; bottom: 0; left: 0; width: var(--tw, 0); transform: translateX(var(--tx, 0)); pointer-events: none;
+  transition: transform .4s var(--spring), width .4s var(--spring); }
 .toggle:not(.is-set) .thumb { transition: none; }
-.opt { position: relative; display: flex; align-items: center; gap: 8px; height: 36px; color: var(--dim); transition: color .15s var(--out); }
+.opt { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; color: var(--dim); transition: color .15s var(--out); }
 .opt::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .35; transform: translateY(-0.08em); transition: background-color .15s var(--out), opacity .15s var(--out), box-shadow .15s var(--out); }
 .opt:hover { color: var(--fg); }
 .opt[aria-checked="true"] { color: var(--fg); }
 .opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
+/* viewfinder: the corner marks, 7px arms of hairline, on a breath of light */
+.thumb { --c: rgba(241, 240, 236, .9); --l: 7px; background-color: rgba(241, 240, 236, .035);
+  background-image: linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c));
+  background-size: var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l);
+  background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom; background-repeat: no-repeat; }
+/* glass: a smoked track built into the bar, and a softly lit pill that slides in it */
+html[data-switch="glass"] .toggle { gap: 0; padding: 3px; border-radius: 999px; background: rgba(241, 240, 236, .05); box-shadow: inset 0 0 0 1px rgba(241, 240, 236, .1); }
+html[data-switch="glass"] .thumb { top: 3px; bottom: 3px; border-radius: 999px; background: rgba(241, 240, 236, .13); box-shadow: inset 0 0 0 .5px rgba(241, 240, 236, .24), 0 1px 6px rgba(0, 0, 0, .45); }
+html[data-switch="glass"] .opt { height: 32px; border-radius: 999px; }
+/* light: no shape at all; the red light itself glides from word to word (the words' own dots stay dim) */
+html[data-switch="light"] .thumb { top: 50%; bottom: auto; left: 14px; width: 5px; height: 5px; margin-top: -3px; border-radius: 50%; background: var(--rec);
+  box-shadow: 0 0 8px rgba(242, 35, 27, .9); }
+html[data-switch="light"] .opt[aria-checked="true"]::before { background: currentColor; opacity: .25; box-shadow: none; }
 
 /* THE WORK — the frames for whichever half is switched on, straight on from the bar */
 .work-switch { display: none; }
@@ -340,7 +356,7 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
   :root { --bar: 56px; --screen-ratio: .8; }
   .bar { grid-template-columns: minmax(0, 1fr) auto; }
   .bar .toggle { display: none; }
-  .mark { justify-self: start; }
+  .mark { justify-self: start; font-size: 21px; }
   .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em; }
   .nav a { padding: 16px 10px; }
   .work-switch { display: block; padding: 16px var(--pad) 0; }
