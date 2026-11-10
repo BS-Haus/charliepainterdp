@@ -34,7 +34,7 @@
         try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
         introDone = true;
         wake();
-      }, 3800);
+      }, 6400);   // the intro's own clock (styles.css)
     };
     if (shots[0].complete) roll();
     else shots[0].addEventListener("load", roll, { once: true });
@@ -56,7 +56,6 @@
      ====================================================================== */
   const SHOT = 2400;   // how long each still is up
   const ticks = $$(".tick"), segs = ticks.map((tk) => $(".seg i", tk)), tickNow = $(".ticker-now"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
-  const viewFilm = $("#view-film");
   const runs = ticks.map((t) => shots.filter((s) => s.dataset.slug === t.dataset.slug));   // each film's stills
   let at = 0, t = 0, last = 0, frame = 0, covered = false, filled = -1;
 
@@ -89,8 +88,6 @@
     if (p) {
       screen.href = `/${p.slug}`;
       screen.setAttribute("aria-label", `Open ${p.title}`);
-      viewFilm.href = `/${p.slug}`;
-      viewFilm.setAttribute("aria-label", `View film: ${p.title}`);
       if (tickTitle.textContent !== p.name) {
         tickTitle.textContent = p.name;
         tickKind.textContent = KINDS[p.kind] || p.kind;
