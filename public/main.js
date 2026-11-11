@@ -78,6 +78,9 @@
 
   const film = () => ticks.findIndex((tk) => tk.dataset.slug === shots[at].dataset.slug);
   // the films before are full and those after empty (set when the film changes); only the one that's up moves
+  // a still gets its source when it's coming up (only the first has one from the start)
+  const load = (img) => { if (img && !img.getAttribute("src") && img.dataset.src) img.src = img.dataset.src; };
+  const loaded = (img) => { load(img); return (img.complete ? Promise.resolve() : img.decode()).catch(() => {}); };
   const fill = () => {
     const f = film(), run = runs[f], k = run.indexOf(shots[at]);
     if (f !== filled) {
@@ -100,7 +103,8 @@
       setTimeout(() => { if (!prev.classList.contains("is-on")) prev.classList.remove("was-on"); }, reduceMotion ? 0 : 1000);
     }
     // the next stills start loading before they're needed
-    [1, 2].forEach((d) => { shots[(at + d) % shots.length].loading = "eager"; });
+    load(shot);
+    [1, 2].forEach((d) => load(shots[(at + d) % shots.length]));
     const f = film(), p = bySlug.get(shot.dataset.slug);
     allTicks.forEach((tk) => (tk === ticks[f] ? tk.setAttribute("aria-current", "true") : tk.removeAttribute("aria-current")));   // (the other reel's too)
     if (p) {
@@ -129,11 +133,14 @@
     last = performance.now();
     frame = requestAnimationFrame(step);
   }
-  allTicks.forEach((tk) => tk.addEventListener("click", () => { show(shots.findIndex((s) => s.dataset.slug === tk.dataset.slug)); wake(); }));
+  allTicks.forEach((tk) => tk.addEventListener("click", () => {
+    const to = shots.find((s) => s.dataset.slug === tk.dataset.slug);
+    if (to) loaded(to).then(() => { if (shots.includes(to)) { show(shots.indexOf(to)); wake(); } });
+  }));
   document.addEventListener("visibilitychange", wake);
   show(0);
   // the switch changes the reel: the other half's films from the first, its first still dissolving in over what was up
-  // (once it's loaded; the other half's first stills load early, once the page has settled)
+  // (once it's loaded; the other half's first stills load early, once the page has settled, with each film's first)
   let reeling = 0;
   const reel = (group) => {
     if (group === reelGroup) return;
@@ -144,13 +151,14 @@
     segs.forEach((seg) => { seg.style.transform = "scaleX(0)"; });
     at = 0; t = 0; filled = -1;
     cancelAnimationFrame(frame);
-    const first = shots[0];
-    first.loading = "eager";
-    (first.complete ? Promise.resolve() : first.decode()).catch(() => {}).then(() => { if (my === reeling) { show(0); wake(); } });
+    loaded(shots[0]).then(() => { if (my === reeling) { show(0); wake(); } });
   };
-  const loadOther = () => setTimeout(() => allShots.filter((s) => s.dataset.group !== reelGroup).slice(0, 2).forEach((s) => { s.loading = "eager"; }), 1500);
-  if (document.readyState === "complete") loadOther();
-  else window.addEventListener("load", loadOther, { once: true });
+  const warm = () => setTimeout(() => {
+    ticks.forEach((tk) => load(shots.find((s) => s.dataset.slug === tk.dataset.slug)));   // each film's first, so a dash goes straight to it
+    allShots.filter((s) => s.dataset.group !== reelGroup).slice(0, 2).forEach(load);       // and the other half's first, for the switch
+  }, 1500);
+  if (document.readyState === "complete") warm();
+  else window.addEventListener("load", warm, { once: true });
 
   /* ======================================================================
      THE BAR — the page slides up over the pinned screen, which dims and then rests. The bar on the page's top edge

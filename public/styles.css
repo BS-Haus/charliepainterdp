@@ -378,12 +378,21 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
   .opt { height: 40px; }
   /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
   .hero { padding: env(safe-area-inset-top) 0 var(--bar); }
-  .stage { --gap: clamp(16px, 3svh, 28px); --title-gap: clamp(24px, 4svh, 40px); }
-  .ticker { padding: 0 var(--pad); }   /* (the picture runs edge to edge; its line keeps the gutter) */
+  .stage { --gap: clamp(16px, 3svh, 28px); --title-gap: clamp(24px, 4svh, 40px); --line-gap: 0px; }
+  /* (where the picture runs edge to edge its line keeps the gutter; where the window is too short for that and the
+     picture is narrower, the line keeps to the picture's edges: only as much gutter as the black either side doesn't give) */
+  .ticker { padding: 0 max(0px, var(--pad) - (100vw - 100%) / 2); }
   .ticker-now { height: 24px; font-size: 12.5px; }
   .hero-role { font-size: 12.5px; }
-  .tick { padding: 14px 5px; }
-  .seg { width: 14px; }
+  /* (every film has a dash, too many to sit beside the name: here they run under it, the whole width, an equal segment
+     each, the one that's up filling; their padding is the gap down to the picture) */
+  .ticker { flex-wrap: wrap; gap: 0; }
+  .ticker-now { max-width: 100%; overflow: hidden; }
+  .ticker-kind { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .ticker-list { flex: 1 0 100%; margin: 0 -3px; }
+  .ticker-list li { flex: 1; }
+  .tick { width: 100%; padding: 12px 3px; }
+  .seg, .tick[aria-current="true"] .seg { width: 100%; }
   /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }
   .grid::after { display: none; }

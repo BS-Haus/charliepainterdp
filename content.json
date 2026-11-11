@@ -546,6 +546,52 @@
       ]
     },
     {
+      "slug": "accomplice",
+      "stills": [
+        "accomplice-4",
+        "accomplice-6",
+        "accomplice-1"
+      ]
+    },
+    {
+      "slug": "flush",
+      "stills": [
+        "flush-5",
+        "flush-2",
+        "flush-1"
+      ]
+    },
+    {
+      "slug": "invitrofelicitas",
+      "stills": [
+        "invitrofelicitas-1"
+      ]
+    },
+    {
+      "slug": "confess",
+      "stills": [
+        "confess-1",
+        "confess-2",
+        "confess-3"
+      ]
+    },
+    {
+      "slug": "moal",
+      "stills": [
+        "moal-5",
+        "moal-2",
+        "moal-3"
+      ]
+    },
+    {
+      "slug": "brownies-or-ice-cream",
+      "stills": [
+        "brownies-or-ice-cream-1",
+        "brownies-or-ice-cream-2",
+        "brownies-or-ice-cream-3"
+      ]
+    },
+    {
       "slug": "66north",
       "stills": [
         "66north-2",
@@ -559,6 +605,38 @@
         "johnsmiths-1",
         "johnsmiths-r2",
         "johnsmiths-r3"
+      ]
+    },
+    {
+      "slug": "aberfeldy",
+      "stills": [
+        "aberfeldy-2",
+        "aberfeldy-r2",
+        "aberfeldy-r4"
+      ]
+    },
+    {
+      "slug": "vision-pro",
+      "stills": [
+        "vision-pro-2",
+        "vision-pro-3",
+        "vision-pro-4"
+      ]
+    },
+    {
+      "slug": "london-jazz-festival",
+      "stills": [
+        "london-jazz-festival-r3",
+        "london-jazz-festival-3",
+        "london-jazz-festival-2"
+      ]
+    },
+    {
+      "slug": "phox-water",
+      "stills": [
+        "phox-r1",
+        "phox-r2",
+        "phox-r3"
       ]
     }
   ],

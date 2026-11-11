@@ -74,8 +74,10 @@ def screen():
         for s in show["stills"]:
             first = not shots
             on = ' class="is-on"' if first else ""
-            shots.append(f'<img src="/media/stills/{s}.jpg" alt="" data-slug="{show["slug"]}" data-group="{GROUP[show["slug"]]}" '
-                         f'loading="{"eager" if first else "lazy"}" decoding="async" draggable="false"{on} />')
+            # only the first loads with the page; main.js gives the rest their source as they're coming up
+            src = f'src="/media/stills/{s}.jpg" loading="eager"' if first else f'data-src="/media/stills/{s}.jpg"'
+            shots.append(f'<img {src} alt="" data-slug="{show["slug"]}" data-group="{GROUP[show["slug"]]}" '
+                         f'decoding="async" draggable="false"{on} />')
     return "\n        ".join(shots)
 
 
