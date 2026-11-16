@@ -31,9 +31,6 @@
       if (rolling) return;
       rolling = true;
       html.classList.remove("is-waiting");
-      // the readouts come on with the camera: each runs through a scramble of characters and settles (styles.css times it)
-      if (!reduceMotion) setTimeout(() => [tickTitle, tickKind, hudDir.lastElementChild, hudProd.lastElementChild, hudClip, $(".hero-role")]
-        .forEach((el, i) => decode(el, i * 70)), 1550);
       setTimeout(() => {
         html.classList.remove("intro");
         try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
@@ -71,21 +68,6 @@
   const hudFields = [tickTitle, tickKind, hudDir, hudProd], hudClip = $("#hud-clip"), hudTc = $("#hud-tc");
   const credit = (el, v) => { el.hidden = !v; el.lastElementChild.textContent = v || ""; };   // one a film doesn't have drops out
   const three = (n) => String(n).padStart(3, "0"), two = (n) => String(n).padStart(2, "0");
-  // a readout coming on the way a display's do: its characters run through a scramble and lock in, left to right
-  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_:";
-  function decode(el, delay = 0) {
-    const final = el.textContent, n = final.length, start = performance.now() + delay, dur = 380 + n * 22;
-    const run = (now) => {
-      const p = (now - start) / dur;
-      if (p >= 1 || !n) { el.textContent = final; return; }
-      if (p >= 0) {
-        const lock = Math.floor(p * n);
-        el.textContent = final.slice(0, lock) + [...final.slice(lock)].map((ch) => (ch === " " ? " " : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join("");
-      }
-      requestAnimationFrame(run);
-    };
-    requestAnimationFrame(run);
-  }
   let reelGroup = shots[0].dataset.group, ticks, segs, runs;
   // the dashes for the reel that's showing, and each film's stills in it
   const cast = () => {
@@ -238,7 +220,6 @@
     reel(group);   // the reel on the first screen follows
     const count = $("#work-count");
     count.textContent = `${String($$(".tile", next).length).padStart(2, "0")} films`;
-    if (!reduceMotion) decode(count);
     if (!reduceMotion) {
       await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: OUT, fill: "forwards" }).finished.catch(() => {});
       if (my !== switching) return;
@@ -315,7 +296,6 @@
         const delay = Math.min(i, 14) * 55;
         e.target.style.setProperty("--rv-delay", `${delay}ms`);
         e.target.classList.add("in");
-        if (e.target.classList.contains("rv-decode")) decode(e.target, delay);   // headings run through a scramble and lock
         arrive.unobserve(e.target);
         // once it has settled it's itself again: its own hover answers at once
         setTimeout(() => { e.target.classList.remove("rv", "rv-wipe", "rv-rule", "rv-decode", "rv-power", "in"); e.target.style.removeProperty("--rv-delay"); }, delay + 1900);
@@ -385,7 +365,6 @@
     // a film opens on its first still; with no player, that still is the picture at the top and isn't repeated below
     player.innerHTML = p.video ? `<div class="film">${pic(0, "", "poster")}</div>` : pic(0, esc(p.title));
     $("#proj-title").textContent = p.title;
-    if (!reduceMotion) decode($("#proj-title"), 260);
     // what it won, where it has something, says more than what kind of film it is
     const rows = [["Director", p.director], ["Production", p.production], p.accolade ? ["Award", p.accolade] : ["Type", KINDS[p.kind] || p.kind]];
     if (p.note) rows.push(["With", p.note.replace(/^(Starring|Talent)\s+/i, "")]);

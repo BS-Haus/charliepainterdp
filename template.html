@@ -95,23 +95,23 @@
   </section>
 
   <main class="page">
-    <!-- THE BAR: the narrative / commercial switch on the left, the places to go on the right. It waits along the bottom
-         of the first screen, rides up with the work, and stays at the top as the header, where the small name docks in
-         the middle -->
+    <!-- THE BAR, set like a camera's menu: a row of cells — his name, the narrative / commercial switch (two cells, how
+         many films in each), and the places to go (with their numbers). It waits along the bottom of the first screen,
+         rides up with the work, and stays at the top as the header -->
     <header class="bar" id="bar">
-      <div class="toggle label" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span>{{TOGGLE}}</div>
-      <a class="mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
-      <nav class="nav label" aria-label="Sections">
-        <a href="#work"><span class="key" aria-hidden="true">01</span>Work</a>
-        <a href="#cv"><span class="key" aria-hidden="true">02</span>CV</a>
-        <a href="#contact"><span class="key" aria-hidden="true">03</span>Contact</a>
+      <a class="cell mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
+      <div class="toggle" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span>{{TOGGLE}}</div>
+      <nav class="nav" aria-label="Sections">
+        <a class="cell" href="#work"><span>Work</span><span class="val" aria-hidden="true">01</span></a>
+        <a class="cell" href="#cv"><span>CV</span><span class="val" aria-hidden="true">02</span></a>
+        <a class="cell" href="#contact"><span>Contact</span><span class="val" aria-hidden="true">03</span></a>
       </nav>
     </header>
 
     <section class="work" id="work" aria-labelledby="work-title">
       <header class="sec-head work-head"><h2 class="sec-title" id="work-title">Work</h2><p class="label"><span id="work-count">{{WORK_COUNT}}</span></p></header>
       <!-- on a phone the switch sits here, at the top of the work, rather than in the bar -->
-      <div class="work-switch"><div class="toggle label" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span>{{TOGGLE}}</div></div>
+      <div class="work-switch"><div class="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span>{{TOGGLE}}</div></div>
       <div class="groups" id="groups">
 {{GROUPS}}
       </div>

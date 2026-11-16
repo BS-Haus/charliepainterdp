@@ -149,7 +149,8 @@ out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_
 # (one Tab stop: the one that's on; the arrow keys move between them)
 off = ' tabindex="-1"'
 toggle = "".join(
-    f'<button class="opt" role="radio" aria-checked="{"true" if g == "narrative" else "false"}"{"" if g == "narrative" else off} data-group="{g}">{LABELS[g]}</button>'
+    f'<button class="opt cell" role="radio" aria-checked="{"true" if g == "narrative" else "false"}"{"" if g == "narrative" else off} data-group="{g}">'
+    f'<span>{LABELS[g]}</span><span class="val" aria-hidden="true">{len(content[g]):02d}</span></button>'
     for g in ("narrative", "commercial")
 )
 out = out.replace("{{TOGGLE}}", toggle)
