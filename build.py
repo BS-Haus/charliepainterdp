@@ -143,16 +143,13 @@ out = out.replace("{{SCREEN}}", screen())
 out = out.replace("{{TICKER}}", ticker())
 out = out.replace("{{FIRST_SLUG}}", first["slug"]).replace("{{FIRST_TITLE}}", esc(first["title"]))
 out = out.replace("{{FIRST_KIND}}", esc(KINDS.get(first["kind"], first["kind"])))
-out = out.replace("{{FIRST_DIR}}", esc(first.get("director", ""))).replace("{{FIRST_PROD}}", esc(first.get("production", "")))
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
 # the switch on the bar: narrative or commercial work
 # (one Tab stop: the one that's on; the arrow keys move between them)
 off = ' tabindex="-1"'
-toggle = "".join(
-    f'<button class="opt cell" role="radio" aria-checked="{"true" if g == "narrative" else "false"}"{"" if g == "narrative" else off} data-group="{g}">'
-    f'<span>{LABELS[g]}</span><span class="val" aria-hidden="true">{len(content[g]):02d}</span></button>'
-    for g in ("narrative", "commercial")
-)
+opt = lambda g: (f'<button class="opt" role="radio" aria-checked="{"true" if g == "narrative" else "false"}"{"" if g == "narrative" else off} '
+                 f'data-group="{g}">{LABELS[g]}</button>')
+toggle = opt("narrative") + '<span class="slide" aria-hidden="true"><i></i></span>' + opt("commercial")
 out = out.replace("{{TOGGLE}}", toggle)
 out = out.replace("{{CV}}", cv())
 out = out.replace("{{AWARDS}}", awards())

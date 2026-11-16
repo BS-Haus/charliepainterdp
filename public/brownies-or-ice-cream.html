@@ -52,15 +52,28 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN, a camera's display: the stills from the work fill the screen, three from each film, one
-       dissolving into the next, and over them the viewfinder, its readouts gathered in its corners: top left, the red
-       light (flashing) and the film that's up, with what it is; top right, its director and production; bottom left,
-       the clip over a meter with a cell for each film; bottom right, his name, large, what he does, and the time of day
-       as running timecode (View film takes its place while the pointer is on the picture). Corner marks and a centre
-       cross. It boots like a camera: the frame opens out from the middle, the picture powers on into focus, the
-       readouts come on. Click the picture and that film opens. Pinned; the page slides up over it. (Every ↗ carries
-       &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
+  <!-- THE BAR, along the top over the display: his name; beside it the narrative / commercial switch, a small slide
+       switch between the two words; and at the right the menu's cells for the places to go. Choose one and its cell
+       lights white and its window comes up over the display; a film opens in that same window -->
+  <header class="bar" id="bar">
+    <a class="mark" href="/" aria-label="Charlie Painter — home">Charlie Painter</a>
+    <div class="toggle" id="toggle" role="radiogroup" aria-label="Work"><button class="opt" role="radio" aria-checked="true" data-group="narrative">Narrative</button><span class="slide" aria-hidden="true"><i></i></span><button class="opt" role="radio" aria-checked="false" tabindex="-1" data-group="commercial">Commercial</button></div>
+    <nav class="nav" aria-label="Menu">
+      <a class="cell" href="#work"><span>Work</span><span class="val" aria-hidden="true">01</span></a>
+      <a class="cell" href="#cv"><span>CV</span><span class="val" aria-hidden="true">02</span></a>
+      <a class="cell" href="#contact"><span>Contact</span><span class="val" aria-hidden="true">03</span></a>
+    </nav>
+  </header>
+
+  <!-- THE DISPLAY, a camera's: the stills from the work fill the screen, three from each film, one dissolving into the
+       next, and over them the viewfinder, its readouts gathered in its corners: kept spare, the way Sigma and Leica keep theirs: top left,
+       the red light (flashing) and the film that's up, with what it is; bottom left, a meter with a cell for each film;
+       bottom right, what he does and the time of day as running timecode (Play takes its place while the pointer is on
+       the picture). Corner marks. A film chosen plays right here, on the display, in place of the stills It boots like a camera: the
+       frame opens out from the middle, the picture comes up into focus, the readouts settle in. Click the picture and
+       that film opens. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
+    <h1 class="sr-only">Charlie Painter — Director of Photography</h1>
     <a class="screen-link" id="screen" href="/vetala" aria-label="Open Vetala">
       <span class="screen">
       <img src="/media/stills/vetala-9.jpg" loading="eager" alt="" data-slug="vetala" data-group="narrative" decoding="async" draggable="false" class="is-on" />
@@ -108,53 +121,49 @@
         <img data-src="/media/stills/phox-r3.jpg" alt="" data-slug="phox-water" data-group="commercial" decoding="async" draggable="false" />
       </span>
     </a>
+    <div class="player" id="player" hidden></div>
     <div class="osd">
       <div class="vf">
-        <span class="vf-cross" aria-hidden="true"></span>
         <p class="hud hud-tl" id="ticker">
           <span class="hud-line"><span class="rec hud-rec" aria-hidden="true"></span><span class="hud-field" id="ticker-title">Vetala</span></span>
           <span class="hud-field hud-kind" id="ticker-kind">Short film</span>
         </p>
-        <p class="hud hud-tr">
-          <span class="hud-field hud-credit" id="hud-dir"><small>Dir</small><span>Ajit Mann</span></span>
-          <span class="hud-field hud-credit" id="hud-prod"><small>Prod</small><span>M &amp; K</span></span>
-        </p>
         <div class="hud hud-bl" id="hud-bottom">
-          <span class="hud-clip" id="hud-clip" aria-hidden="true">A001_C001</span>
           <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" data-group="narrative" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="accomplice" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Accomplice</span></button></li><li><button class="tick" data-slug="flush" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Flush!</span></button></li><li><button class="tick" data-slug="invitrofelicitas" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">In Vitro Felicitas</span></button></li><li><button class="tick" data-slug="confess" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Confess</span></button></li><li><button class="tick" data-slug="moal" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Memories of a Life</span></button></li><li><button class="tick" data-slug="brownies-or-ice-cream" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Brownies or Ice Cream?</span></button></li><li hidden><button class="tick" data-slug="66north" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li hidden><button class="tick" data-slug="johnsmiths" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li><li hidden><button class="tick" data-slug="aberfeldy" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Aberfeldy</span></button></li><li hidden><button class="tick" data-slug="vision-pro" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Vision Pro</span></button></li><li hidden><button class="tick" data-slug="london-jazz-festival" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">London Jazz Festival</span></button></li><li hidden><button class="tick" data-slug="phox-water" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Phox Water</span></button></li></ol>
         </div>
-        <div class="hero-title">
-          <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter">Charlie Painter</h1>
-          <p class="hero-role label">Director of Photography</p>
-        </div>
         <p class="hud hud-br">
+          <span class="hud-role">Director of Photography</span>
           <span class="hud-tc" id="hud-tc" aria-hidden="true">00:00:00:00</span>
-          <span class="view-film" aria-hidden="true">View film ↗&#xFE0E;</span>
+          <span class="view-film" aria-hidden="true">Play ▶&#xFE0E;</span>
         </p>
       </div>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
   </section>
 
-  <main class="page">
-    <!-- THE BAR, set like a camera's menu: a row of cells — his name, the narrative / commercial switch (two cells, how
-         many films in each), and the places to go (with their numbers). It waits along the bottom of the first screen,
-         rides up with the work, and stays at the top as the header -->
-    <header class="bar" id="bar">
-      <a class="cell mark" href="#top" aria-label="Charlie Painter — back to the top">Charlie Painter</a>
-      <div class="toggle" id="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span><button class="opt cell" role="radio" aria-checked="true" data-group="narrative"><span>Narrative</span><span class="val" aria-hidden="true">09</span></button><button class="opt cell" role="radio" aria-checked="false" tabindex="-1" data-group="commercial"><span>Commercial</span><span class="val" aria-hidden="true">06</span></button></div>
-      <nav class="nav" aria-label="Sections">
-        <a class="cell" href="#work"><span>Work</span><span class="val" aria-hidden="true">01</span></a>
-        <a class="cell" href="#cv"><span>CV</span><span class="val" aria-hidden="true">02</span></a>
-        <a class="cell" href="#contact"><span>Contact</span><span class="val" aria-hidden="true">03</span></a>
-      </nav>
-    </header>
+  <!-- NOW PLAYING: while a film plays on the display, what it is, and the way to its details (in the menu's window), the
+       film before or after, or back to the stills -->
+  <aside class="np" id="np" aria-label="Now playing" hidden>
+    <p class="np-label label"><span class="rec" aria-hidden="true"></span>Now playing</p>
+    <p class="np-title" id="np-title"></p>
+    <p class="np-meta label" id="np-meta"></p>
+    <div class="np-actions">
+      <button class="cell" type="button" id="np-info">Info</button>
+      <a class="cell" id="np-prev" href="#" aria-label="Previous film">‹ Prev</a>
+      <a class="cell" id="np-next" href="#" aria-label="Next film">Next ›</a>
+      <button class="cell" type="button" id="np-stop">Stop ✕</button>
+    </div>
+  </aside>
 
-    <section class="work" id="work" aria-labelledby="work-title">
-      <header class="sec-head work-head"><h2 class="sec-title" id="work-title">Work</h2><p class="label"><span id="work-count">09 films</span></p></header>
-      <!-- on a phone the switch sits here, at the top of the work, rather than in the bar -->
-      <div class="work-switch"><div class="toggle" role="radiogroup" aria-label="Work"><span class="thumb" aria-hidden="true"></span><button class="opt cell" role="radio" aria-checked="true" data-group="narrative"><span>Narrative</span><span class="val" aria-hidden="true">09</span></button><button class="opt cell" role="radio" aria-checked="false" tabindex="-1" data-group="commercial"><span>Commercial</span><span class="val" aria-hidden="true">06</span></button></div></div>
-      <div class="groups" id="groups">
+  <!-- THE WINDOWS: each place to go comes up as a window over the display, like a camera's menu over its picture: its
+       heading along the top (its number, its name, a readout, Close), its contents scrolling inside it -->
+  <main class="page">
+    <span class="win-scrim" id="win-scrim" hidden></span>
+
+    <section class="win work" id="work" aria-labelledby="work-title" hidden>
+      <header class="win-head label"><h2 class="win-title" id="work-title"><span class="win-num">01</span>Work</h2><span class="win-info" id="work-count">09 films</span><button class="win-close" type="button">Close</button></header>
+      <div class="win-body">
+        <div class="groups" id="groups">
       <section class="group" data-group="narrative" aria-label="Narrative">
         <div class="grid">
         <article class="tile" data-slug="iffilm">
@@ -223,12 +232,14 @@
         </article>
         </div>
       </section>
+        </div>
       </div>
     </section>
 
     <!-- CV: the plain list producers expect -->
-    <section class="cv" id="cv" aria-label="CV">
-      <header class="sec-head"><h2 class="sec-title">CV</h2><p class="label"><span>Director / Prod Co.</span></p></header>
+    <section class="win cv" id="cv" aria-labelledby="cv-title" hidden>
+      <header class="win-head label"><h2 class="win-title" id="cv-title"><span class="win-num">02</span>CV</h2><span class="win-info">Director / Prod Co.</span><button class="win-close" type="button">Close</button></header>
+      <div class="win-body">
       <div class="cv-block">
         <h3 class="label">Feature film</h3>
         <ul class="cv-list">
@@ -270,56 +281,56 @@
           <li><span class="cv-t">Phox Water</span><span class="cv-c"></span></li>
         </ul>
       </div>
-      <div class="cv-block">
-        <h3 class="label">Awards</h3>
-        <ul class="cv-list awards">
+        <div class="cv-block">
+          <h3 class="label">Awards</h3>
+          <ul class="cv-list awards">
           <li><span class="label">Winner</span><span class="cv-t">Best Cinematography</span><span class="cv-c">SSIFF 2025</span></li>
           <li><span class="label">Nominee</span><span class="cv-t">Best Cinematography</span><span class="cv-c">YETI Film Fest</span></li>
           <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">LakeCity</span></li>
           <li><span class="label">Winner</span><span class="cv-t">Best Film</span><span class="cv-c">Cambridge Short Film Festival</span></li>
           <li><span class="label">Winner</span><span class="cv-t">Best Drama</span><span class="cv-c">Arena 51 Film Festival</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- CONTACT: who he is at the top; how to reach him at the foot, level with the foot of his portrait -->
-    <section class="contact" id="contact" aria-label="Contact">
-      <header class="sec-head"><h2 class="sec-title">Contact</h2><p class="label">London, UK <span class="clock" id="clock" aria-hidden="true"></span></p></header>
-      <div class="contact-body">
-        <div class="contact-text">
-          <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
-          <div class="reach">
-            <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
-            <nav class="links" aria-label="Elsewhere">
-              <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
-              <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
-              <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
-            </nav>
-          </div>
+          </ul>
         </div>
-        <figure class="portrait"><img src="/media/portrait.jpg" alt="Charlie Painter at the camera" loading="lazy" decoding="async" /></figure>
       </div>
     </section>
 
-    <!-- FEATURED: the press, set like the CV -->
-    <section class="press" id="press" aria-label="Featured">
-      <header class="sec-head"><h2 class="sec-title">Featured</h2><p class="label">Press</p></header>
+    <!-- CONTACT: who he is at the top; how to reach him at the foot, level with the foot of his portrait; then the press,
+         and one of his photographs to end on -->
+    <section class="win contact" id="contact" aria-labelledby="contact-title" hidden>
+      <header class="win-head label"><h2 class="win-title" id="contact-title"><span class="win-num">03</span>Contact</h2><span class="win-info">London, UK <span class="clock" id="clock" aria-hidden="true"></span></span><button class="win-close" type="button">Close</button></header>
+      <div class="win-body">
+        <div class="contact-body">
+          <div class="contact-text">
+            <p class="about">Charlie Painter is a narrative features &amp; shorts cinematographer, based in London, and a British Society of Cinematographers mentee.</p>
+            <div class="reach">
+              <a class="mail" href="mailto:charlie@charliepainterdp.com">charlie@charliepainterdp.com</a>
+              <nav class="links" aria-label="Elsewhere">
+                <a href="https://vimeo.com/charliepainterdp" target="_blank" rel="noopener" aria-label="Vimeo"><svg aria-hidden="true"><use href="/icons.svg#i-vimeo" /></svg></a>
+                <a href="https://www.instagram.com/charliepainter_dp" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="/icons.svg#i-instagram" /></svg></a>
+                <a href="https://www.imdb.com/name/nm15809574/" target="_blank" rel="noopener" aria-label="IMDb"><svg aria-hidden="true"><use href="/icons.svg#i-imdb" /></svg></a>
+              </nav>
+            </div>
+          </div>
+          <figure class="portrait"><img src="/media/portrait.jpg" alt="Charlie Painter at the camera" loading="lazy" decoding="async" /></figure>
+        </div>
+        <section class="press" id="press" aria-label="Featured">
+          <header class="sec-head"><h2 class="sec-title">Featured</h2><p class="label">Press</p></header>
       <a class="press-item" href="https://britishcinematographer.co.uk/charlie-painter-operation-dynamo/" target="_blank" rel="noopener">
         <span class="press-title">A Complex Operation</span>
         <span class="press-stand credit">Charlie Painter runs through his approach to lensing Second World War film Operation Dynamo</span>
         <span class="press-read label">Read in British Cinematographer ↗&#xFE0E;</span>
       </a>
+        </section>
+        <figure class="closing">
+          <img src="/media/closing-garage.webp" alt="A figure alone in an underground car park" loading="lazy" decoding="async" />
+          <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><button class="win-top" type="button">Top ↑</button></footer>
+        </figure>
+      </div>
     </section>
-
-    <!-- THE LAST FRAME: one of his photographs, edge to edge, with the way back to the top -->
-    <figure class="closing">
-      <img src="/media/closing-garage.webp" alt="A figure alone in an underground car park" loading="lazy" decoding="async" />
-      <footer class="foot label"><span>© <span class="year">2026</span> Charlie Painter</span><a href="#top">Top ↑</a></footer>
-    </figure>
   </main>
 
-  <!-- THE FILM: a panel laid over the site, which blurs behind it. The layer scrolls as one, panel and all; the line
-       along the foot of the panel's bar fills as you go down it -->
+  <!-- A FILM'S DETAILS (Info, while it plays): its credits and stills, in the menu's window. They scroll inside the
+       window; the line along the foot of its bar fills as you go down -->
   <span class="scrim" id="scrim" aria-hidden="true"></span>
 
   <div class="layer" id="layer" hidden>

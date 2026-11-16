@@ -19,7 +19,7 @@
   // the reel that's showing: the stills from whichever half of the work is switched on (narrative to start with)
   let shots = allShots.filter((s) => s.dataset.group === allShots[0].dataset.group);
   const work = $("#work"), groupsEl = $("#groups"), bar = $("#bar");
-  let openSheet = null;
+  let openSheet = null, nowPlaying = null;   // the details panel that's up; the film playing on the display
 
   /* ---------- The intro plays once per visit (the page marks it before anything paints). It holds on black until the
      screen has its first still to open onto (the page lets it go after 1.5s anyway); the stills start once it's done */
@@ -44,18 +44,6 @@
     setTimeout(roll, 1500);
   }
 
-  /* ---------- The name: a small title above the picture (the stylesheet sizes it), shown once its face has loaded. The
-     title and the film under the picture are measured, so the picture can take exactly what they leave ---------- */
-  const heroName = $("#hero-name"), heroTitle = $(".hero-title"), hudTop = $("#ticker"), hudBottom = $("#hud-bottom");
-  const fitName = () => {
-    html.style.setProperty("--title-h", `${heroTitle.offsetHeight}px`);
-    html.style.setProperty("--hud-h", `${hudTop.offsetHeight + hudBottom.offsetHeight}px`);   // the readouts above and below
-    heroName.classList.add("is-fit");
-  };
-  document.fonts.ready.then(fitName);
-  document.fonts.addEventListener("loadingdone", fitName);
-  setTimeout(fitName, 2500);   // whatever happens with the fonts, show the name
-  window.addEventListener("resize", fitName);
 
   /* ======================================================================
      THE SCREEN — three stills from each of the best films, one dissolving into the next: the narrative films, or the
@@ -64,10 +52,9 @@
      and while the page is hidden
      ====================================================================== */
   const SHOT = 2400;   // how long each still is up
-  const allTicks = $$(".tick"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind"), hudDir = $("#hud-dir"), hudProd = $("#hud-prod");
-  const hudFields = [tickTitle, tickKind, hudDir, hudProd], hudClip = $("#hud-clip"), hudTc = $("#hud-tc");
-  const credit = (el, v) => { el.hidden = !v; el.lastElementChild.textContent = v || ""; };   // one a film doesn't have drops out
-  const three = (n) => String(n).padStart(3, "0"), two = (n) => String(n).padStart(2, "0");
+  const allTicks = $$(".tick"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
+  const hudFields = [tickTitle, tickKind], hudTc = $("#hud-tc");
+  const two = (n) => String(n).padStart(2, "0");
   let reelGroup = shots[0].dataset.group, ticks, segs, runs;
   // the dashes for the reel that's showing, and each film's stills in it
   const cast = () => {
@@ -117,12 +104,9 @@
       const changed = tickTitle.textContent !== p.name;
       tickTitle.textContent = p.name;
       tickKind.textContent = KINDS[p.kind] || p.kind;
-      credit(hudDir, p.director);
-      credit(hudProd, p.production);
       // what's up fades in as the film changes
       if (changed && !reduceMotion) hudFields.forEach((el) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: "cubic-bezier(.4, 0, .2, 1)" }));
     }
-    hudClip.textContent = `A${three(f + 1)}_C${three(runs[f].indexOf(shot) + 1)}`;   // the film's number in the reel, the still's in the film
     fill();
   };
   const step = (now) => {
@@ -132,7 +116,7 @@
     else fill();
     frame = requestAnimationFrame(step);
   };
-  const playing = () => introDone && !reduceMotion && !covered && !openSheet && !document.hidden;   // with less motion, it holds on the first
+  const playing = () => introDone && !reduceMotion && !covered && !openSheet && !nowPlaying && !document.hidden;   // with less motion, it holds on the first
   function wake() {
     cancelAnimationFrame(frame);
     if (!playing()) return;
@@ -179,21 +163,6 @@
      THE BAR — the page slides up over the pinned screen, which dims and then rests. The bar on the page's top edge
      rides up with it; when it reaches the top it stays as the header and the small name joins it
      ====================================================================== */
-  // how far the page travels before it covers the screen (and the bar reaches the top): measured, not read on every scroll
-  const shade = $(".hero-shade");
-  let span = 1;
-  const measure = () => { span = Math.max(1, hero.offsetHeight - bar.offsetHeight); };
-  const onScroll = () => {
-    const y = window.scrollY, c = clamp(y / span, 0, 1);
-    if (!scrollLinked) { shade.style.opacity = c.toFixed(3); bar.style.setProperty("--grey", c.toFixed(3)); }
-    bar.classList.toggle("is-top", y >= span - 0.5);
-    if ((c >= 0.999) !== covered) {
-      covered = c >= 0.999;
-      wake();
-    }
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", () => { measure(); onScroll(); });
 
   /* ======================================================================
      THE SWITCH — narrative or commercial work. The light pill slides under the one that's on, and the frames change
@@ -204,7 +173,7 @@
   let switching = 0;
   const place = () => toggles.forEach((tg) => {
     const all = $$(".opt", tg), on = all.find((o) => o.getAttribute("aria-checked") === "true"), thumb = $(".thumb", tg);
-    if (!on || !tg.offsetWidth) return;   // a switch that isn't showing is placed when it shows (on resize)
+    if (!thumb || !on || !tg.offsetWidth) return;   // (a switch with no lit block, or not showing, has nothing to place)
     thumb.style.setProperty("--tw", `${on.offsetWidth}px`);
     thumb.style.setProperty("--tx", `${on.offsetLeft}px`);
     thumb.style.setProperty("--lean", on === all[0] ? "4px" : "-4px");   // on hover it leans towards the other half
@@ -224,20 +193,17 @@
       await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: OUT, fill: "forwards" }).finished.catch(() => {});
       if (my !== switching) return;
     }
-    // if you're down in the work, come back to its top so you see the change
-    const workTop = work.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
-    if (window.scrollY > workTop + 4) window.scrollTo({ top: workTop, behavior: "instant" });
-    const y = window.scrollY;
+    // the work's window shows the change from its top
+    $(".win-body", work).scrollTop = 0;
     was.getAnimations().forEach((a) => a.cancel());
     was.hidden = true;
     next.hidden = false;
-    // the browser would keep a frame from the half that's gone in view (scroll anchoring); stay where you were
-    if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
     $$(".tile", next).forEach((tile) => { tile.classList.remove("in", "rising"); reveal.observe(tile); });
   };
   // either half flips it, like a switch: the other half, or the one that's on (which hands over to the other)
   const other = (group) => (group === "narrative" ? "commercial" : "narrative");
   opts.forEach((o) => o.addEventListener("click", () => choose(o.getAttribute("aria-checked") === "true" ? other(o.dataset.group) : o.dataset.group)));
+  $$(".slide").forEach((s) => s.addEventListener("click", () => choose(other($(".opt[aria-checked='true']").dataset.group))));
   toggles.forEach((tg) => tg.addEventListener("keydown", (e) => {
     const to = { ArrowRight: "commercial", ArrowLeft: "narrative" }[e.key];
     if (!to) return;
@@ -312,7 +278,7 @@
      can't be reached (Tab stays in the panel). Whatever is cut short carries on from where it had got to
      ====================================================================== */
   const scrim = $("#scrim"), layer = $("#layer"), proj = $("#proj"), sheetBody = $("#proj-body"), progress = $(".sheet-progress i");
-  const behind = [$(".page"), hero];
+  const behind = [$(".page")];   // (the film keeps playing on the display beside its details)
   const asPhone = window.matchMedia("(max-width: 760px)");
   let lastFocus = null, current = null, moving = 0;
   const motion = (el, frames, o) => (reduceMotion ? null : el.animate(frames, o));
@@ -330,12 +296,6 @@
   const ready = (ms) => {
     const img = $("#proj-player img");
     return Promise.race([img ? img.decode().catch(() => {}) : Promise.resolve(), wait(ms)]);
-  };
-  const play = (p) => {
-    const film = $("#proj-player .film");
-    if (!p.video || !film || $("iframe", film)) return;
-    film.insertAdjacentHTML("beforeend", `<iframe src="${embed(p.video)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${esc(p.title)}"></iframe>`);
-    $("iframe", film).addEventListener("load", (e) => e.target.classList.add("is-ready"), { once: true });
   };
   // the line along the bar's foot fills as you go down the film (by script only where the browser can't tie it to the scroll)
   const track = () => {
@@ -361,9 +321,9 @@
       return `<img${cls && ` class="${cls}"`} src="/media/stills/${p.stills[j]}.jpg" width="${w}" height="${h}" alt="${alt}" decoding="async" />`;
     };
     const player = $("#proj-player");
-    player.classList.toggle("is-still", !p.video);
-    // a film opens on its first still; with no player, that still is the picture at the top and isn't repeated below
-    player.innerHTML = p.video ? `<div class="film">${pic(0, "", "poster")}</div>` : pic(0, esc(p.title));
+    player.classList.add("is-still");
+    // its details open on its first still (the film itself plays on the display); that still isn't repeated below
+    player.innerHTML = pic(0, esc(p.title));
     $("#proj-title").textContent = p.title;
     // what it won, where it has something, says more than what kind of film it is
     const rows = [["Director", p.director], ["Production", p.production], p.accolade ? ["Award", p.accolade] : ["Type", KINDS[p.kind] || p.kind]];
@@ -371,7 +331,7 @@
     // an award reads as what it was, then where: "Best Cinematography – SSIFF" sets as two lines
     const cell = (k, v) => (k === "Award" ? esc(v).replace(/\s+[–—-]\s+(.+)$/, "<span>$1</span>") : esc(v));
     $("#proj-credits").innerHTML = rows.filter((r) => r[1]).slice(0, 3).map(([k, v]) => `<div><dt>${k}</dt><dd>${cell(k, v)}</dd></div>`).join("");
-    $("#proj-stills").innerHTML = p.stills.map((s, j) => j).filter((j) => p.video || j > 0)
+    $("#proj-stills").innerHTML = p.stills.map((s, j) => j).filter((j) => j > 0)
       .map((j) => `<figure class="still">${pic(j, `${esc(p.title)} — still ${j + 1}`).replace("<img", `<img loading="${j < 3 ? "eager" : "lazy"}"`)}</figure>`).join("");
     $$("img", proj).forEach(settle);
     $("#proj-pos").textContent = `${pad(i + 1)} / ${pad(list.length)}`;
@@ -395,8 +355,9 @@
     renderFilm(p);
     document.body.classList.add("is-locked");
     behind.forEach((el) => { el.inert = true; });
+    light("work");
     wake();
-    const phone = asPhone.matches;
+    const phone = false;   // (it opens in the menu's window, the same on a phone)
     const from = phone ? { transform: `translateY(${innerHeight}px)` } : { opacity: 0, transform: "translateY(28px) scale(.97)" };
     const to = phone ? { transform: "none" } : { opacity: 1, transform: "none" };
     hold(proj);
@@ -417,7 +378,6 @@
     if (my !== moving) return;
     rest(proj);
     rest(scrim);
-    play(p);
   };
   // from one film to the next while the panel is up: this one slides away, that one slides in from the side it's on
   const turn = async (p) => {
@@ -436,18 +396,18 @@
     rest(sheetBody);
     const slide = motion(sheetBody, [{ opacity: 0, transform: `translateX(${dir * 36}px)` }, { opacity: 1, transform: "none" }], { duration: 250, easing: OUT });
     await over(slide);
-    if (my === moving) play(p);
   };
   const close = async () => {
     if (!openSheet) return;
     const my = ++moving;
     openSheet = null;
     current = null;
-    document.title = "Charlie Painter — Director of Photography, London";
+    document.title = nowPlaying ? `${bySlug.get(nowPlaying).title} — Charlie Painter` : "Charlie Painter — Director of Photography, London";
     behind.forEach((el) => { el.inert = false; });
+    light(openWin);
     wake();
     lastFocus?.focus?.({ preventScroll: true });
-    const phone = asPhone.matches;
+    const phone = false;
     [proj, scrim, sheetBody].forEach(hold);
     const away = motion(proj, [phone ? { transform: `translateY(${innerHeight}px)` } : { opacity: 0, transform: "translateY(14px) scale(.985)" }],
       { duration: 200, easing: OUT, fill: "forwards" });
@@ -461,8 +421,9 @@
     $("#proj-player").innerHTML = "";
     $("#proj-stills").innerHTML = "";
   };
-  // closing goes back to the site's own address without moving the page
-  const dismiss = (e) => { e?.preventDefault(); history.pushState(null, "", "/" + location.search); close(); };
+  // closing steps back to where the film was opened from (its window, or the display), as the back button would; a film
+  // that the visit started on goes to the site's own address
+  const dismiss = (e) => { e?.preventDefault(); close(); };   // (the details close; the film plays on)
   $(".proj-back").addEventListener("click", dismiss);
   // a click on the blurred site around the panel closes it too
   layer.addEventListener("click", (e) => { if (e.target === layer) dismiss(e); });
@@ -480,11 +441,15 @@
     const slug = old ? decodeURIComponent(old[1]) : location.pathname.replace(/^\/|\.html$|\/$/g, "");
     const p = bySlug.get(slug);
     if (old && p) history.replaceState(null, "", `/${slug}${location.search}`);
-    if (p) open(p);
-    else close();
+    const w = (location.hash.match(/^#(work|cv|contact|press)$/) || [])[1];
+    if (w) showWin(w === "press" ? "contact" : w);
+    else hideWin();
+    if (p) { playHere(p); if (openSheet) open(p); }   // (with its details up, they follow the film)
+    else { stopHere(); close(); }
   };
   function go(slug) {
-    if (location.pathname !== `/${slug}`) history.pushState(null, "", `/${slug}${location.search}`);
+    // one step in the history for a film however many it moves through, so one step back closes it
+    if (location.pathname !== `/${slug}`) history[nowPlaying && history.state?.film ? "replaceState" : "pushState"]({ film: true }, "", `/${slug}${location.search}`);
     route();
   }
   // a link to a film here opens it in place rather than loading its page again
@@ -499,17 +464,119 @@
   window.addEventListener("popstate", route);
   window.addEventListener("hashchange", route);
 
-  /* ---------- The bar: which part of the page you're in ---------- */
-  // a part is lit once its top has passed the middle of the screen; the last one passed wins
-  const navLinks = $$(".nav a");
-  const sections = navLinks.map((a) => $(a.getAttribute("href")));
-  const passed = sections.map(() => false);
-  const lights = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { passed[sections.indexOf(e.target)] = e.isIntersecting || e.boundingClientRect.top < 0; });
-    const on = passed.lastIndexOf(true);
-    navLinks.forEach((a, i) => a.classList.toggle("is-on", i === on));
-  }, { rootMargin: "0px 0px -50% 0px" });
-  sections.forEach((el) => el && lights.observe(el));
+  /* ======================================================================
+     THE MENU — the places to go come up as windows over the display, the way a camera's menu comes up over its
+     picture: choose one and its cell lights white and its window comes up (quickly, rising a little), the display
+     behind dims, goes out of focus and rests; choose it again, or Close, or Escape, or the display around it, and it
+     goes. Each has its own address (#work, #cv, #contact), so the back button goes back through them
+     ====================================================================== */
+  const wins = new Map($$(".win").map((w) => [w.id, w]));
+  const cells = $$(".nav .cell"), winScrim = $("#win-scrim");
+  let openWin = null, winMoving = 0;
+  function light(id) {
+    cells.forEach((c) => (id && c.getAttribute("href") === `#${id}` ? c.setAttribute("aria-current", "true") : c.removeAttribute("aria-current")));
+  }
+  function showWin(id) {
+    if (openWin === id || !wins.has(id)) return;
+    ++winMoving;
+    const was = openWin && wins.get(openWin), win = wins.get(id);
+    openWin = id;
+    light(openSheet ? "work" : id);
+    hero.classList.add("is-dim");
+    hero.inert = true;
+    winScrim.hidden = false;
+    covered = true;
+    wake();
+    if (was) { was.getAnimations().forEach((a) => a.cancel()); was.hidden = true; }
+    win.getAnimations().forEach((a) => a.cancel());
+    win.hidden = false;
+    motion(win, [{ opacity: 0, transform: "translateY(10px) scale(.994)" }, { opacity: 1, transform: "none" }], { duration: was ? 180 : 260, easing: OUT });
+  }
+  async function hideWin() {
+    if (!openWin) return;
+    const my = ++winMoving, win = wins.get(openWin);
+    openWin = null;
+    light(null);
+    if (!openSheet) { hero.classList.remove("is-dim"); hero.inert = false; }
+    winScrim.hidden = true;
+    covered = false;
+    wake();
+    await over(motion(win, [{ opacity: 1 }, { opacity: 0, transform: "translateY(6px) scale(.996)" }], { duration: 180, easing: OUT }));
+    if (my === winMoving || openWin !== win.id) win.hidden = true;
+  }
+  const toWin = (id) => {
+    const url = "/" + location.search + (id ? `#${id}` : "");
+    if (id && openWin && !openSheet) history.replaceState(null, "", url);   // from one window to another: one step back closes
+    else history.pushState(null, "", url);
+    route();
+  };
+  cells.forEach((c) => c.addEventListener("click", (e) => {
+    e.preventDefault();
+    const id = c.getAttribute("href").slice(1);
+    toWin(openWin === id && !openSheet ? null : id);
+  }));
+  $(".mark").addEventListener("click", (e) => { e.preventDefault(); toWin(null); });
+  winScrim.addEventListener("click", () => toWin(null));
+  $$(".win-close").forEach((b) => b.addEventListener("click", () => toWin(null)));
+  $$(".win-top").forEach((b) => b.addEventListener("click", () => b.closest(".win-body").scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && openWin && !openSheet && !e.defaultPrevented) toWin(null); });
+
+  /* ======================================================================
+     NOW PLAYING — choose a film (the picture on the display, or a frame in the work's window) and it plays right there
+     on the display, in place of the stills: the readouts make way, and a card at the top left says what's playing,
+     with the way to its details (in the menu's window), the film before or after, and back to the stills. A film with
+     no player plays as its own stills, one into the next. Its address is the film's (/vetala): back, or Stop, or
+     Escape goes back to the stills
+     ====================================================================== */
+  const stage = $("#player"), np = $("#np");
+  let slides = 0;
+  const unload = () => { clearInterval(slides); stage.innerHTML = ""; };
+  function playHere(p) {
+    if (nowPlaying === p.slug) return;
+    const fresh = !nowPlaying;
+    nowPlaying = p.slug;
+    unload();
+    if (p.video) stage.innerHTML = `<iframe src="${embed(p.video)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${esc(p.title)}"></iframe>`;
+    else {
+      stage.innerHTML = p.stills.map((s, j) => `<img src="/media/stills/${s}.jpg" alt="" decoding="async"${j ? "" : ' class="is-on"'} />`).join("");
+      let k = 0;
+      if (!reduceMotion && p.stills.length > 1) slides = setInterval(() => {
+        const imgs = $$("img", stage);
+        imgs[k].classList.remove("is-on");
+        k = (k + 1) % imgs.length;
+        imgs[k].classList.add("is-on");
+      }, 3200);
+    }
+    stage.hidden = false;
+    hero.classList.add("is-playing");
+    const list = order(), i = list.indexOf(p.slug);
+    $("#np-title").textContent = p.title;
+    $("#np-meta").textContent = [KINDS[p.kind] || p.kind, p.director && `Dir. ${p.director}`].filter(Boolean).join(" · ");
+    $("#np-prev").href = `/${list[(i - 1 + list.length) % list.length]}`;
+    $("#np-next").href = `/${list[(i + 1) % list.length]}`;
+    np.hidden = false;
+    if (fresh) motion(np, [{ opacity: 0, transform: "translateY(-6px)" }, { opacity: 1, transform: "none" }], { duration: 280, easing: OUT });
+    else motion($("#np-title"), [{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: OUT });
+    document.title = `${p.title} — Charlie Painter`;
+    wake();
+  }
+  function stopHere() {
+    if (!nowPlaying) return;
+    nowPlaying = null;
+    unload();
+    stage.hidden = true;
+    hero.classList.remove("is-playing");
+    np.hidden = true;
+    document.title = "Charlie Painter — Director of Photography, London";
+    wake();
+  }
+  const stop = () => {
+    if (history.state?.film) history.back();
+    else { history.pushState(null, "", "/" + location.search); route(); }
+  };
+  $("#np-stop").addEventListener("click", stop);
+  $("#np-info").addEventListener("click", () => { if (nowPlaying) open(bySlug.get(nowPlaying)); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && nowPlaying && !openWin && !openSheet && !e.defaultPrevented) stop(); });
 
   /* ---------- The time where he is, by the contact: London, to the second ---------- */
   const clock = $("#clock");
@@ -520,8 +587,6 @@
     setInterval(tick, 1000);
   }
 
-  measure();
-  onScroll();
   route();
   wake();
 })();
