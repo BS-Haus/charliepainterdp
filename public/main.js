@@ -31,12 +31,15 @@
       if (rolling) return;
       rolling = true;
       html.classList.remove("is-waiting");
+      // the readouts come on with the camera: each runs through a scramble of characters and settles (styles.css times it)
+      if (!reduceMotion) setTimeout(() => [tickTitle, tickKind, hudDir.lastElementChild, hudProd.lastElementChild, hudClip, $(".hero-role")]
+        .forEach((el, i) => decode(el, i * 70)), 1550);
       setTimeout(() => {
         html.classList.remove("intro");
         try { sessionStorage.setItem("cp-intro", "1"); } catch (e) {}
         introDone = true;
         wake();
-      }, 5000);   // the intro's own clock (styles.css)
+      }, 3000);   // the intro's own clock (styles.css)
     };
     if (shots[0].complete) roll();
     else shots[0].addEventListener("load", roll, { once: true });
@@ -68,6 +71,21 @@
   const hudFields = [tickTitle, tickKind, hudDir, hudProd], hudClip = $("#hud-clip"), hudTc = $("#hud-tc");
   const credit = (el, v) => { el.hidden = !v; el.lastElementChild.textContent = v || ""; };   // one a film doesn't have drops out
   const three = (n) => String(n).padStart(3, "0"), two = (n) => String(n).padStart(2, "0");
+  // a readout coming on the way a display's do: its characters run through a scramble and lock in, left to right
+  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_:";
+  function decode(el, delay = 0) {
+    const final = el.textContent, n = final.length, start = performance.now() + delay, dur = 380 + n * 22;
+    const run = (now) => {
+      const p = (now - start) / dur;
+      if (p >= 1 || !n) { el.textContent = final; return; }
+      if (p >= 0) {
+        const lock = Math.floor(p * n);
+        el.textContent = final.slice(0, lock) + [...final.slice(lock)].map((ch) => (ch === " " ? " " : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join("");
+      }
+      requestAnimationFrame(run);
+    };
+    requestAnimationFrame(run);
+  }
   let reelGroup = shots[0].dataset.group, ticks, segs, runs;
   // the dashes for the reel that's showing, and each film's stills in it
   const cast = () => {
