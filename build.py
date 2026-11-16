@@ -130,15 +130,15 @@ def awards():
     )
 
 
-def name_mark(name="Charlie Painter"):
-    """The wordmark, letter by letter."""
-    words = ("".join(f"<i>{esc(c)}</i>" for c in word) for word in name.split(" "))
-    return '<span class="hero-name-in" aria-hidden="true">' + " ".join(f'<span class="w">{w}</span>' for w in words) + "</span>"
+def name_mark():
+    """The wordmark: his name, set in Michroma (the stylesheet makes it capitals)."""
+    return "Charlie Painter"
 
 
 first = FILMS[content["showcase"][0]["slug"]]
 out = (ROOT / "template.html").read_text()
 out = out.replace("{{NAME}}", name_mark())
+out = out.replace("{{WORK_COUNT}}", f"{len(content['narrative']):02d} films")
 out = out.replace("{{SCREEN}}", screen())
 out = out.replace("{{TICKER}}", ticker())
 out = out.replace("{{FIRST_SLUG}}", first["slug"]).replace("{{FIRST_TITLE}}", esc(first["title"]))

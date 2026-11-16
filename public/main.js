@@ -203,7 +203,7 @@
   const measure = () => { span = Math.max(1, hero.offsetHeight - bar.offsetHeight); };
   const onScroll = () => {
     const y = window.scrollY, c = clamp(y / span, 0, 1);
-    if (!scrollLinked) { shade.style.opacity = (c * 0.85).toFixed(3); bar.style.setProperty("--grey", c.toFixed(3)); }
+    if (!scrollLinked) { shade.style.opacity = c.toFixed(3); bar.style.setProperty("--grey", c.toFixed(3)); }
     bar.classList.toggle("is-top", y >= span - 0.5);
     if ((c >= 0.999) !== covered) {
       covered = c >= 0.999;
@@ -236,6 +236,9 @@
     place();
     if (was === next) return;
     reel(group);   // the reel on the first screen follows
+    const count = $("#work-count");
+    count.textContent = `${String($$(".tile", next).length).padStart(2, "0")} films`;
+    if (!reduceMotion) decode(count);
     if (!reduceMotion) {
       await was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: OUT, fill: "forwards" }).finished.catch(() => {});
       if (my !== switching) return;
@@ -299,9 +302,11 @@
      top to bottom. Whatever arrives together is staggered in reading order
      ====================================================================== */
   const reveals = [
-    ...$$(".cv .sec-head, .contact .sec-head, .press .sec-head, .cv-block, .press-item").map((el) => [el, "rv-rule"]),
-    ...$$(".sec-title, .about, .mail, .press-title").map((el) => [el, "rv-wipe"]),
-    ...$$(".sec-head .label, .cv-block h3, .cv-list li, .links a, .portrait, .press-stand, .press-read").map((el) => [el, "rv"]),
+    ...$$(".sec-head, .cv-block, .press-item").map((el) => [el, "rv-rule"]),
+    ...$$(".about").map((el) => [el, "rv-wipe"]),
+    ...$$(".sec-title, .mail, .press-title, .cv-t").map((el) => [el, "rv-decode"]),
+    ...$$(".sec-head .label, .cv-block h3, .cv-list li, .links a, .press-stand, .press-read").map((el) => [el, "rv"]),
+    ...$$(".portrait, .closing").map((el) => [el, "rv-power"]),
   ];
   const arrive = new IntersectionObserver((entries) => {
     entries.filter((e) => e.isIntersecting)
@@ -310,9 +315,10 @@
         const delay = Math.min(i, 14) * 55;
         e.target.style.setProperty("--rv-delay", `${delay}ms`);
         e.target.classList.add("in");
+        if (e.target.classList.contains("rv-decode")) decode(e.target, delay);   // headings run through a scramble and lock
         arrive.unobserve(e.target);
         // once it has settled it's itself again: its own hover answers at once
-        setTimeout(() => { e.target.classList.remove("rv", "rv-wipe", "rv-rule", "in"); e.target.style.removeProperty("--rv-delay"); }, delay + 1700);
+        setTimeout(() => { e.target.classList.remove("rv", "rv-wipe", "rv-rule", "rv-decode", "rv-power", "in"); e.target.style.removeProperty("--rv-delay"); }, delay + 1900);
       });
   }, { rootMargin: "0px 0px -8% 0px" });
   if (!reduceMotion) reveals.forEach(([el, kind]) => { el.classList.add(kind); arrive.observe(el); });
@@ -379,6 +385,7 @@
     // a film opens on its first still; with no player, that still is the picture at the top and isn't repeated below
     player.innerHTML = p.video ? `<div class="film">${pic(0, "", "poster")}</div>` : pic(0, esc(p.title));
     $("#proj-title").textContent = p.title;
+    if (!reduceMotion) decode($("#proj-title"), 260);
     // what it won, where it has something, says more than what kind of film it is
     const rows = [["Director", p.director], ["Production", p.production], p.accolade ? ["Award", p.accolade] : ["Type", KINDS[p.kind] || p.kind]];
     if (p.note) rows.push(["With", p.note.replace(/^(Starring|Talent)\s+/i, "")]);
@@ -524,6 +531,15 @@
     navLinks.forEach((a, i) => a.classList.toggle("is-on", i === on));
   }, { rootMargin: "0px 0px -50% 0px" });
   sections.forEach((el) => el && lights.observe(el));
+
+  /* ---------- The time where he is, by the contact: London, to the second ---------- */
+  const clock = $("#clock");
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZoneName: "short" });
+    const tick = () => { clock.textContent = fmt.format(new Date()); };
+    tick();
+    setInterval(tick, 1000);
+  }
 
   measure();
   onScroll();
