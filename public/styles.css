@@ -6,8 +6,8 @@
    over the site. Black, hairlines, one red light.
 
    Type: Libertinus Serif (Charlie's) sets the wordmark, edge to edge (any face in types.js can be tried with ?type=…), and
-   is the voice of the work — film titles, headings, the about line, the email; PT Sans Caption does the instrument labels
-   and the credits. */
+   is the voice of the work — film titles, headings, the about line, the email; IBM Plex Mono is the display's voice:
+   every readout, label, credit and line of text, the way a camera's screen sets them. */
 :root {
   --bg: #050505;
   --body: #0c0c0c;
@@ -20,7 +20,7 @@
   --hair: rgba(241, 240, 236, 0.09);
   --rec: #f2231b;
   --display: "Libertinus Serif", "Iowan Old Style", Georgia, serif;
-  --text: "PT Sans Caption", "PT Sans", "Helvetica Neue", Arial, sans-serif;
+  --text: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --mark-font: var(--display);   /* types.js sets these for the chosen face */
   --mark-weight: 400;
   --mark-small: 400;
@@ -45,7 +45,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: var(--bar); scrollbar-gutter: stable; }   /* the page doesn't shift when a film opens and its scrollbar goes */
-body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--text); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--text); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 body.is-locked { overflow: hidden; }
 img, video, iframe { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -59,106 +59,109 @@ i { font-style: normal; }
 ::selection { background: var(--rec); color: #000; }
 :focus-visible { outline: 1px solid var(--rec); outline-offset: 2px; }
 /* the instrument parts: small tracked capitals */
-.label { font-family: var(--text); font-size: 12.5px; letter-spacing: .12em; line-height: 1.6; text-transform: uppercase; }
-.credit { font-family: var(--text); font-size: 15px; letter-spacing: .01em; line-height: 1.45; }
+.label { font-family: var(--text); font-size: 11.5px; letter-spacing: .06em; line-height: 1.6; text-transform: uppercase; }
+.credit { font-family: var(--text); font-size: 14px; letter-spacing: 0; line-height: 1.45; }
 
 /* a light, used only for something that is on */
 .rec { display: inline-block; flex: none; width: 5px; height: 5px; margin-right: 12px; border-radius: 50%; background: var(--rec); vertical-align: middle; transform: translateY(-0.12em); box-shadow: 0 0 7px rgba(242, 35, 27, .85); }
 
-/* THE FIRST SCREEN — pinned. The picture, as big as fits (a scope screen; on a phone a tall 4:5 frame), with a slim line
-   right above it, lined up with its edges: the film that's up on the left, a small dash for each film on the right.
-   Under it, his name, small, like the title card of an art-house film, in the middle of the space down to the bar
-   (main.js measures the line and the title, so the picture takes exactly what they leave). The stills dissolve one into
-   the next, each drifting in a little while it's up */
-.hero { position: sticky; top: 0; z-index: 0; display: flex; flex-direction: column; height: 100vh; height: 100svh; overflow: hidden; background: #000;
-  padding: 0 var(--pad) var(--bar); }
-/* (three rows: a set margin above, the picture with its line, and the title's space below, which takes whatever the
-   picture leaves, so the picture sits up near the top and the title in the middle of the space under it; that space is
-   never less than the title with --title-gap either side) */
-.stage { --gap: clamp(20px, 3.4svh, 40px); --title-gap: clamp(32px, 5svh, 60px); --line-gap: 10px; --band: calc(var(--title-h, 80px) + 2 * var(--title-gap));
-  flex: 1; min-height: 0; display: grid; grid-template-rows: var(--gap) auto minmax(var(--band), 1fr); justify-items: center; align-items: center;
-  container-type: size; }
-.frame { grid-row: 2; width: min(100cqw, (100cqh - var(--gap) - var(--hud-h, 44px) - 2 * var(--line-gap) - var(--band)) * var(--screen-ratio)); }
-.hero-title { grid-row: 3; }
-/* the picture and the label under its corner are one link; the label comes up only while the pointer is on it, in the
-   timecode's place on the readouts below (which makes way for it) */
-.screen-link { position: relative; display: block; width: 100%; }
-.screen { position: relative; display: block; width: 100%; aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile);
-  box-shadow: 0 0 0 1px rgba(241, 240, 236, .6); }   /* the monitor's frame line */
-.view-film { position: absolute; top: calc(100% + var(--line-gap)); right: 0; display: flex; align-items: center; height: 22px; font-family: var(--text); font-weight: 700;
-  font-size: 12px; letter-spacing: .04em; line-height: 1; text-transform: uppercase; color: var(--fg); white-space: nowrap; pointer-events: none;
-  opacity: 0; transform: translateY(6px); transition: opacity .25s var(--out), transform .35s var(--out); }
-.screen-link:focus-visible .view-film { opacity: 1; transform: none; }
-html:not(.intro) .frame:has(.screen-link:focus-visible) .hud-tc { opacity: 0; }
-@media (hover: hover) and (pointer: fine) {
-  .screen-link:hover .view-film { opacity: 1; transform: none; }
-  html:not(.intro) .frame:has(.screen-link:hover) .hud-tc { opacity: 0; }
-}
-html.intro .screen-link .view-film { opacity: 0; transform: translateY(6px); }   /* not while the intro plays: it comes after everything else */
+/* THE FIRST SCREEN — pinned, and laid out as a camera's display: the stills fill the whole screen, one dissolving into
+   the next (each drifting in a little while it's up), and over them the viewfinder. Along the top, readouts: the red
+   light, flashing, then what's up, spread across like a camera's settings (the film, what it is, its director, its
+   production, each fading over as the film changes; one it doesn't have drops out), and the camera, A. Then the frame:
+   corner marks and a small cross at the centre, with his name large in its lower right, like a title, and what he does
+   under it. Along the foot: the clip (the film's number in the reel, the still's number in the film), a meter with a
+   cell for each film, and the time of day as timecode, in red, running at 24 frames a second. Click anywhere on the
+   picture and that film opens (View film takes the timecode's place while the pointer is on it). The page slides up
+   over it */
+.hero { position: sticky; top: 0; z-index: 0; height: 100vh; height: 100svh; overflow: hidden; background: #000; }
+.screen-link { position: absolute; inset: 0; display: block; }
+.screen { position: absolute; inset: 0; display: block; overflow: hidden; background: #000; }
+/* (a little dark along the top and the foot, so the readouts read over any picture) */
+.screen-link::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0) 24%), linear-gradient(0deg, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0) 44%); }
 .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s var(--ease); user-select: none; -webkit-user-drag: none; }
 /* the next still dissolves in over the last, which stays put underneath until it's covered */
 .screen img.is-on { z-index: 2; opacity: 1; }
 .screen img.was-on { z-index: 1; opacity: 1; transition: none; }
 .screen img.is-on, .screen img.was-on { animation: drift 3.8s linear both; }
 @keyframes drift { from { transform: scale(1); } to { transform: scale(1.045); } }
-/* the monitor's readouts, lined up with the picture's edges, in bold capitals with figures that don't jostle. Above:
-   the camera (A), then what's up, spread across like a camera's settings: the film, what it is, its director, its
-   production (each fading over as the film changes; one it doesn't have drops out), and the red light. Below: the clip
-   (the film's number in the reel, the still's number in the film), a small dash for each film, and the time of day as
-   timecode, in red, running at 24 frames a second. The dashes are hairlines; the one that's up stretches out and fills
-   while its stills play, those already shown stay half lit; their names are for screen readers */
-.hud { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 22px; margin: 0; font-family: var(--text); font-weight: 700;
-  font-size: 12px; letter-spacing: .04em; line-height: 1; text-transform: uppercase; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.hud-top { margin-bottom: var(--line-gap); }
-.hud-bottom { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); margin-top: var(--line-gap); }
-.hud-cam { font-size: 18px; }
-.hud-field small { margin-right: 6px; font-size: 9px; color: var(--dim); }
-.hud-rec { width: 9px; height: 9px; margin: 0; transform: none; box-shadow: 0 0 8px rgba(242, 35, 27, .8); }
+/* the viewfinder, laid over the picture, down to the bar; the pointer passes through it to the picture (all but the
+   meter, whose cells can be pressed) */
+.osd { position: absolute; inset: 0 0 var(--bar); z-index: 6; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: clamp(14px, 2.6svh, 28px) var(--pad) 8px;
+  pointer-events: none; }
+.hud { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 22px; margin: 0; font-family: var(--text); font-weight: 500;
+  font-size: 12px; letter-spacing: .02em; line-height: 1; text-transform: uppercase; white-space: nowrap; font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .45); }
+.hud-rec { width: 9px; height: 9px; margin: 0; transform: none; box-shadow: 0 0 8px rgba(242, 35, 27, .8); animation: rec-blink 1.2s steps(1, end) infinite; }
+@keyframes rec-blink { 50% { opacity: .15; } }
+.hud-cam { font-size: 16px; font-weight: 600; }
+.hud-field small { margin-right: 6px; font-size: 10px; color: var(--mid); }
+.hud-bottom { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
 .hud-clip { justify-self: start; }
-.hud-tc { justify-self: end; color: var(--rec); transition: opacity .25s var(--out); }
-.ticker-list { display: flex; margin: 0; }
-.tick { position: relative; display: grid; place-items: center; padding: 8px 4px; }   /* (a bigger target than the dash it draws) */
-.seg { position: relative; display: block; width: 10px; height: 1px; overflow: hidden; border-radius: 1px; background: rgba(241, 240, 236, .26);
-  transition: width .6s var(--ease), background-color .15s var(--out); }
-.tick[aria-current="true"] .seg { width: 36px; }
-.seg i { position: absolute; inset: 0; background: var(--fg); transform-origin: left; transform: scaleX(0); }   /* main.js fills it */
-.tick:not([aria-current="true"]) .seg i { opacity: .55; }
+.hud-tc, .hud-bottom .view-film { grid-column: 3; grid-row: 1; justify-self: end; }
+.hud-tc { color: var(--rec); transition: opacity .25s var(--out); }
+.view-film { color: var(--fg); opacity: 0; transform: translateY(4px); transition: opacity .25s var(--out), transform .35s var(--out); }
+html:not(.intro) .hero:has(.screen-link:focus-visible) .view-film { opacity: 1; transform: none; }
+html:not(.intro) .hero:has(.screen-link:focus-visible) .hud-tc { opacity: 0; }
+@media (hover: hover) and (pointer: fine) {
+  html:not(.intro) .hero:has(.screen-link:hover) .view-film { opacity: 1; transform: none; }
+  html:not(.intro) .hero:has(.screen-link:hover) .hud-tc { opacity: 0; }
+}
+/* the meter: a cell for each film, like a display's level or battery meter. The one that's up is outlined in the red of
+   the light and fills, in steps, while its stills play; those already shown stay half lit, those to come empty. The
+   names on the cells are for screen readers */
+.ticker-list { display: flex; margin: 0; pointer-events: auto; }
+.tick { position: relative; display: grid; place-items: center; padding: 8px 2px; }   /* (a bigger target than the cell it draws) */
+.seg { position: relative; display: block; width: 18px; height: 7px; box-shadow: inset 0 0 0 1px rgba(241, 240, 236, .42); transition: box-shadow .15s var(--out); }
+.tick[aria-current="true"] .seg { box-shadow: inset 0 0 0 1px var(--rec), 0 0 6px rgba(242, 35, 27, .35); }
+.seg i { position: absolute; inset: 2px; background: var(--fg); transform-origin: left; transform: scaleX(0); }   /* main.js fills it */
+.tick:not([aria-current="true"]) .seg i { opacity: .5; }
 .tick-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (hover: hover) and (pointer: fine) {
-  .tick:hover .seg { background: rgba(241, 240, 236, .5); }
+  .tick:hover .seg { box-shadow: inset 0 0 0 1px rgba(241, 240, 236, .85); }
 }
+/* the frame: its corner marks (see below) and a small cross at the centre; his name in its lower right */
+.vf { --c: rgba(241, 240, 236, .72); --l: clamp(16px, 1.8vw, 26px); position: relative; display: grid; align-items: end; justify-items: end;
+  margin: clamp(10px, 1.8svh, 18px) 0; padding: clamp(16px, 2.2vw, 34px); }
+.vf::before { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.vf-cross { position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; opacity: .55;
+  background: linear-gradient(var(--c), var(--c)) center / 100% 1px no-repeat, linear-gradient(var(--c), var(--c)) center / 1px 100% no-repeat; }
 /* as the page slides up over the screen, the screen goes dark: tied to the scroll itself where the browser can (no script,
    no repainting), else main.js sets the opacity */
-.hero-shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #000; opacity: 0; }
+.hero-shade { position: absolute; inset: 0; z-index: 7; pointer-events: none; background: #000; opacity: 0; }
 @supports (animation-timeline: scroll()) {
   .hero-shade { animation: shade linear both; animation-timeline: scroll(root block); animation-range: 0px calc(100svh - var(--bar)); }
 }
 @keyframes shade { to { opacity: .85; } }
-/* the wordmark, small, with what he does under it: a title card in the middle of the space below the picture; it stays
+/* the wordmark, large, with what he does under it, set to the right in the frame's lower corner like a title; it stays
    with the picture as the page slides over */
-.hero-title { display: grid; justify-items: center; gap: 10px; }
-.hero-role { color: var(--dim); font-size: 12px; }
-.hero-name { margin: 0; text-align: center; white-space: nowrap; color: #fff;
+.hero-title { position: relative; display: grid; justify-items: end; gap: 12px; text-align: right; text-shadow: 0 1px 30px rgba(0, 0, 0, .4); }
+.hero-role { color: var(--mid); font-size: 12px; }
+.hero-name { margin: 0; text-align: right; white-space: nowrap; color: #fff;
   font-family: var(--mark-font); font-weight: var(--mark-weight); font-stretch: var(--mark-stretch); font-style: var(--mark-style); letter-spacing: var(--mark-track);
-  font-variation-settings: var(--mark-vary); font-size: clamp(32px, min(3vw, 5.2svh), 54px); line-height: 1; word-spacing: var(--mark-words); }
+  font-variation-settings: var(--mark-vary); font-size: clamp(44px, min(5.4vw, 10svh), 100px); line-height: 1; word-spacing: var(--mark-words); }
 html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
 .js .hero-name:not(.is-fit) { visibility: hidden; }
-.hero-name-in { display: inline-block; margin-right: calc(var(--mark-track) * -1); }   /* no tracking after the last letter, so it centres */
+.hero-name-in { display: inline-block; margin-right: calc(var(--mark-track) * -1); }   /* no tracking after the last letter */
 .hero-name .w, .hero-name i { display: inline-block; }
 
 /* THE PAGE — slides up over the first screen; the bar at its top edge becomes the header. On the first screen the bar is
-   the screen's own black, its controls sitting in it like the ones under a camera's monitor; as the page comes up it
-   turns, with the scroll, to a smoked grey glass with a hairline under it, which the work then passes beneath (tied to
-   the scroll where the browser can, else main.js sets --grey) */
-.page { position: relative; z-index: 1; margin-top: calc(var(--bar) * -1); background: var(--bg); }
+   see-through, its controls laid over the foot of the picture like a camera's; as the page comes up it turns, with the
+   scroll, to a smoked grey glass with a hairline under it, which the work then passes beneath (tied to the scroll where
+   the browser can, else main.js sets --grey). (The page's own black starts under the bar, so the bar shows the picture) */
+.page { position: relative; z-index: 1; margin-top: calc(var(--bar) * -1); background: linear-gradient(transparent var(--bar), var(--bg) var(--bar)); }
 .bar { --grey: 0; position: sticky; top: 0; z-index: 30; height: var(--bar); display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; padding: 0 var(--pad);
-  background-color: color-mix(in srgb, rgba(26, 26, 26, .8) calc(var(--grey) * 100%), #000);
+  background-color: color-mix(in srgb, rgba(26, 26, 26, .8) calc(var(--grey) * 100%), transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--line) calc(var(--grey) * 100%), transparent);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2); backdrop-filter: blur(20px) saturate(1.2); }
+  -webkit-backdrop-filter: blur(calc(var(--grey) * 20px)) saturate(1.2); backdrop-filter: blur(calc(var(--grey) * 20px)) saturate(1.2); }
 @supports (animation-timeline: scroll()) {
   .bar { animation: grey linear both; animation-timeline: scroll(root block); animation-range: 0px calc(100svh - var(--bar)); }
 }
-@keyframes grey { from { background-color: #000; border-bottom-color: transparent; } to { background-color: rgba(26, 26, 26, .8); border-bottom-color: var(--line); } }
+@keyframes grey {
+  from { background-color: transparent; border-bottom-color: transparent; -webkit-backdrop-filter: blur(0px) saturate(1); backdrop-filter: blur(0px) saturate(1); }
+  to { background-color: rgba(26, 26, 26, .8); border-bottom-color: var(--line); -webkit-backdrop-filter: blur(20px) saturate(1.2); backdrop-filter: blur(20px) saturate(1.2); }
+}
 .bar > .toggle { justify-self: start; }
 /* the small wordmark docks in the middle once the bar is the header (on the first screen the title card says it) */
 .mark { justify-self: center; white-space: nowrap; font-family: var(--mark-font); font-weight: var(--mark-small); font-stretch: var(--mark-stretch); font-style: var(--mark-style);
@@ -166,15 +169,19 @@ html[data-mark-case="caps"] .hero-name { text-transform: uppercase; }
   opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: opacity .45s var(--ease), transform .55s var(--ease), visibility .55s; }
 html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text-transform: uppercase; }
 .bar.is-top .mark { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
-.nav { justify-self: end; display: flex; gap: clamp(22px, 2.6vw, 44px); font-size: 13px; }
-.nav a { color: var(--mid); transition: color .15s var(--out); }
+/* the places to go, set like the switch: under the pointer, and for the part of the page you're in, the corner marks
+   frame it */
+.nav { justify-self: end; display: flex; gap: clamp(4px, 1vw, 14px); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.nav a { position: relative; display: flex; align-items: center; height: 34px; padding: 0 14px; color: var(--mid); transition: color .15s var(--out); }
+.nav a::before { content: ""; position: absolute; inset: 0; --c: rgba(241, 240, 236, .45); --l: 7px; opacity: 0; transition: opacity .15s var(--out); pointer-events: none; }
 .nav a:hover, .nav a.is-on { color: var(--fg); }
+.nav a:hover::before, .nav a.is-on::before { opacity: 1; }
 
 /* THE SWITCH — narrative or commercial work: one toggle, a faint hairline track with the two halves in it, equal. The half
    that's on is framed the way a viewfinder frames a shot (four corner marks, in the same soft hairline as the dashes under
    the picture) and its red light is lit; switch, and the frame slides across and re-frames the other. A click on either
    half flips it, like a switch; on hover the frame leans a little towards the other side, to say it slides */
-.toggle { position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 3px; background: rgba(241, 240, 236, .025);
+.toggle { position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 3px; background: rgba(0, 0, 0, .25);
   box-shadow: inset 0 0 0 1px rgba(241, 240, 236, .12); }
 .thumb { position: absolute; top: 3px; bottom: 3px; left: 0; width: var(--tw, 0); transform: translateX(var(--tx, 0)); translate: 0 0; pointer-events: none;
   transition: transform .4s var(--spring), width .4s var(--spring), translate .3s var(--out); }
@@ -185,13 +192,15 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .opt:hover { color: var(--fg); }
 .opt[aria-checked="true"] { color: var(--fg); }
 .opt[aria-checked="true"]::before { background: var(--rec); opacity: 1; box-shadow: 0 0 6px rgba(242, 35, 27, .8); }
-/* the corner marks: 7px arms of 1px hairline (the dashes' weight), at the dashes' soft tone rather than white, on a
-   breath of light */
-.thumb { --c: rgba(241, 240, 236, .38); --l: 7px; background-color: rgba(241, 240, 236, .035);
+/* THE VIEWFINDER'S CORNER MARKS, wherever something is framed: the picture, the half of the switch that's on, the part
+   of the page you're in, a frame under the pointer. Arms of 1px hairline; --c is their colour, --l their length */
+.thumb, .vf::before, .nav a::before, .grid .tile::after {
   background-image: linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
     linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c));
   background-size: var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l), var(--l) 1px, 1px var(--l);
   background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom; background-repeat: no-repeat; }
+/* (on the switch, at the soft tone of the hairlines rather than white, on a breath of light) */
+.thumb { --c: rgba(241, 240, 236, .45); --l: 7px; background-color: rgba(241, 240, 236, .035); }
 
 /* THE WORK — the frames for whichever half is switched on, straight on from the bar */
 .work-switch { display: none; }
@@ -210,6 +219,8 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .tile-title { font-family: var(--display); font-size: clamp(26px, 2.3vw, 38px); line-height: 1.02; letter-spacing: -0.01em; color: #fff; }
 .tile-title a { pointer-events: auto; }
 .tile-credit { color: rgba(255, 255, 255, .8); }
+.grid .tile::after { content: ""; position: absolute; inset: clamp(12px, 1.4vw, 20px); z-index: 3; --c: rgba(241, 240, 236, .75); --l: 18px; opacity: 0;
+  transition: opacity .2s var(--out); pointer-events: none; }
 .js .tile:not(.in) > img { opacity: 0; filter: blur(6px); transform: scale(1.12); }   /* (blur kept small: these are big pictures) */
 .js .tile:not(.in) .tile-cap { opacity: 0; transform: translateY(10px); }
 .tile.rising > img { transition: opacity .9s var(--expo) var(--d, 0ms), filter 1.1s var(--expo) var(--d, 0ms), transform 1.6s var(--expo) var(--d, 0ms); }
@@ -218,6 +229,7 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
   .grid .tile-cap { opacity: 0; transform: translateY(8px); }
   .grid .tile:hover .tile-cap, .grid .tile:focus-within .tile-cap { opacity: 1; transform: none; }
   .grid .tile.in:hover > img { transform: scale(1.025); }
+  .grid .tile:hover::after { opacity: 1; }
 }
 
 /* CV, CONTACT, FEATURED — the rest of the page: the plain list producers expect, how to reach him, the press */
@@ -234,7 +246,7 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .cv-list { padding: 16px var(--pad) 20px; border-left: 1px solid var(--hair); }
 .cv-list li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: baseline; gap: 24px; padding: 6px 0; }
 .cv-t { font-family: var(--display); font-size: 21px; line-height: 1.2; }
-.cv-c { font-size: 15px; color: var(--mid); }
+.cv-c { font-size: 14px; color: var(--mid); }
 .awards li { grid-template-columns: 11ch minmax(0, 1.1fr) minmax(0, 1fr); }
 .awards .label { color: var(--dim); }
 /* who he is at the top; the address and the places to find him at the foot, level with the foot of the portrait */
@@ -244,7 +256,7 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .mail { display: inline-block; font-family: var(--display); font-size: clamp(30px, 4vw, 60px); line-height: 1.05; letter-spacing: -0.015em; transition: color .15s var(--out); }
 .mail:hover { color: var(--rec); }
 .links { display: flex; gap: 10px; margin-top: 26px; color: var(--mid); }
-.links a { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; transition: color .15s var(--out), background-color .15s var(--out), border-color .15s var(--out); }
+.links a { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); transition: color .15s var(--out), background-color .15s var(--out), border-color .15s var(--out); }
 .links svg { width: 18px; height: 18px; fill: currentColor; }
 .links a:hover { color: #050505; background: var(--fg); border-color: var(--fg); }
 .portrait { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: var(--tile); }
@@ -252,7 +264,7 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 /* the press, set like the CV: the piece's title large, what it's about beneath, where to read it */
 .press-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 32px; padding: 40px var(--pad) 48px; border-bottom: 1px solid var(--line); }
 .press-title { font-family: var(--display); font-size: clamp(34px, 4.4vw, 68px); line-height: 1.02; letter-spacing: -0.015em; text-wrap: balance; transition: color .15s var(--out); }
-.press-stand { grid-column: 1; max-width: 44ch; font-size: 17px; color: var(--mid); text-wrap: pretty; }
+.press-stand { grid-column: 1; max-width: 52ch; font-size: 15px; color: var(--mid); text-wrap: pretty; }
 .press-read { grid-column: 2; grid-row: 1; align-self: start; padding-top: .6em; color: var(--mid); transition: color .15s var(--out); }
 .press-item:hover .press-title { color: var(--rec); }
 .press-item:hover .press-read { color: var(--fg); }
@@ -288,7 +300,7 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .layer { position: fixed; inset: 0; z-index: 50; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding-bottom: clamp(16px, 4.5vh, 48px); }
 .layer::-webkit-scrollbar { display: none; }
 .sheet { position: relative; width: min(1240px, 100% - 2 * clamp(16px, 4vw, 64px)); margin: clamp(16px, 4.5vh, 48px) auto 0; overflow: clip; container-type: inline-size;
-  background: rgba(14, 14, 14, .88); border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px;
+  background: rgba(14, 14, 14, .88); border: 1px solid rgba(255, 255, 255, .12);
   box-shadow: 0 40px 120px rgba(0, 0, 0, .65), inset 0 1px 0 rgba(255, 255, 255, .06); }
 .sheet:focus { outline: 0; }
 .sheet-bar { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; height: 54px; padding: 0 var(--pad);
@@ -323,7 +335,7 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .proj-credits > div { padding: 20px clamp(16px, 1.7vw, 26px); }
 .proj-credits > div + div { border-left: 1px solid var(--hair); }
 .proj-credits dt { color: var(--dim); }
-.proj-credits dd { margin-top: 8px; font-family: var(--text); font-size: 16px; line-height: 1.35; letter-spacing: .01em; text-transform: none; color: var(--fg); }
+.proj-credits dd { margin-top: 8px; font-family: var(--text); font-size: 14.5px; line-height: 1.4; letter-spacing: 0; text-transform: none; color: var(--fg); }
 .proj-credits dd span { display: block; color: var(--mid); }   /* where an award was won, under it */
 /* the stills two by two, each in a dark frame (a shorter one sits in the middle of its row); an odd one out at the end
    runs the full width */
@@ -357,10 +369,10 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .intro .hero-role { animation: appear 1.6s cubic-bezier(.4, 0, .2, 1) 1.2s both; }
 .intro .screen { animation: appear 1.6s cubic-bezier(.4, 0, .2, 1) 2.9s both, grow 2.2s cubic-bezier(.22, 1, .36, 1) 2.9s both; }
 .intro .screen img { animation: none; }   /* the first still starts drifting when the stills start, not behind the curtains */
-.intro .hud { animation: appear .8s var(--ease) 4.2s both; }
+.intro .hud, .intro .vf::before, .intro .vf-cross { animation: appear .8s var(--ease) 4.2s both; }
 .intro .bar { animation: rise-edge .7s var(--ease) 4.3s both; }
 /* on black until the screen has a still to open onto (main.js) */
-html.is-waiting :is(.screen, .hero-name, .hero-role, .hud, .bar), html.is-waiting .screen::before, html.is-waiting .screen::after { animation-play-state: paused; }
+html.is-waiting :is(.screen, .hero-name, .hero-role, .hud, .vf-cross, .bar), html.is-waiting :is(.screen, .vf)::before, html.is-waiting .screen::after { animation-play-state: paused; }
 
 /* NARROWER */
 @media (max-width: 960px) {
@@ -384,38 +396,39 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .hud, .bar), html.is-waitin
   /* the links: in the middle of the bar on the first screen; once it's the header and the name comes in on the left, they
      slide over to the right (they're laid out on the right; on the first screen they're moved back to the middle: half
      the room they leave, less the 10px they reach past the gutter) */
-  .nav { gap: 2px; margin-right: -10px; font-size: 13px; letter-spacing: .1em;
-    transform: translateX(calc((100% - 100cqw) / 2 - 10px)); transition: transform .55s var(--ease); }
+  .nav { gap: 2px; font-size: 12px;
+    transform: translateX(calc((100% - 100cqw) / 2)); transition: transform .55s var(--ease); }
   .bar.is-top .nav { transform: none; }
-  .nav a { padding: 16px 10px; }
+  .nav a { height: 48px; padding: 0 10px; }
+  .nav a::before { inset: 8px 0; }
   .work-switch { display: block; padding: 16px var(--pad) 0; text-align: center; }
   .work-switch .toggle { display: inline-grid; }
   .opt { height: 40px; }
-  /* the first screen: the picture as big as fits in the gutter, framed like a monitor's; title and film in close around it */
-  .hero { padding: env(safe-area-inset-top) var(--pad) var(--bar); }
-  .stage { --gap: clamp(16px, 3svh, 28px); --title-gap: clamp(24px, 4svh, 40px); }
-  .hero-role { font-size: 12.5px; }
-  /* (above, only what's up: the film and what it is, the credits go. Below, every film has a dash, too many to sit
-     between the clip and the timecode: they run over them, the whole width, an equal segment each, the one that's up
-     filling) */
+  /* the first screen: above, only what's up (the film and what it is; the credits go); the name in the frame's corner;
+     below, every film has a cell, too many to sit between the clip and the timecode: they run over them, the whole
+     width, an equal cell each */
+  .osd { padding-top: calc(env(safe-area-inset-top) + 14px); }
+  .vf { --l: 16px; padding: 18px 16px; }
+  .hero-name { font-size: clamp(34px, 10.5vw, 46px); }
+  .hero-role { font-size: 11px; }
   .hud-credit { display: none; }
   .hud-top { gap: 12px; }
   .hud-kind { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .hud-bottom { grid-template-columns: 1fr 1fr; grid-template-rows: auto 18px; height: auto; }
-  .ticker-list { grid-row: 1; grid-column: 1 / -1; margin: 0 -3px; }
+  .ticker-list { grid-row: 1; grid-column: 1 / -1; margin: 0 -2px; }
   .hud-clip { grid-row: 2; grid-column: 1; }
-  .hud-tc { grid-row: 2; grid-column: 2; }
+  .hud-tc, .hud-bottom .view-film { grid-row: 2; grid-column: 2; }
   .ticker-list li { flex: 1; }
-  .tick { width: 100%; padding: 0 3px 8px; }
-  .seg, .tick[aria-current="true"] .seg { width: 100%; }
+  .tick { width: 100%; padding: 0 2px 10px; }
+  .seg { width: 100%; }
   /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }
   .grid::after { display: none; }
   .grid .tile { overflow: visible; background: none; }
   .grid .tile > img { height: auto; aspect-ratio: 1.6 / 1; background: var(--tile); }
   .tile-cap { position: static; gap: 1px; padding: 14px 0 0; background: none; }
-  .tile-title { font-family: var(--text); font-size: 14px; line-height: 1.5; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
-  .tile-credit { font-size: 16px; color: var(--fg); }
+  .tile-title { font-family: var(--text); font-size: 12.5px; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; color: var(--mid); }
+  .tile-credit { font-size: 14.5px; color: var(--fg); }
   .cv-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }
   .awards li { grid-template-columns: minmax(0, 1fr) auto; }
   .awards li .cv-t { grid-column: 1 / -1; order: -1; }
@@ -425,12 +438,12 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .hud, .bar), html.is-waitin
   .links { margin-top: 20px; }
   .links a { width: 52px; height: 52px; }
   .press-item { grid-template-columns: minmax(0, 1fr); padding: 32px var(--pad) 40px; }
-  .press-stand { font-size: 15.5px; }
+  .press-stand { font-size: 14px; }
   .press-read { grid-column: 1; grid-row: auto; padding-top: 6px; }
   .closing img { height: 118vw; }
   .scrim { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
   .layer { padding-bottom: 0; }
-  .sheet { width: 100%; min-height: calc(100% - max(10px, env(safe-area-inset-top))); margin-top: max(10px, env(safe-area-inset-top)); border-radius: 14px 14px 0 0; border-bottom: 0; }
+  .sheet { width: 100%; min-height: calc(100% - max(10px, env(safe-area-inset-top))); margin-top: max(10px, env(safe-area-inset-top)); border-bottom: 0; }
   .proj-follow { padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
   .sheet-bar { grid-template-columns: minmax(0, 1fr) auto; }
   .proj-pos { display: none; }

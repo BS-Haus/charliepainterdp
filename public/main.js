@@ -90,7 +90,8 @@
       segs.forEach((seg, i) => { if (i !== f) seg.style.transform = `scaleX(${i < f ? 1 : 0})`; });
       filled = f;
     }
-    segs[f].style.transform = `scaleX(${((k + t / SHOT) / run.length).toFixed(4)})`;
+    // (in twelfths, the way a display's meter steps, not a smooth slide)
+    segs[f].style.transform = `scaleX(${(Math.floor(((k + t / SHOT) / run.length) * 12) / 12).toFixed(4)})`;
   };
   const show = (i) => {
     const prev = cur;

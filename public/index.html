@@ -24,7 +24,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Charlie Painter", "jobTitle": "Director of Photography", "description": "Charlie Painter is a narrative features & shorts cinematographer, based in London, and a British Society of Cinematographers mentee.", "url": "https://charliepainterdp.vercel.app/", "image": "https://charliepainterdp.vercel.app/media/portrait.jpg", "email": "mailto:charlie@charliepainterdp.com", "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"}, "sameAs": ["https://vimeo.com/charliepainterdp", "https://www.instagram.com/charliepainter_dp", "https://www.imdb.com/name/nm15809574/"], "award": ["Best Cinematography, SSIFF 2025", "Best Film, LakeCity", "Best Film, Cambridge Short Film Festival", "Best Drama, Arena 51 Film Festival"]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=PT+Sans+Caption:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <script src="/types.js"></script>
   <script>
@@ -53,27 +53,17 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN, read like a camera's monitor: a scope screen in the dark playing stills from the work, three from
-       each film, framed in a fine line, with a row of readouts above it (camera A, the film that's up, what it is, its
-       director and production, the red light) and one below (the clip, a dash for each film, the time of day as running
-       timecode). Under that, in the middle of the space down to the bar, his name and what he does, like the title card
-       of an art-house film. Click the screen and that film opens (on the picture, View film takes the timecode's place).
-       Pinned; the page slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw
-       it as an emoji) -->
+  <!-- THE FIRST SCREEN, laid out as a camera's display: the stills from the work fill the screen, three from each film,
+       one dissolving into the next, and over them the viewfinder: readouts along the top (the red light, flashing; the
+       film that's up, what it is, its director and production; the camera, A), the frame's corner marks and centre
+       cross, his name large in the frame's lower right with what he does, and readouts along the foot (the clip, a
+       meter with a cell for each film, the time of day as running timecode). Click the picture and that film opens (View
+       film takes the timecode's place while the pointer is on it). Pinned; the page slides up over it. (Every ↗ carries
+       &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
-    <div class="stage">
-      <div class="frame">
-        <p class="hud hud-top" id="ticker">
-          <span class="hud-cam" aria-hidden="true">A</span>
-          <span class="hud-field" id="ticker-title">Vetala</span>
-          <span class="hud-field hud-kind" id="ticker-kind">Short film</span>
-          <span class="hud-field hud-credit" id="hud-dir"><small>Dir</small><span>Ajit Mann</span></span>
-          <span class="hud-field hud-credit" id="hud-prod"><small>Prod</small><span>M &amp; K</span></span>
-          <span class="rec hud-rec" aria-hidden="true"></span>
-        </p>
-        <a class="screen-link" id="screen" href="/vetala" aria-label="Open Vetala">
-          <span class="screen">
-          <img src="/media/stills/vetala-9.jpg" loading="eager" alt="" data-slug="vetala" data-group="narrative" decoding="async" draggable="false" class="is-on" />
+    <a class="screen-link" id="screen" href="/vetala" aria-label="Open Vetala">
+      <span class="screen">
+      <img src="/media/stills/vetala-9.jpg" loading="eager" alt="" data-slug="vetala" data-group="narrative" decoding="async" draggable="false" class="is-on" />
         <img data-src="/media/stills/vetala-3.jpg" alt="" data-slug="vetala" data-group="narrative" decoding="async" draggable="false" />
         <img data-src="/media/stills/vetala-4.jpg" alt="" data-slug="vetala" data-group="narrative" decoding="async" draggable="false" />
         <img data-src="/media/stills/operationdynamo-1.jpg" alt="" data-slug="operationdynamo" data-group="narrative" decoding="async" draggable="false" />
@@ -116,18 +106,29 @@
         <img data-src="/media/stills/phox-r1.jpg" alt="" data-slug="phox-water" data-group="commercial" decoding="async" draggable="false" />
         <img data-src="/media/stills/phox-r2.jpg" alt="" data-slug="phox-water" data-group="commercial" decoding="async" draggable="false" />
         <img data-src="/media/stills/phox-r3.jpg" alt="" data-slug="phox-water" data-group="commercial" decoding="async" draggable="false" />
-          </span>
-          <span class="view-film" aria-hidden="true">View film ↗&#xFE0E;</span>
-        </a>
-        <div class="hud hud-bottom" id="hud-bottom">
-          <span class="hud-clip" id="hud-clip" aria-hidden="true">A001_C001</span>
-          <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" data-group="narrative" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="accomplice" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Accomplice</span></button></li><li><button class="tick" data-slug="flush" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Flush!</span></button></li><li><button class="tick" data-slug="invitrofelicitas" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">In Vitro Felicitas</span></button></li><li><button class="tick" data-slug="confess" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Confess</span></button></li><li><button class="tick" data-slug="moal" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Memories of a Life</span></button></li><li><button class="tick" data-slug="brownies-or-ice-cream" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Brownies or Ice Cream?</span></button></li><li hidden><button class="tick" data-slug="66north" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li hidden><button class="tick" data-slug="johnsmiths" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li><li hidden><button class="tick" data-slug="aberfeldy" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Aberfeldy</span></button></li><li hidden><button class="tick" data-slug="vision-pro" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Vision Pro</span></button></li><li hidden><button class="tick" data-slug="london-jazz-festival" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">London Jazz Festival</span></button></li><li hidden><button class="tick" data-slug="phox-water" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Phox Water</span></button></li></ol>
-          <span class="hud-tc" id="hud-tc" aria-hidden="true">00:00:00:00</span>
+      </span>
+    </a>
+    <div class="osd">
+      <p class="hud hud-top" id="ticker">
+        <span class="rec hud-rec" aria-hidden="true"></span>
+        <span class="hud-field" id="ticker-title">Vetala</span>
+        <span class="hud-field hud-kind" id="ticker-kind">Short film</span>
+        <span class="hud-field hud-credit" id="hud-dir"><small>Dir</small><span>Ajit Mann</span></span>
+        <span class="hud-field hud-credit" id="hud-prod"><small>Prod</small><span>M &amp; K</span></span>
+        <span class="hud-cam" aria-hidden="true">A</span>
+      </p>
+      <div class="vf">
+        <span class="vf-cross" aria-hidden="true"></span>
+        <div class="hero-title">
+          <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
+          <p class="hero-role label">Director of Photography</p>
         </div>
       </div>
-      <div class="hero-title">
-        <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>
-        <p class="hero-role label">Director of Photography</p>
+      <div class="hud hud-bottom" id="hud-bottom">
+        <span class="hud-clip" id="hud-clip" aria-hidden="true">A001_C001</span>
+        <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" data-group="narrative" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="accomplice" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Accomplice</span></button></li><li><button class="tick" data-slug="flush" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Flush!</span></button></li><li><button class="tick" data-slug="invitrofelicitas" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">In Vitro Felicitas</span></button></li><li><button class="tick" data-slug="confess" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Confess</span></button></li><li><button class="tick" data-slug="moal" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Memories of a Life</span></button></li><li><button class="tick" data-slug="brownies-or-ice-cream" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Brownies or Ice Cream?</span></button></li><li hidden><button class="tick" data-slug="66north" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li hidden><button class="tick" data-slug="johnsmiths" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li><li hidden><button class="tick" data-slug="aberfeldy" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Aberfeldy</span></button></li><li hidden><button class="tick" data-slug="vision-pro" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Vision Pro</span></button></li><li hidden><button class="tick" data-slug="london-jazz-festival" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">London Jazz Festival</span></button></li><li hidden><button class="tick" data-slug="phox-water" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Phox Water</span></button></li></ol>
+        <span class="hud-tc" id="hud-tc" aria-hidden="true">00:00:00:00</span>
+        <span class="view-film" aria-hidden="true">View film ↗&#xFE0E;</span>
       </div>
     </div>
     <span class="hero-shade" aria-hidden="true"></span>
