@@ -53,19 +53,24 @@
   </script>
 </head>
 <body>
-  <!-- THE FIRST SCREEN: a scope screen in the dark playing stills from the best of the work, three from each film. Right
-       above it, a slim line lined up with its edges: the film that's up on the left, a small dash for each film on the
-       right. Under it, in the middle of the space down to the bar, his name and what he does, like the title card of an
-       art-house film. Click the screen and that film opens (on the picture, View film comes up under its corner). Pinned;
-       the page slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw it as an
-       emoji) -->
+  <!-- THE FIRST SCREEN, read like a camera's monitor: a scope screen in the dark playing stills from the work, three from
+       each film, framed in a fine line, with a row of readouts above it (camera A, the film that's up, what it is, its
+       director and production, the red light) and one below (the clip, a dash for each film, the time of day as running
+       timecode). Under that, in the middle of the space down to the bar, his name and what he does, like the title card
+       of an art-house film. Click the screen and that film opens (on the picture, View film takes the timecode's place).
+       Pinned; the page slides up over it. (Every ↗ carries &#xFE0E;, which keeps it a plain arrow: phones otherwise draw
+       it as an emoji) -->
   <section class="hero" id="top" aria-label="Selected stills">
     <div class="stage">
       <div class="frame">
-        <div class="ticker label" id="ticker">
-          <p class="ticker-now"><span class="rec" aria-hidden="true"></span><span id="ticker-title">Vetala</span><span class="ticker-kind" id="ticker-kind">Short film</span></p>
-          <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" data-group="narrative" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="accomplice" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Accomplice</span></button></li><li><button class="tick" data-slug="flush" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Flush!</span></button></li><li><button class="tick" data-slug="invitrofelicitas" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">In Vitro Felicitas</span></button></li><li><button class="tick" data-slug="confess" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Confess</span></button></li><li><button class="tick" data-slug="moal" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Memories of a Life</span></button></li><li><button class="tick" data-slug="brownies-or-ice-cream" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Brownies or Ice Cream?</span></button></li><li hidden><button class="tick" data-slug="66north" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li hidden><button class="tick" data-slug="johnsmiths" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li><li hidden><button class="tick" data-slug="aberfeldy" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Aberfeldy</span></button></li><li hidden><button class="tick" data-slug="vision-pro" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Vision Pro</span></button></li><li hidden><button class="tick" data-slug="london-jazz-festival" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">London Jazz Festival</span></button></li><li hidden><button class="tick" data-slug="phox-water" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Phox Water</span></button></li></ol>
-        </div>
+        <p class="hud hud-top" id="ticker">
+          <span class="hud-cam" aria-hidden="true">A</span>
+          <span class="hud-field" id="ticker-title">Vetala</span>
+          <span class="hud-field hud-kind" id="ticker-kind">Short film</span>
+          <span class="hud-field hud-credit" id="hud-dir"><small>Dir</small><span>Ajit Mann</span></span>
+          <span class="hud-field hud-credit" id="hud-prod"><small>Prod</small><span>M &amp; K</span></span>
+          <span class="rec hud-rec" aria-hidden="true"></span>
+        </p>
         <a class="screen-link" id="screen" href="/vetala" aria-label="Open Vetala">
           <span class="screen">
           <img src="/media/stills/vetala-9.jpg" loading="eager" alt="" data-slug="vetala" data-group="narrative" decoding="async" draggable="false" class="is-on" />
@@ -112,8 +117,13 @@
         <img data-src="/media/stills/phox-r2.jpg" alt="" data-slug="phox-water" data-group="commercial" decoding="async" draggable="false" />
         <img data-src="/media/stills/phox-r3.jpg" alt="" data-slug="phox-water" data-group="commercial" decoding="async" draggable="false" />
           </span>
-          <span class="view-film label" aria-hidden="true">View film ↗&#xFE0E;</span>
+          <span class="view-film" aria-hidden="true">View film ↗&#xFE0E;</span>
         </a>
+        <div class="hud hud-bottom" id="hud-bottom">
+          <span class="hud-clip" id="hud-clip" aria-hidden="true">A001_C001</span>
+          <ol class="ticker-list" aria-label="Films"><li><button class="tick" data-slug="vetala" data-group="narrative" aria-current="true"><span class="seg"><i></i></span><span class="tick-name">Vetala</span></button></li><li><button class="tick" data-slug="operationdynamo" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Operation Dynamo</span></button></li><li><button class="tick" data-slug="iffilm" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">If</span></button></li><li><button class="tick" data-slug="accomplice" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Accomplice</span></button></li><li><button class="tick" data-slug="flush" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Flush!</span></button></li><li><button class="tick" data-slug="invitrofelicitas" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">In Vitro Felicitas</span></button></li><li><button class="tick" data-slug="confess" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Confess</span></button></li><li><button class="tick" data-slug="moal" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Memories of a Life</span></button></li><li><button class="tick" data-slug="brownies-or-ice-cream" data-group="narrative"><span class="seg"><i></i></span><span class="tick-name">Brownies or Ice Cream?</span></button></li><li hidden><button class="tick" data-slug="66north" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">66°North</span></button></li><li hidden><button class="tick" data-slug="johnsmiths" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">John Smith’s</span></button></li><li hidden><button class="tick" data-slug="aberfeldy" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Aberfeldy</span></button></li><li hidden><button class="tick" data-slug="vision-pro" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Vision Pro</span></button></li><li hidden><button class="tick" data-slug="london-jazz-festival" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">London Jazz Festival</span></button></li><li hidden><button class="tick" data-slug="phox-water" data-group="commercial"><span class="seg"><i></i></span><span class="tick-name">Phox Water</span></button></li></ol>
+          <span class="hud-tc" id="hud-tc" aria-hidden="true">00:00:00:00</span>
+        </div>
       </div>
       <div class="hero-title">
         <h1 class="hero-name" id="hero-name" aria-label="Charlie Painter"><span class="hero-name-in" aria-hidden="true"><span class="w"><i>C</i><i>h</i><i>a</i><i>r</i><i>l</i><i>i</i><i>e</i></span> <span class="w"><i>P</i><i>a</i><i>i</i><i>n</i><i>t</i><i>e</i><i>r</i></span></span></h1>

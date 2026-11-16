@@ -143,6 +143,7 @@ out = out.replace("{{SCREEN}}", screen())
 out = out.replace("{{TICKER}}", ticker())
 out = out.replace("{{FIRST_SLUG}}", first["slug"]).replace("{{FIRST_TITLE}}", esc(first["title"]))
 out = out.replace("{{FIRST_KIND}}", esc(KINDS.get(first["kind"], first["kind"])))
+out = out.replace("{{FIRST_DIR}}", esc(first.get("director", ""))).replace("{{FIRST_PROD}}", esc(first.get("production", "")))
 out = out.replace("{{GROUPS}}", group_section("narrative", True) + "\n" + group_section("commercial", False))
 # the switch on the bar: narrative or commercial work
 # (one Tab stop: the one that's on; the arrow keys move between them)

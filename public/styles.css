@@ -78,15 +78,22 @@ i { font-style: normal; }
 .stage { --gap: clamp(20px, 3.4svh, 40px); --title-gap: clamp(32px, 5svh, 60px); --line-gap: 10px; --band: calc(var(--title-h, 80px) + 2 * var(--title-gap));
   flex: 1; min-height: 0; display: grid; grid-template-rows: var(--gap) auto minmax(var(--band), 1fr); justify-items: center; align-items: center;
   container-type: size; }
-.frame { grid-row: 2; width: min(100cqw, (100cqh - var(--gap) - var(--ticker-h, 24px) - var(--line-gap) - var(--band)) * var(--screen-ratio)); }
+.frame { grid-row: 2; width: min(100cqw, (100cqh - var(--gap) - var(--hud-h, 44px) - 2 * var(--line-gap) - var(--band)) * var(--screen-ratio)); }
 .hero-title { grid-row: 3; }
-/* the picture and the label under its corner are one link; the label comes up only while the pointer is on it */
+/* the picture and the label under its corner are one link; the label comes up only while the pointer is on it, in the
+   timecode's place on the readouts below (which makes way for it) */
 .screen-link { position: relative; display: block; width: 100%; }
-.screen { position: relative; display: block; width: 100%; aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile); }
-.view-film { position: absolute; top: 100%; right: 0; padding-top: 10px; font-size: 12px; color: var(--fg); white-space: nowrap; pointer-events: none;
+.screen { position: relative; display: block; width: 100%; aspect-ratio: var(--screen-ratio); overflow: hidden; background: var(--tile);
+  box-shadow: 0 0 0 1px rgba(241, 240, 236, .6); }   /* the monitor's frame line */
+.view-film { position: absolute; top: calc(100% + var(--line-gap)); right: 0; display: flex; align-items: center; height: 22px; font-family: var(--text); font-weight: 700;
+  font-size: 12px; letter-spacing: .04em; line-height: 1; text-transform: uppercase; color: var(--fg); white-space: nowrap; pointer-events: none;
   opacity: 0; transform: translateY(6px); transition: opacity .25s var(--out), transform .35s var(--out); }
 .screen-link:focus-visible .view-film { opacity: 1; transform: none; }
-@media (hover: hover) and (pointer: fine) { .screen-link:hover .view-film { opacity: 1; transform: none; } }
+html:not(.intro) .frame:has(.screen-link:focus-visible) .hud-tc { opacity: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .screen-link:hover .view-film { opacity: 1; transform: none; }
+  html:not(.intro) .frame:has(.screen-link:hover) .hud-tc { opacity: 0; }
+}
 html.intro .screen-link .view-film { opacity: 0; transform: translateY(6px); }   /* not while the intro plays: it comes after everything else */
 .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s var(--ease); user-select: none; -webkit-user-drag: none; }
 /* the next still dissolves in over the last, which stays put underneath until it's covered */
@@ -94,14 +101,22 @@ html.intro .screen-link .view-film { opacity: 0; transform: translateY(6px); }  
 .screen img.was-on { z-index: 1; opacity: 1; transition: none; }
 .screen img.is-on, .screen img.was-on { animation: drift 3.8s linear both; }
 @keyframes drift { from { transform: scale(1); } to { transform: scale(1.045); } }
-/* the line above the picture: the film that's up on the left (its name fading over as the film changes), and on the
-   right a small dash for each film, hairlines; the one that's up stretches out and fills while its stills play, those
-   already shown stay half lit. The names on the dashes are for screen readers */
-.ticker { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: var(--line-gap); }
-.ticker-now { display: flex; align-items: center; gap: 10px; min-width: 0; height: 22px; font-size: 12px; white-space: nowrap; }
-.ticker-now .rec { margin-right: -2px; }
-.ticker-kind { color: var(--dim); }
-.ticker-list { display: flex; flex: none; margin: 0 -4px 0 0; }   /* (-4: the last dash's padding, so it ends on the picture's edge) */
+/* the monitor's readouts, lined up with the picture's edges, in bold capitals with figures that don't jostle. Above:
+   the camera (A), then what's up, spread across like a camera's settings: the film, what it is, its director, its
+   production (each fading over as the film changes; one it doesn't have drops out), and the red light. Below: the clip
+   (the film's number in the reel, the still's number in the film), a small dash for each film, and the time of day as
+   timecode, in red, running at 24 frames a second. The dashes are hairlines; the one that's up stretches out and fills
+   while its stills play, those already shown stay half lit; their names are for screen readers */
+.hud { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 22px; margin: 0; font-family: var(--text); font-weight: 700;
+  font-size: 12px; letter-spacing: .04em; line-height: 1; text-transform: uppercase; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.hud-top { margin-bottom: var(--line-gap); }
+.hud-bottom { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); margin-top: var(--line-gap); }
+.hud-cam { font-size: 18px; }
+.hud-field small { margin-right: 6px; font-size: 9px; color: var(--dim); }
+.hud-rec { width: 9px; height: 9px; margin: 0; transform: none; box-shadow: 0 0 8px rgba(242, 35, 27, .8); }
+.hud-clip { justify-self: start; }
+.hud-tc { justify-self: end; color: var(--rec); transition: opacity .25s var(--out); }
+.ticker-list { display: flex; margin: 0; }
 .tick { position: relative; display: grid; place-items: center; padding: 8px 4px; }   /* (a bigger target than the dash it draws) */
 .seg { position: relative; display: block; width: 10px; height: 1px; overflow: hidden; border-radius: 1px; background: rgba(241, 240, 236, .26);
   transition: width .6s var(--ease), background-color .15s var(--out); }
@@ -342,10 +357,10 @@ html[data-mark-case="caps"] .mark { font-size: 17px; letter-spacing: .06em; text
 .intro .hero-role { animation: appear 1.6s cubic-bezier(.4, 0, .2, 1) 1.2s both; }
 .intro .screen { animation: appear 1.6s cubic-bezier(.4, 0, .2, 1) 2.9s both, grow 2.2s cubic-bezier(.22, 1, .36, 1) 2.9s both; }
 .intro .screen img { animation: none; }   /* the first still starts drifting when the stills start, not behind the curtains */
-.intro .ticker { animation: appear .8s var(--ease) 4.2s both; }
+.intro .hud { animation: appear .8s var(--ease) 4.2s both; }
 .intro .bar { animation: rise-edge .7s var(--ease) 4.3s both; }
 /* on black until the screen has a still to open onto (main.js) */
-html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-waiting .screen::before, html.is-waiting .screen::after { animation-play-state: paused; }
+html.is-waiting :is(.screen, .hero-name, .hero-role, .hud, .bar), html.is-waiting .screen::before, html.is-waiting .screen::after { animation-play-state: paused; }
 
 /* NARROWER */
 @media (max-width: 960px) {
@@ -376,22 +391,22 @@ html.is-waiting :is(.screen, .hero-name, .hero-role, .ticker, .bar), html.is-wai
   .work-switch { display: block; padding: 16px var(--pad) 0; text-align: center; }
   .work-switch .toggle { display: inline-grid; }
   .opt { height: 40px; }
-  /* the first screen: the picture edge to edge, as big as fits; title and film in close around it */
-  .hero { padding: env(safe-area-inset-top) 0 var(--bar); }
-  .stage { --gap: clamp(16px, 3svh, 28px); --title-gap: clamp(24px, 4svh, 40px); --line-gap: 0px; }
-  /* (where the picture runs edge to edge its line keeps the gutter; where the window is too short for that and the
-     picture is narrower, the line keeps to the picture's edges: only as much gutter as the black either side doesn't give) */
-  .ticker { padding: 0 max(0px, var(--pad) - (100vw - 100%) / 2); }
-  .ticker-now { height: 24px; font-size: 12.5px; }
+  /* the first screen: the picture as big as fits in the gutter, framed like a monitor's; title and film in close around it */
+  .hero { padding: env(safe-area-inset-top) var(--pad) var(--bar); }
+  .stage { --gap: clamp(16px, 3svh, 28px); --title-gap: clamp(24px, 4svh, 40px); }
   .hero-role { font-size: 12.5px; }
-  /* (every film has a dash, too many to sit beside the name: here they run under it, the whole width, an equal segment
-     each, the one that's up filling; their padding is the gap down to the picture) */
-  .ticker { flex-wrap: wrap; gap: 0; }
-  .ticker-now { max-width: 100%; overflow: hidden; }
-  .ticker-kind { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .ticker-list { flex: 1 0 100%; margin: 0 -3px; }
+  /* (above, only what's up: the film and what it is, the credits go. Below, every film has a dash, too many to sit
+     between the clip and the timecode: they run over them, the whole width, an equal segment each, the one that's up
+     filling) */
+  .hud-credit { display: none; }
+  .hud-top { gap: 12px; }
+  .hud-kind { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .hud-bottom { grid-template-columns: 1fr 1fr; grid-template-rows: auto 18px; height: auto; }
+  .ticker-list { grid-row: 1; grid-column: 1 / -1; margin: 0 -3px; }
+  .hud-clip { grid-row: 2; grid-column: 1; }
+  .hud-tc { grid-row: 2; grid-column: 2; }
   .ticker-list li { flex: 1; }
-  .tick { width: 100%; padding: 12px 3px; }
+  .tick { width: 100%; padding: 0 3px 8px; }
   .seg, .tick[aria-current="true"] .seg { width: 100%; }
   /* the frames stand apart, each with its caption under it: the title in capitals, what it won (or who made it) beneath */
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: var(--pad) var(--pad) 8px; background: none; border-bottom: 0; }

@@ -46,10 +46,10 @@
 
   /* ---------- The name: a small title above the picture (the stylesheet sizes it), shown once its face has loaded. The
      title and the film under the picture are measured, so the picture can take exactly what they leave ---------- */
-  const heroName = $("#hero-name"), heroTitle = $(".hero-title"), tickerEl = $("#ticker");
+  const heroName = $("#hero-name"), heroTitle = $(".hero-title"), hudTop = $("#ticker"), hudBottom = $("#hud-bottom");
   const fitName = () => {
     html.style.setProperty("--title-h", `${heroTitle.offsetHeight}px`);
-    html.style.setProperty("--ticker-h", `${tickerEl.offsetHeight}px`);
+    html.style.setProperty("--hud-h", `${hudTop.offsetHeight + hudBottom.offsetHeight}px`);   // the readouts above and below
     heroName.classList.add("is-fit");
   };
   document.fonts.ready.then(fitName);
@@ -64,7 +64,10 @@
      and while the page is hidden
      ====================================================================== */
   const SHOT = 2400;   // how long each still is up
-  const allTicks = $$(".tick"), tickNow = $(".ticker-now"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind");
+  const allTicks = $$(".tick"), tickTitle = $("#ticker-title"), tickKind = $("#ticker-kind"), hudDir = $("#hud-dir"), hudProd = $("#hud-prod");
+  const hudFields = [tickTitle, tickKind, hudDir, hudProd], hudClip = $("#hud-clip"), hudTc = $("#hud-tc");
+  const credit = (el, v) => { el.hidden = !v; el.lastElementChild.textContent = v || ""; };   // one a film doesn't have drops out
+  const three = (n) => String(n).padStart(3, "0"), two = (n) => String(n).padStart(2, "0");
   let reelGroup = shots[0].dataset.group, ticks, segs, runs;
   // the dashes for the reel that's showing, and each film's stills in it
   const cast = () => {
@@ -110,13 +113,15 @@
     if (p) {
       screen.href = `/${p.slug}`;
       screen.setAttribute("aria-label", `Open ${p.title}`);
-      if (tickTitle.textContent !== p.name) {
-        tickTitle.textContent = p.name;
-        tickKind.textContent = KINDS[p.kind] || p.kind;
-        // the name of the film that's up fades in as it changes
-        if (!reduceMotion) tickNow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: "cubic-bezier(.4, 0, .2, 1)" });
-      }
+      const changed = tickTitle.textContent !== p.name;
+      tickTitle.textContent = p.name;
+      tickKind.textContent = KINDS[p.kind] || p.kind;
+      credit(hudDir, p.director);
+      credit(hudProd, p.production);
+      // what's up fades in as the film changes
+      if (changed && !reduceMotion) hudFields.forEach((el) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: "cubic-bezier(.4, 0, .2, 1)" }));
     }
+    hudClip.textContent = `A${three(f + 1)}_C${three(runs[f].indexOf(shot) + 1)}`;   // the film's number in the reel, the still's in the film
     fill();
   };
   const step = (now) => {
@@ -139,6 +144,15 @@
   }));
   document.addEventListener("visibilitychange", wake);
   show(0);
+  // the timecode: the time of day, at 24 frames a second (with less motion, by the second); only while it's on view
+  const stamp = () => {
+    if (document.hidden || covered) return;
+    const d = new Date(), fr = reduceMotion ? 0 : Math.floor((d.getMilliseconds() * 24) / 1000);
+    const tc = `${two(d.getHours())}:${two(d.getMinutes())}:${two(d.getSeconds())}:${two(fr)}`;
+    if (hudTc.textContent !== tc) hudTc.textContent = tc;
+  };
+  stamp();
+  setInterval(stamp, reduceMotion ? 1000 : 1000 / 24);
   // the switch changes the reel: the other half's films from the first, its first still dissolving in over what was up
   // (once it's loaded; the other half's first stills load early, once the page has settled, with each film's first)
   let reeling = 0;
